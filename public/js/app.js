@@ -49336,6 +49336,22 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/js/addsubject.js":
+/*!************************************!*\
+  !*** ./resources/js/addsubject.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+$(document).ready(function () {
+  var html = $('#option_subject');
+  $('#btn_add').click(function () {
+    $('#add_subject_main').after(html);
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/app.js":
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
@@ -49526,7 +49542,7 @@ $(document).ready(function () {
   var i = 1;
   $('#add').click(function () {
     i++;
-    $('#input-courses').append('<tr id="row' + i + '"><td><select class="form-control" name="course_id[]" id="course_id"> @foreach ($subjects as $subject)<option value="{{ $subject->id }}">---- {{ $subject->name }} ----</option>    @endforeach</select></td><td><button class="btn btn-danger btn_remove"id="' + i + '" type="button" name="remove"><i class="far fa-trash-alt"></i></i></button></td></tr>');
+    $('#add_subject').append();
   });
   $(document).on('click', '.btn_remove', function () {
     var button_id = $(this).attr("id");
@@ -49592,19 +49608,20 @@ $(document).ready(function () {
 /***/ }),
 
 /***/ 0:
-/*!*************************************************************************************************************************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/js/logout.js ./resources/js/courses.js ./resources/js/changeimg.js ./resources/js/option.js ./resources/js/datatable.js ./resources/sass/app.scss ***!
-  \*************************************************************************************************************************************************************************************************/
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/js/logout.js ./resources/js/courses.js ./resources/js/changeimg.js ./resources/js/option.js ./resources/js/datatable.js ./resources/js/addsubject.js ./resources/sass/app.scss ***!
+  \******************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/duytu/Desktop/Project1/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project1/resources/js/logout.js */"./resources/js/logout.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project1/resources/js/courses.js */"./resources/js/courses.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project1/resources/js/changeimg.js */"./resources/js/changeimg.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project1/resources/js/option.js */"./resources/js/option.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project1/resources/js/datatable.js */"./resources/js/datatable.js");
-module.exports = __webpack_require__(/*! /home/duytu/Desktop/Project1/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/logout.js */"./resources/js/logout.js");
+__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/courses.js */"./resources/js/courses.js");
+__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/changeimg.js */"./resources/js/changeimg.js");
+__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/option.js */"./resources/js/option.js");
+__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/datatable.js */"./resources/js/datatable.js");
+__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/addsubject.js */"./resources/js/addsubject.js");
+module.exports = __webpack_require__(/*! /home/duytu/Desktop/Project/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

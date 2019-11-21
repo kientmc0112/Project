@@ -18,5 +18,6 @@ mix.js([
         'resources/js/changeimg.js',
         'resources/js/option.js',
         'resources/js/datatable.js',
+        'resources/js/addsubject.js',
    ], 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
