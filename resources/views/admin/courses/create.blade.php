@@ -25,10 +25,11 @@
                                 <div class="col-md-12">
                                     <div class="panel panel-default">
                                         <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <form action="{{ route('admin.courses.store') }}" method="post">
-                                                        @csrf
+                                            <form action="{{ route('admin.courses.store') }}" method="post"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="row">
+                                                    <div class="col-md-6">
                                                         @if ($errors->any())
                                                         <div class="alert alert-danger"><i
                                                                 class="fas fa-exclamation-triangle"></i>
@@ -54,15 +55,40 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
+                                                            <table id="add_subject_main">
+                                                                <label for="">{{ trans('setting.subject') }}</label>
+                                                                <tr>
+                                                                    <td><select name="subject_id[]" id="subject_id"
+                                                                            class="form-control">
+                                                                            @foreach ($subjects as $subject)
+                                                                            <option value="">{{ $subject->name }}</option>
+                                                                            @endforeach
+                                                                        </select></td>
+                                                                    <td><button type="button" id="btn_add"
+                                                                            name="btn_add"
+                                                                            class="btn btn-primary">Add</button></td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>
                                                             <textarea class="form-control" name="description" id=""
                                                                 cols="30" rows="10"></textarea>
                                                         </div>
                                                         <button type="submit"
                                                             class="btn btn-primary">{{ trans('setting.add_course') }}</button>
-                                                    </form>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Course Image</label>
+                                                            <input id="img" type="file" name="image"
+                                                                class="form-control hidden" onchange="changeImg(this)">
+                                                            <img id="image" class="thumbnail" width="100%"
+                                                                height="350px" src="/images/avatar.jpg">
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -74,7 +100,21 @@
             </div>
         </div>
         <!-- /.container-fluid -->
-
+        <div class="form-group d-none" id="option_subject">
+                <table>
+                    <tr>
+                        <td><select name="subject_id[]" id="subject_id"
+                                class="form-control">
+                                @foreach ($subjects as $subject)
+                                <option value="">{{ $subject->name }}</option>
+                                @endforeach
+                            </select></td>
+                        <td><button type="button" id="btn_remove"
+                                name="btn_remove"
+                                class="btn btn-danger">X</button></td>
+                    </tr>
+                </table>
+            </div>
         <!-- Sticky Footer -->
         <footer class="sticky-footer">
             <div class="container my-auto">

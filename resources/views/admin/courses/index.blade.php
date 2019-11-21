@@ -38,6 +38,7 @@
                                                         <tr class="bg-primary">
                                                             <th>{{ trans('setting.id') }}</th>
                                                             <th>{{ trans('setting.name') }}</th>
+                                                            <th>{{ trans('setting.image') }}</th>
                                                             <th>{{ trans('setting.categories') }}</th>
                                                             <th>{{ trans('setting.status') }}</th>
                                                             <th>{{ trans('setting.description') }}</th>
@@ -55,6 +56,7 @@
                                                                     </div>
                                                                 </div>
                                                             </td>
+                                                            <td><img style="width: 100px; height: 100px;" src="{{ $course->image }}" alt=""></td>
                                                             <td>{{ $course->category->name }}</td>
                                                             <td>
                                                                 <a href="#" class="btn @if ($course->status == 0)
@@ -79,6 +81,8 @@
                                                                     method="post">
                                                                     @csrf
                                                                     @method('DELETE')
+                                                                    <a href="{{ route('admin.courses.show', $course->id) }}"
+                                                                            class="btn btn-primary"><i class="far fa-eye"></i></a>
                                                                     <a href="{{ route('admin.courses.edit', $course->id) }}"
                                                                             class="btn btn-warning"><i class="fas fa-edit"
                                                                                 aria-hidden="true"></i></a>

@@ -25,12 +25,12 @@
                                 <div class="col-md-12">
                                     <div class="panel panel-default">
                                         <div class="panel-body">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <form action="{{ route('admin.courses.update', $course->id) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        @method('PUT')
+                                            <form action="{{ route('admin.courses.update', $course->id) }}"
+                                                method="post" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="row">
+                                                    <div class="col-md-6">
                                                         @if ($errors->any())
                                                         <div class="alert alert-danger"><i
                                                                 class="fas fa-exclamation-triangle"></i>
@@ -77,9 +77,19 @@
                                                         </div>
                                                         <button type="submit"
                                                             class="btn btn-primary">{{ trans('setting.edit_course') }}</button>
-                                                    </form>
+
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Course Image</label>
+                                                            <input id="img" type="file" name="image"
+                                                                class="form-control hidden" onchange="changeImg(this)">
+                                                            <img id="image" class="thumbnail" width="100%"
+                                                                height="350px" src="{{ $course->image }}">
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

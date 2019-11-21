@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Category;
+use App\Models\Subject;
 use App\Http\Requests\CourseRequest;
 
 class CourseController extends Controller
@@ -47,8 +48,9 @@ class CourseController extends Controller
      */
     public function create()
     {
+        $subjects = Subject::all();
         $categories = $this->getSubCategories(0);
-        return view('admin.courses.create',compact('categories'));
+        return view('admin.courses.create',compact('categories','subjects'));
     }
 
     /**
@@ -60,14 +62,21 @@ class CourseController extends Controller
     public function store(CourseRequest $request)
     {
         $course = new Course;
-        $attributes = [
+        $attr = [
             'category_id' => $request->get('category_id'),
             'name' => $request->get('name'),
             'description' => $request->get('description'),
             'status' => $request->get('status'),
         ];
-        // print_r($attributes);
-        $course->create($attributes);
+        if ($request->hasFile('image')) {  
+            $destinationDir = public_path('images/course');
+            $fileName = uniqid('course').'.'.$request->image->extension();
+            $request->image->move($destinationDir, $fileName);
+            $attr['image'] = '/images/course/'.$fileName;
+        } else {
+            $attr['image'] = '/images/courses.png';
+        }
+        $course->create($attr);
 
         return redirect()->route('admin.courses.index')->with('alert', trans('setting.add_course_success'));
     }
@@ -80,7 +89,9 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        //
+        $course = Course::findOrFail($id);
+        $subject = Course::find($id)->subjects()->orderBy('name')->get();
+        return view('admin.courses.show', compact('course','subject'));
     }
 
     /**
@@ -107,12 +118,21 @@ class CourseController extends Controller
     public function update(CourseRequest $request, $id)
     {
         $course = Course::findOrFail($id);
-        $attributes = [
+        $attr = [
             'category_id' => $request->get('category_id'),
             'name' => $request->get('name'),
             'description' => $request->get('description'),
             'status' => $request->get('status'),
         ];
+        if ($request->hasFile('image')) {  
+            $destinationDir = public_path('images/course');
+            $fileName = uniqid('course').'.'.$request->image->extension();
+            $request->image->move($destinationDir, $fileName);
+            $attr['image'] = '/images/course/'.$fileName;
+        } else {
+            $attr['image'] = $course->image;
+        }
+        $course->update($attr);
 
         return redirect()->route('admin.courses.index')->with('alert', trans('setting.edit_course_success'));
     }

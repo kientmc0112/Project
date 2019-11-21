@@ -60,17 +60,13 @@ class SubjectController extends Controller
      */
     public function show(Request $request)
     {
-        // $conditions = [];
-        // if ($request->course_id) {
-        //     $conditions[] = ['id','=',$request->course_id];
-        // }
-        // $subjects = Subject::where($conditions)->get();
-        // return view('admin.subjects.index', compact('subjects'));
         $courses = Course::all();
-        $subjects = Subject::where('id','=','1')->get();
-        // $subjects = Subject::findOrFail(1);
-        return view('admin.subjects.index', compact('subjects','courses'));
-        // print_r($subjects);
+        $subjects = Subject::with('courses')->get();
+        foreach ($subjects->courses as $course) {
+            $course->id;
+        }
+        dd($course);
+        // return view('admin.subjects.show', compact('subjects','courses'));
     }
 
     /**
