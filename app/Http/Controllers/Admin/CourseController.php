@@ -11,7 +11,7 @@ use App\Http\Requests\CourseRequest;
 
 class CourseController extends Controller
 {
-    const PAGE =10;
+    const PAGE = 10;
     /**
      * Display a listing of the resource.
      *
@@ -61,28 +61,26 @@ class CourseController extends Controller
      */
     public function store(CourseRequest $request)
     {
-        $course = new Course;
-        // $attr = [
-        //     'category_id' => $request->get('category_id'),
-        //     'name' => $request->get('name'),
-        //     'description' => $request->get('description'),
-        //     'status' => $request->get('status'),
-        // ];
-        // if ($request->hasFile('image')) {  
-        //     $destinationDir = public_path('images/course');
-        //     $fileName = uniqid('course').'.'.$request->image->extension();
-        //     $request->image->move($destinationDir, $fileName);
-        //     $attr['image'] = '/images/course/'.$fileName;
-        // } else {
-        //     $attr['image'] = '/images/courses.png';
-        // }
-        // $course->create($attr);
-
-        // return redirect()->route('admin.courses.index')->with('alert', trans('setting.add_course_success'));
-
-
-            $subject_id = $request->subject_id;
-        dd($subject_id);
+        $attr = [
+            'category_id' => $request->get('category_id'),
+            'name' => $request->get('name'),
+            'description' => $request->get('description'),
+            'status' => $request->get('status'),
+        ];
+        if ($request->hasFile('image')) {  
+            $destinationDir = public_path('images/course');
+            $fileName = uniqid('course').'.'.$request->image->extension();
+            $request->image->move($destinationDir, $fileName);
+            $attr['image'] = '/images/course/'.$fileName;
+        } else {
+            $attr['image'] = '/images/courses.png';
+        }
+        $course = Course::create($attr);
+        $course_id = $course->id;
+        $course = Course::find($course_id);
+        $course->subjects()->attach($request->subject_id);
+        
+        return redirect()->route('admin.courses.index')->with('alert', trans('setting.add_course_success'));
     }
 
     /**
@@ -109,7 +107,8 @@ class CourseController extends Controller
         
         $course = Course::findOrFail($id);
         $categories = Category::all();
-        return view('admin.courses.edit', compact('course','categories'));
+        $subjects = Subject::all();
+        return view('admin.courses.edit', compact('course','categories','subjects'));
     }
 
     /**

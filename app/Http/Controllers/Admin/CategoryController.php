@@ -27,7 +27,7 @@ class CategoryController extends Controller
      * @param int $parent_id
      * @return mix
      */
-    private function getSubCategories($parent_id, $ignore_id=null)
+    private function getSubCategories($parent_id, $ignore_id = null)
     {
         $categories = Category::where('parent_id', $parent_id)
             ->where('id', '<>', $ignore_id)
