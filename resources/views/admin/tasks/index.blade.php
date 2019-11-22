@@ -30,7 +30,7 @@
                                         <div class="bootstrap-table">
                                             <div class="table-responsive">
                                                 <a href="{{ route('admin.tasks.create') }}" class="btn btn-primary">Thêm sản phẩm</a>
-                                                <table id="table" class="table table-bordered" style="margin-top:20px;">
+                                                <table class="table table-bordered" style="margin-top:20px;">
 
                                                     <thead>
                                                         <tr class="bg-primary">
