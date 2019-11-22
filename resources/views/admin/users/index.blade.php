@@ -71,6 +71,8 @@
                                                     method="post">
                                                     @csrf
                                                     @method('DELETE')
+                                                    <a href="{{ route('admin.users.show', $user->id) }}"
+                                                        class="btn btn-primary"><i class="far fa-eye"></i></a>
                                                     <a href="{{ route('admin.users.edit', $user->id) }}"
                                                         class="btn btn-warning"><i class="fas fa-edit"></i></a>
                                                     <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>

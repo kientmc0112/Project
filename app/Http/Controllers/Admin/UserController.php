@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Course;
+use App\Models\User_Course;
 use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
@@ -76,7 +78,20 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $courses = Course::all();
+        return view('admin.users.show', compact('user','courses'));
+    }
+
+    public function postShow(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $attr = [
+            'course_id' => $request->get('course_id'),
+            'user_id' => $user->id,
+        ];
+        $user_course =User_Course::create($attr);
+        return redirect()->route('admin.users.show', $user->id);
     }
 
     /**

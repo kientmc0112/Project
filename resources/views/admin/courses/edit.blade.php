@@ -72,19 +72,22 @@
                                                         <div class="form-group">
                                                             <table id="add_subject_main" class="table">
                                                                 <label for="">{{ trans('setting.subject') }}</label>
-                                                                
+                                                                @foreach ( $subject as $subject)
                                                                 <tr>
                                                                     <td><select name="subject_id[]" id="subject_id"
                                                                             class="form-control">
-                                                                            @foreach ($subjects as $subject)
-                                                                            <option value="{{ $subject->id }}">
-                                                                                {{ $subject->name }}</option>
+                                                                            @foreach ($subjects as $item)
+                                                                            <option @if ($subject->id == $item->id)
+                                                                                selected
+                                                                                @endif value="{{ $item->id }}">
+                                                                                {{ $item->name }} </option>
                                                                             @endforeach
                                                                         </select></td>
                                                                     <td><button type="button" id="btn_add"
                                                                             name="btn_add"
                                                                             class="btn btn-primary">Add</button></td>
                                                                 </tr>
+                                                                @endforeach
                                                             </table>
                                                         </div>
                                                         <div class="form-group">

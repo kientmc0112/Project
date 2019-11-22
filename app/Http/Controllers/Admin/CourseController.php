@@ -107,8 +107,9 @@ class CourseController extends Controller
         
         $course = Course::findOrFail($id);
         $categories = Category::all();
+        $subject = Course::find($id)->subjects()->orderBy('name')->get();
         $subjects = Subject::all();
-        return view('admin.courses.edit', compact('course','categories','subjects'));
+        return view('admin.courses.edit', compact('course','categories','subject','subjects'));
     }
 
     /**

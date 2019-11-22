@@ -36,5 +36,5 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
         'as' => 'admin',
         'parameters' => ['users' => 'id']
     ]);
-    Route::post('subjects/show','SubjectController@show')->name('postShow');
+    Route::post('users/{id}','UserController@postShow')->name('postShowUser');
 });

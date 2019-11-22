@@ -31,25 +31,12 @@
                                             <div class="table-responsive">
                                                 <a href="{{ route('admin.subjects.create') }}"
                                                     class="btn btn-primary">Thêm sản phẩm</a>
-                                                <form action="{{ route('postShow') }}" method="post">
-                                                    @csrf
                                                     <table class="table table-bordered" style="margin-top:20px;">
                                                         <thead>
                                                             <tr class="bg-primary">
                                                                 <th>ID</th>
                                                                 <th>Name</th>
-                                                                <th>
-                                                                    <select id="courses_option" class="form-control"
-                                                                        name="course_id"
-                                                                        onchange=" return optionCourses()">
-                                                                        <option>Courses</option>
-                                                                        @foreach ($courses as $course)
-                                                                        <option value="{{ $course->id }}">
-                                                                            {{ $course->name }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                    <button id="btn-courses-option" class="d-none" type="submit">fill</button>
-                                                                </th>
+                                                                <th>Course</th>
                                                                 <th>Status</th>
                                                                 <th>Description</th>
                                                                 <th width='15%'>Tùy chọn</th>
@@ -84,7 +71,7 @@
                                                                     <p>{{ $subject->description }}</p>
                                                                 </td>
                                                                 <td>
-                                                                    {{-- <form
+                                                                    <form
                                                                         action="{{ route('admin.subjects.destroy', $subject->id) }}"
                                                                         method="post">
                                                                         @csrf
@@ -96,7 +83,7 @@
                                                                         <button type="submit" class="btn btn-danger"><i
                                                                                 class="fa fa-trash"
                                                                                 aria-hidden="true"></i></button>
-                                                                    </form> --}}
+                                                                    </form>
                                                                 </td>
                                                             </tr>
                                                             @empty
