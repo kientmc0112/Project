@@ -62,23 +62,27 @@ class CourseController extends Controller
     public function store(CourseRequest $request)
     {
         $course = new Course;
-        $attr = [
-            'category_id' => $request->get('category_id'),
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-            'status' => $request->get('status'),
-        ];
-        if ($request->hasFile('image')) {  
-            $destinationDir = public_path('images/course');
-            $fileName = uniqid('course').'.'.$request->image->extension();
-            $request->image->move($destinationDir, $fileName);
-            $attr['image'] = '/images/course/'.$fileName;
-        } else {
-            $attr['image'] = '/images/courses.png';
-        }
-        $course->create($attr);
+        // $attr = [
+        //     'category_id' => $request->get('category_id'),
+        //     'name' => $request->get('name'),
+        //     'description' => $request->get('description'),
+        //     'status' => $request->get('status'),
+        // ];
+        // if ($request->hasFile('image')) {  
+        //     $destinationDir = public_path('images/course');
+        //     $fileName = uniqid('course').'.'.$request->image->extension();
+        //     $request->image->move($destinationDir, $fileName);
+        //     $attr['image'] = '/images/course/'.$fileName;
+        // } else {
+        //     $attr['image'] = '/images/courses.png';
+        // }
+        // $course->create($attr);
 
-        return redirect()->route('admin.courses.index')->with('alert', trans('setting.add_course_success'));
+        // return redirect()->route('admin.courses.index')->with('alert', trans('setting.add_course_success'));
+
+
+            $subject_id = $request->subject_id;
+        dd($subject_id);
     }
 
     /**

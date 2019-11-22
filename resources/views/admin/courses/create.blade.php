@@ -55,13 +55,13 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
-                                                            <table id="add_subject_main">
+                                                            <table id="add_subject_main" class="table">
                                                                 <label for="">{{ trans('setting.subject') }}</label>
                                                                 <tr>
                                                                     <td><select name="subject_id[]" id="subject_id"
                                                                             class="form-control">
                                                                             @foreach ($subjects as $subject)
-                                                                            <option value="">{{ $subject->name }}</option>
+                                                                            <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                                                                             @endforeach
                                                                         </select></td>
                                                                     <td><button type="button" id="btn_add"
@@ -101,12 +101,12 @@
         </div>
         <!-- /.container-fluid -->
         <div class="form-group d-none" id="option_subject">
-                <table>
+                <table id="input" class="table">
                     <tr>
                         <td><select name="subject_id[]" id="subject_id"
                                 class="form-control">
                                 @foreach ($subjects as $subject)
-                                <option value="">{{ $subject->name }}</option>
+                                <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                                 @endforeach
                             </select></td>
                         <td><button type="button" id="btn_remove"
