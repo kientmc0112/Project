@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Course;
+use App\Models\Category;
 
 class CourseController extends Controller
 {
@@ -14,7 +16,9 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Course::latest('created_at')->paginate(config('course.PagePaginate'));
+        $categories = Category::all();
+        return view('client.course.list', compact('courses', 'categories'));
     }
 
     /**
