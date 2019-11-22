@@ -1,6 +1,8 @@
 $(document).ready(function () {
-    var html = $('#option_subject')
     $('#btn_add').click(function () {
-        $('#add_subject_main').after(html);
+        $('#input').clone().appendTo('#add_subject_main')
+    });
+    $(document).on('click','#btn_remove',function(){
+        $(this).parents('#input').remove();
     });
 });

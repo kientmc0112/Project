@@ -49344,9 +49344,11 @@ module.exports = function(module) {
 /***/ (function(module, exports) {
 
 $(document).ready(function () {
-  var html = $('#option_subject');
   $('#btn_add').click(function () {
-    $('#add_subject_main').after(html);
+    $('#input').clone().appendTo('#add_subject_main');
+  });
+  $(document).on('click', '#btn_remove', function () {
+    $(this).parents('#input').remove();
   });
 });
 
@@ -49614,14 +49616,14 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/logout.js */"./resources/js/logout.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/courses.js */"./resources/js/courses.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/changeimg.js */"./resources/js/changeimg.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/option.js */"./resources/js/option.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/datatable.js */"./resources/js/datatable.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/addsubject.js */"./resources/js/addsubject.js");
-module.exports = __webpack_require__(/*! /home/duytu/Desktop/Project/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/logout.js */"./resources/js/logout.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/courses.js */"./resources/js/courses.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/changeimg.js */"./resources/js/changeimg.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/option.js */"./resources/js/option.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/datatable.js */"./resources/js/datatable.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/addsubject.js */"./resources/js/addsubject.js");
+module.exports = __webpack_require__(/*! /home/chitt/Desktop/Project/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
