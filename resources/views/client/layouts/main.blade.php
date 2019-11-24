@@ -6,7 +6,7 @@
     <meta name="description" content="StudyPress | Education & Courses HTML Template" />
     <meta name="keywords" content="academy, course, education, education html theme, elearning, learning," />
     <meta name="author" content="ThemeMascot" />
-    <title>{{ __('ftms') }}</title>
+    <title>{{ __('FTMS | Framgia Training Manage System') }}</title>
     <link href="{{ asset('bower_components/assets-client/images/favicon.png') }}" rel="shortcut icon" type="image/png">
     <link href="{{ asset('bower_components/assets-client/images/apple-touch-icon.png') }}" rel="apple-touch-icon">
     <link href="{{ asset('bower_components/assets-client/images/apple-touch-icon-72x72.png') }}" rel="apple-touch-icon" sizes="72x72">

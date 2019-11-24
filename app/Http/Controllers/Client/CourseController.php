@@ -50,7 +50,11 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        //
+        // $courses = Course::where('category_id', $id)->paginate(config('course.PagePaginate'));;
+        $category = Category::find($id);
+        $courses = $category->courses->paginate(1);
+        $categories =  Category::all();
+        return view('client.course.list', compact('courses', 'categories'));
     }
 
     /**

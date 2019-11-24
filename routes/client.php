@@ -12,5 +12,6 @@
 */
 
 Route::group(['prefix' => 'courses'], function () {
-    Route::get('/list', 'CourseController@index');
+    Route::get('/', 'CourseController@index');
+    Route::get('/{category_id}/show', 'CourseController@show');
 });
