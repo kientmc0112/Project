@@ -97,6 +97,12 @@
   <script src="{{ asset('bower_components/assets/admin/js/demo/chart-area-demo.js') }}"></script>
   <script src="{{ asset('js/app.js') }}"></script>
   <script type="text/javascript" src="{{ asset('bower_components/datatable/DataTables/datatables.min.js') }}"></script>
+  {{-- <script>
+    function checkConfirm() {
+      var conf = confirm("Bạn có chắc chắn muốn xóa ?");
+      return conf;
+      }
+  </script> --}}
 
 </body>
 

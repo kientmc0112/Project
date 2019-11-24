@@ -18,7 +18,7 @@
                 <span>List User</span>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <div>
                                 <ul>
                                     <li><b>ID :</b> {{ $user->id }}</li>
@@ -44,7 +44,8 @@
                                                             </option>
                                                             @endforeach
                                                         </select></td>
-                                                    <td><button class="btn btn-primary" type="submit">Submit</button></td>
+                                                    <td><button class="btn btn-primary" type="submit">Submit</button>
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </li>
@@ -54,33 +55,34 @@
                             <div class="vertical-menu">
                                 <div class="item-menu active">Danh mục
                                 </div>
-                                {{-- @foreach ($subject as $item)
+                                @foreach ($user_course as $item)
                                 <div class="item-menu"><span>{{ $item->name }}</span>
-                                <div class="category-fix">
-                                    <a class="btn-category btn-primary"
-                                        href="{{ route('admin.subjects.edit', $item->id) }}"><i
-                                            class="fa fa-edit"></i></a>
-                                    <a class="btn-category btn-danger" href="#"><i class="fas fa-times"></i></i></a>
+                                    <div class="category-fix">
+                                        @if ($item->status == 0)
+                                        <a class="btn-category btn-warning" href="#">Ativiting</a>
+                                        @else
+                                        <a class="btn-category btn-success" href="#">Success</a>
+                                        @endif
+                                    </div>
                                 </div>
+                                @endforeach
                             </div>
-                            @endforeach --}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- /.container-fluid -->
+    <!-- /.container-fluid -->
 
-<!-- Sticky Footer -->
-<footer class="sticky-footer">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright © Your Website 2019</span>
+    <!-- Sticky Footer -->
+    <footer class="sticky-footer">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Copyright © Your Website 2019</span>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
 </div>
 <!-- end content -->

@@ -17,8 +17,8 @@ class CreateUserCourseTable extends Migration
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned()->nullable();
             $table->integer('course_id')->unsigned()->nullable();
-            $table->integer('status')->unsigned()->nullable();
-            $table->integer('process')->unsigned()->nullable();
+            $table->integer('status')->unsigned()->nullable()->default(0);
+            $table->integer('process')->unsigned()->nullable()->default(0);
             $table->timestamps();
         });
     }
