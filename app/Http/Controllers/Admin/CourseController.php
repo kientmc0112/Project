@@ -171,6 +171,8 @@ class CourseController extends Controller
         $course->update($attr);
 
         return redirect()->route('admin.courses.index')->with('alert', trans('setting.edit_course_success'));
+        // $subject = $request->subject_id;
+        // dd($subject);
     }
 
     /**
