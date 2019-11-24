@@ -38,6 +38,6 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
     ]);
     Route::post('users/{id}','UserController@postShow')->name('postShowUser');
     Route::post('subjects/{id}','SubjectController@postShow')->name('postShowSubject');
-    Route::post('courses/{id}','CourseController@postShow')->name('postShowCourse');
-    Route::put('courses/{id}','CourseController@finishCourse')->name('postFinishCourse');
+    Route::post('courses/{id}/show','CourseController@postShow')->name('postShowCourse');
+    Route::put('courses/{id}/show','CourseController@finishCourse')->name('postFinishCourse');
 });

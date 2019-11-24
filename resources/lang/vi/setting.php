@@ -27,6 +27,10 @@ return [
     'open' => 'Open',
     'waiting' => 'Waiting',
     'empty' => 'Empty',
+    'subject' => 'Subject',
+    'image' => 'Image',
+    'add' => 'Add',
+    'course_image' => 'Course Image',
     'course_empty' => 'Form Course Empty!!! Pls add data to courses table!!!',
     //
     'parent_id_required' => 'Parent_id Trống!!! Bạn vui lòng nhập đầy đủ thông tin!!!',

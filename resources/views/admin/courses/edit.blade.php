@@ -70,9 +70,12 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
+                                                            <label for="">{{ trans('setting.subject') }}</label> |
+                                                            <button type="button" id="btn_add" name="btn_add"
+                                                                class="btn btn-primary">{{ trans('setting.add') }}</button>
+                                                            @foreach ( $subject as $subject)
                                                             <table id="add_subject_main" class="table">
-                                                                <label for="">{{ trans('setting.subject') }}</label>
-                                                                @foreach ( $subject as $subject)
+
                                                                 <tr>
                                                                     <td><select name="subject_id[]" id="subject_id"
                                                                             class="form-control">
@@ -83,12 +86,13 @@
                                                                                 {{ $item->name }} </option>
                                                                             @endforeach
                                                                         </select></td>
-                                                                    <td><button type="button" id="btn_add"
-                                                                            name="btn_add"
-                                                                            class="btn btn-primary">Add</button></td>
+                                                                    <td><button type="button" id="btn_remove_edit"
+                                                                            name="btn_remove_edit"
+                                                                            class="btn btn-danger">X</button></td>
                                                                 </tr>
-                                                                @endforeach
                                                             </table>
+                                                            @endforeach
+
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>
@@ -96,13 +100,14 @@
                                                                 cols="30"
                                                                 rows="10">{{ $course->description }}</textarea>
                                                         </div>
-                                                        <button type="submit"
-                                                            class="btn btn-primary">{{ trans('setting.edit_course') }}</button>
+                                                        <a href="{{ route('admin.courses.update', $course->id) }}">
+                                                            <button type="submit" class="btn btn-primary">{{ trans('setting.edit_course') }}</button>
+                                                        </a>
 
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>Course Image</label>
+                                                            <label>{{ trans('setting.course_image') }}</label>
                                                             <input id="img" type="file" name="image"
                                                                 class="form-control hidden" onchange="changeImg(this)">
                                                             <img id="image" class="thumbnail" width="100%"
