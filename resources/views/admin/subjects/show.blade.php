@@ -22,93 +22,119 @@
                     <div>
                         <!--/.row-->
                         <div class="row">
-                            <div class="col-xs-12 col-md-12 col-lg-12">
-
-                                <div class="panel panel-primary">
-
-                                    <div class="panel-body">
-                                        <div class="bootstrap-table">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered" style="margin-top:20px;">
-                                                    <thead>
-                                                        <tr class="bg-primary">
-                                                            <th>ID</th>
-                                                            <th>Name</th>
-                                                            <th>
-                                                                <select id="courses_option" class="form-control"
-                                                                    name="course_id" onchange=" return optionCourses()">
-                                                                    <option>Courses</option>
-                                                                    @foreach ($courses as $course)
-                                                                    <option value="{{ $course->id }}">
-                                                                        {{ $course->name }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <button id="btn-courses-option" class="d-none"
-                                                                    type="submit">fill</button>
-                                                            </th>
-                                                            <th>Status</th>
-                                                            <th>Description</th>
-                                                            <th width='15%'>Tùy chọn</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @forelse ($subjects as $subject)
-                                                        <tr>
-                                                            <td>{{ $subject->id }}</td>
-                                                            <td>
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <p>Subject Name : {{ $subject->name }}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                @foreach ($subject->courses as $course)
-                                                                <ul>
-                                                                    <li>{{ $course->name }}</li>
-                                                                </ul>
-                                                                @endforeach
-                                                            </td>
-                                                            <td>
-                                                                @if ($subject->status == false)
-                                                                <button class="btn btn-success">Open</button>
-                                                                @else
-                                                                <button class="btn btn-warning">Waiting</button>
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                <p>{{ $subject->description }}</p>
-                                                            </td>
-                                                            <td>
-                                                                {{-- <form
-                                                                            action="{{ route('admin.subjects.destroy', $subject->id) }}"
-                                                                method="post">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <a href="{{ route('admin.subjects.edit', $subject->id) }}"
-                                                                    class="btn btn-warning"><i class="fas fa-edit"
-                                                                        aria-hidden="true"></i></a>
-                                                                <button type="submit" class="btn btn-danger"><i
-                                                                        class="fa fa-trash"
-                                                                        aria-hidden="true"></i></button>
-                                                                </form> --}}
-                                                            </td>
-                                                        </tr>
-                                                        @empty
-
-                                                        @endforelse
-                                                    </tbody>
-                                                </table>
-                                                </form>
-                                                <div align='right'>
-                                                    {{-- {{ $subjects->links() }} --}}
-                                                </div>
+                            <div class="col-md-3">
+                                <div>
+                                    <ul>
+                                        <li><b>ID :</b> {{ $subject->id }}</li>
+                                        <li><b>Name :</b> {{ $subject->name }}</li>
+                                        <li><b>Status :</b>
+                                            @if ($subject->status == true)
+                                            -----<b style="color: yellow"> Waiting</b>-----
+                                            @else
+                                            -----<b style="color: Green">Open</b>-----
+                                            @endif
+                                        </li>
+                                        <li><b>Description :</b> {{ $subject->description }}</li>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#myModal">Assign User</button>
+                                    </ul>
+                                </div>
+                                <div class="modal fade" id="myModal" role="dialog">
+                                    <div class="modal-dialog">
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <label for="">Assgin User</label>
                                             </div>
-                                            <div class="clearfix"></div>
+                                            <form action="{{ route('postShowSubject', $subject->id) }}" method="POST">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <select class="form-control" name="user_id">
+                                                        @foreach ($listUser as $user)
+                                                        <option value="{{ $user->id }}">{{ $user->name }} |
+                                                            {{ $user->email }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-primary">add</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                                <!--/.row-->
+                                @if (session('alert'))
+                                <div class="alert alert-success">{{ session('alert') }}</div>
+                                @endif
+                                <div class="vertical-menu">
+                                    <div class="item-menu active">Danh mục
+                                    </div>
+                                    @foreach ($tasks as $item)
+                                    <div class="item-menu"><span>{{ $item->name }}</span>
+                                        {{-- <div class="category-fix">
+                                            <a class="btn-category btn-primary"
+                                                href="{{ route('admin.subjects.edit', $item->id) }}"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <a class="btn-category btn-danger" href="#"><i
+                                                    class="fas fa-times"></i></i></a>
+                                        </div> --}}
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <table class="table table-bordered" style="margin-top:20px;">
+                                    <thead>
+                                        <tr class="bg-primary">
+                                            <th>{{ trans('setting.id') }}</th>
+                                            <th>{{ trans('setting.name') }}</th>
+                                            <th>{{ trans('setting.email') }}</th>
+                                            <th>{{ trans('setting.process') }}</th>
+                                            <th width='15%'>{{ trans('setting.options') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($users as $user)
+                                        <tr>
+                                            <td>{{ $user->id }}</td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <p><b>{{ $user->name }}</b></p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>{{ $user->email }}</td>
+                                            <td></td>
+                                            <td>
+                                                {{-- <form
+                                                                action="{{ route('admin.subjects.destroy', $subject->id) }}"
+                                                method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <a href="{{ route('admin.subjects.show', $subject->id) }}"
+                                                    class="btn btn-primary"><i class="far fa-eye"></i></a>
+                                                <a href="{{ route('admin.subjects.edit', $subject->id) }}"
+                                                    class="btn btn-warning"><i class="fas fa-edit"
+                                                        aria-hidden="true"></i></a>
+                                                <button class="btn btn-danger" type="submit"><i class="fa fa-trash"
+                                                        aria-hidden="true"></i></button>
+                                                </form> --}}
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td>{{ trans('setting.subject_empty') }}
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

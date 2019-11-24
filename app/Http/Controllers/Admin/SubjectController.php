@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Subject;
+use App\Models\User;
+use DB;
 
 class SubjectController extends Controller
 {
@@ -58,17 +60,27 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($id)
     {
-        $courses = Course::all();
-        $subjects = Subject::with('courses')->get();
-        foreach ($subjects->courses as $course) {
-            $course->id;
-        }
-        dd($course);
-        // return view('admin.subjects.show', compact('subjects','courses'));
+        $subject = Subject::findOrFail($id);
+        $users = Subject::find($id)->users()->get();
+        $tasks = Subject::find($id)->tasks()->get();
+        $listUser = User::all();
+        return view('admin.subjects.show', compact('subject','users','listUser','tasks'));
     }
 
+    public function postShow(Request $request, $id)
+    {
+        $subject = Subject::findOrFail($id);
+        $user_id = $request->user_id;
+        $check = DB::table('user_subject')->where('subject_id', $id)->where('user_id', $user_id)->get();
+        if (count($check) >= 1) {
+            return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'User dang hoc tai course nay!');    
+        } else {
+            Subject::find($id)->users()->attach($request->user_id);
+            return redirect()->route('admin.subjects.show', $subject->id)->with('Assign User to Course success!');
+        }
+    }
     /**
      * Show the form for editing the specified resource.
      *

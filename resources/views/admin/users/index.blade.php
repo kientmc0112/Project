@@ -47,7 +47,7 @@
                                         <tr>
                                             <td>{{ $user->id }}</td>
                                             <td><b>{{ $user->name }} <b></td>
-                                            <td><img id="avatar-user" src="{{ $user->avatar }}"></td>
+                                            <td><img style="width: 100px; height: 100px" id="avatar-user" src="{{ $user->avatar }}"></td>
                                             <td>{{ $user->email }}</td>
                                             <td>{{ $user->address }}</td>
                                             <td>{{ $user->phone }}</td>

@@ -17,7 +17,7 @@ class CreateUserTaskTable extends Migration
             $table->bigIncrements('id');
             $table->integer('user_id')->unsigned()->nullable();
             $table->integer('task_id')->unsigned()->nullable();
-            $table->integer('status')->unsigned()->nullable();
+            $table->integer('status')->unsigned()->nullable()->default(0);
             $table->timestamps();
         });
     }

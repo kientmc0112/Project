@@ -8,6 +8,8 @@ use App\Models\Course;
 use App\Models\Category;
 use App\Models\Subject;
 use App\Http\Requests\CourseRequest;
+use App\Models\User;
+use DB;
 
 class CourseController extends Controller
 {
@@ -93,7 +95,37 @@ class CourseController extends Controller
     {
         $course = Course::findOrFail($id);
         $subject = Course::find($id)->subjects()->orderBy('name')->get();
-        return view('admin.courses.show', compact('course','subject'));
+        $userCourse = Course::find($id)->users()->get();
+        $listUser = User::all();
+        $statusUser = DB::table('user_course')->where('course_id', $id)->get();
+        // dd($statusUser);
+        return view('admin.courses.show', compact('course','subject','userCourse','listUser','statusUser'));
+    }
+
+    public function postShow(Request $request, $id)
+    {
+        $course = Course::findOrFail($id);
+        $check = DB::table('user_course')->where('course_id', $id)->where('user_id', $request->user_id)->get();
+        $checkStatusUser = DB::table('user_course')->where('user_id', $request->user_id)->where('status', 0)->get();
+        if (count($checkStatusUser) >= 1) {
+            return redirect()->route('admin.courses.show', $course->id)->with('alert', 'K the dang ky nhieu hon 2 course!!!');
+        }else {
+            if (count($check) >= 1) {
+                return redirect()->route('admin.courses.show', $course->id)->with('alert', 'User Da hoc course nay r!');
+            } else {
+                Course::find($id)->users()->attach($request->user_id);
+                return redirect()->route('admin.courses.show', $course->id)->with('alert', 'Success');
+            }
+        }
+    }
+
+    public function finishCourse(Request $request, $id)
+    {
+        DB::table('user_course')
+                ->where('course_id', $id)
+                ->where('user_id', $request->user_id)
+                ->update(['status' => 1]);
+        return redirect()->route('admin.courses.show', $id);
     }
 
     /**

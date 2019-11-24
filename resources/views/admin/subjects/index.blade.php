@@ -76,6 +76,8 @@
                                                                         method="post">
                                                                         @csrf
                                                                         @method('DELETE')
+                                                                        <a href="{{ route('admin.subjects.show', $subject->id) }}"
+                                                                                class="btn btn-primary"><i class="far fa-eye"></i></a>
                                                                         <a href="{{ route('admin.subjects.edit', $subject->id) }}"
                                                                             class="btn btn-warning"><i
                                                                                 class="fas fa-edit"

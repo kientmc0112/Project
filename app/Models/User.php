@@ -49,23 +49,23 @@ class User extends Authenticatable
         return $this->hasMany(Activity::class);
     }
 
-    public function user_course()
-    {
-        return $this->hasMany(User_Course::class);
-    }
-
-    public function user_subject()
-    {
-        return $this->hasMany(User_Subject::class);
-    }
-
-    public function user_task()
-    {
-        return $this->hasMany(User_Task::class);
-    }
-
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'user_subject');
+    }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'user_course');
+    }
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class, 'user_task');
     }
 }

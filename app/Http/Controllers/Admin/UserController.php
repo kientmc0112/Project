@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Course;
-use App\Models\User_Course;
 use App\Http\Requests\UserRequest;
+use DB;
 
 class UserController extends Controller
 {
@@ -80,18 +80,21 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $courses = Course::all();
-        return view('admin.users.show', compact('user','courses'));
+        $user_course = User::find($id)->courses()->get();
+        return view('admin.users.show', compact('user','courses','user_course'));
     }
 
     public function postShow(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $attr = [
-            'course_id' => $request->get('course_id'),
-            'user_id' => $user->id,
-        ];
-        $user_course =User_Course::create($attr);
-        return redirect()->route('admin.users.show', $user->id);
+        $user_course = User::find($id)->courses()->get();
+        $checkStatus = DB::table('user_course')->where('status', 0)->where('user_id', $id)->get();
+        if (count($checkStatus) >= 1) {
+            return redirect()->route('admin.users.show', $user->id)->with('alert', trans('setting.checkstatus'));    
+        } else {
+            $user->courses()->attach($request->course_id);
+            return redirect()->route('admin.users.show', $user->id)->with('alert', trans('setting.add_user_course_success'));
+        }
     }
 
     /**

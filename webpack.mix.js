@@ -19,5 +19,6 @@ mix.js([
         'resources/js/option.js',
         'resources/js/datatable.js',
         'resources/js/addsubject.js',
+        'resources/js/checkconfirm.js',
    ], 'public/js')
     .sass('resources/sass/app.scss', 'public/css');

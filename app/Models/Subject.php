@@ -22,8 +22,8 @@ class Subject extends Model
         return $this->hasMany(Task::class);
     }
 
-    public function user_subject()
+    public function users()
     {
-        return $this->hasMany(User_Subject::class);
+        return $this->belongsToMany(User::class, 'user_subject');
     }
 }
