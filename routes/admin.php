@@ -36,8 +36,14 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
         'as' => 'admin',
         'parameters' => ['users' => 'id']
     ]);
-    Route::post('users/{id}','UserController@postShow')->name('postShowUser');
-    Route::post('subjects/{id}','SubjectController@postShow')->name('postShowSubject');
-    Route::post('courses/{id}/show','CourseController@postShow')->name('postShowCourse');
-    Route::put('courses/{id}/show','CourseController@finishCourse')->name('postFinishCourse');
+    Route::post('users/{id}', 'UserController@postShow')->name('postShowUser');
+
+    Route::post('subjects/{id}/show', 'SubjectController@postShow')->name('postShowSubject');
+    Route::put('subjects/{id}/show', 'SubjectController@finishSubject')->name('putFinishSubject');
+
+    Route::post('courses/{id}/show', 'CourseController@postShow')->name('postShowCourse');
+    Route::put('courses/{id}/show', 'CourseController@finishCourse')->name('postFinishCourse');
+
+    Route::post('tasks/{id}/show', 'TaskController@postShow')->name('postShowTask');
+    Route::put('tasks/{id}/show', 'TaskController@finishCourse')->name('putFinishTask');
 });

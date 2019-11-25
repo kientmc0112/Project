@@ -31,9 +31,9 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         @if ($errors->any())
-                                                        <div class="alert alert-danger"><i
-                                                                class="fas fa-exclamation-triangle"></i>
-                                                            {{ $errors->first() }}</div>
+                                                            <div class="alert alert-danger"><i
+                                                                    class="fas fa-exclamation-triangle"></i>
+                                                                {{ $errors->first() }}</div>
                                                         @endif
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.category') }} :</label>
@@ -55,14 +55,14 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group">
-                                                            <table id="add_subject_main" class="table">
+                                                            <table id="add_main" class="table">
                                                                 <label for="">{{ trans('setting.subject') }}</label>
                                                                 <tr>
                                                                     <td><select name="subject_id[]" id="subject_id"
                                                                             class="form-control">
                                                                             @foreach ($subjects as $subject)
-                                                                            <option value="{{ $subject->id }}">
-                                                                                {{ $subject->name }}</option>
+                                                                                <option value="{{ $subject->id }}">
+                                                                                    {{ $subject->name }}</option>
                                                                             @endforeach
                                                                         </select></td>
                                                                     <td><button type="button" id="btn_add"
@@ -106,7 +106,7 @@
                 <tr>
                     <td><select name="subject_id[]" id="subject_id" class="form-control">
                             @foreach ($subjects as $subject)
-                            <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                                <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                             @endforeach
                         </select></td>
                     <td><button type="button" id="btn_remove" name="btn_remove" class="btn btn-danger">X</button></td>

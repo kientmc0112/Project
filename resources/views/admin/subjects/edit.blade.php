@@ -27,7 +27,8 @@
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <form action="{{ route('admin.subjects.update', $subject->id) }}" method="post">
+                                                    <form action="{{ route('admin.subjects.update', $subject->id) }}"
+                                                        method="post">
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="form-group">
@@ -46,6 +47,30 @@
                                                                     selected
                                                                     @endif>Waiting</option>
                                                             </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="">{{ trans('setting.subject') }}</label> | 
+                                                            <td><button type="button" id="btn_add" name="btn_add"
+                                                                    class="btn btn-primary">Add</button></td>
+                                                            @foreach ($course as $item)
+                                                            <table id="add_main" class="table">
+                                                                <tr>
+                                                                    <td><select name="course_id[]" id="course_id"
+                                                                            class="form-control">
+                                                                            @foreach ($courses as $course)
+                                                                            <option @if ($item->id == $course->id)
+                                                                                selected
+                                                                                @endif
+                                                                                value="{{ $course->id }}">
+                                                                                {{ $course->name }}</option>
+                                                                            @endforeach
+                                                                        </select></td>
+                                                                    <td><button type="button" id="btn_remove_edit"
+                                                                            name="btn_remove_edit"
+                                                                            class="btn btn-danger">X</button></td>
+                                                                </tr>
+                                                            </table>
+                                                            @endforeach
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">Description</label>
@@ -69,7 +94,22 @@
             </div>
         </div>
         <!-- /.container-fluid -->
-
+        <div class="form-group d-none" id="option_subject">
+                <table id="input" class="table">
+                    <tr>
+                        <td><select name="course_id[]" id="course_id"
+                                class="form-control">
+                                @foreach ($courses as $course)
+                                <option value="{{ $course->id }}">
+                                    {{ $course->name }}</option>
+                                @endforeach
+                            </select></td>
+                        <td><button type="button" id="btn_remove"
+                                name="btn_remove"
+                                class="btn btn-danger">X</button></td>
+                    </tr>
+                </table>
+            </div>
         <!-- Sticky Footer -->
         <footer class="sticky-footer">
             <div class="container my-auto">

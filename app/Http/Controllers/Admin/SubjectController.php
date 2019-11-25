@@ -32,7 +32,8 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        return view('admin.subjects.create');
+        $courses = Course::all();
+        return view('admin.subjects.create', compact('courses'));
     }
 
     /**
@@ -43,15 +44,17 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        $subject = new Subject;
         $attr= [
             'name' => $request->get('name'),
             'status' => $request->get('status'),
             'description' => $request->get('description'),
         ];
-        $subject->create($attr);
-
+        $subject = Subject::create($attr);
+        $subject_id = $subject->id;
+        $subject = Subject::find($subject_id);
+        $subject->courses()->attach($request->course_id);
         return redirect()->route('admin.subjects.index')->with('alert', trans('setting.add_subject_success'));
+        
     }
 
     /**
@@ -66,7 +69,8 @@ class SubjectController extends Controller
         $users = Subject::find($id)->users()->get();
         $tasks = Subject::find($id)->tasks()->get();
         $listUser = User::all();
-        return view('admin.subjects.show', compact('subject','users','listUser','tasks'));
+        $statusUser = DB::table('user_subject')->where('subject_id', $id)->get();
+        return view('admin.subjects.show', compact('subject','users','listUser','tasks','statusUser'));
     }
 
     public function postShow(Request $request, $id)
@@ -74,13 +78,28 @@ class SubjectController extends Controller
         $subject = Subject::findOrFail($id);
         $user_id = $request->user_id;
         $check = DB::table('user_subject')->where('subject_id', $id)->where('user_id', $user_id)->get();
-        if (count($check) >= 1) {
-            return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'User dang hoc tai course nay!');    
-        } else {
-            Subject::find($id)->users()->attach($request->user_id);
-            return redirect()->route('admin.subjects.show', $subject->id)->with('Assign User to Course success!');
+        $checkStatusUser = DB::table('user_subject')->where('user_id', $request->user_id)->where('status', 0)->get();
+        if (count($checkStatusUser) >= 1) {
+            return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'K the hoc 2 subject');    
+        }else {
+            if (count($check) >= 1) {
+                return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'User dang hoc tai course nay!');    
+            } else {
+                Subject::find($id)->users()->attach($request->user_id);
+                return redirect()->route('admin.subjects.show', $subject->id)->with('Assign User to Course success!');
+            }
         }
     }
+
+    public function finishSubject(Request $request, $id)
+    {
+        DB::table('user_subject')
+                ->where('subject_id', $id)
+                ->where('user_id', $request->user_id)
+                ->update(['status' => 1]);
+        return redirect()->route('admin.subjects.show', $id);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -90,7 +109,9 @@ class SubjectController extends Controller
     public function edit($id)
     {
         $subject = Subject::findOrFail($id);
-        return view('admin.subjects.edit', compact('subject'));
+        $courses = Course::all();
+        $course = Subject::find($id)->courses()->get();
+        return view('admin.subjects.edit', compact('subject','courses','course'));
     }
 
     /**
@@ -109,6 +130,9 @@ class SubjectController extends Controller
             'description' => $request->get('description'),
         ];
         $subject->update($attr);
+        $course_id = $request->course_id;
+        $subject->courses()->detach();
+        $subject->courses()->attach($request->course_id);
 
         return redirect()->route('admin.subjects.index')->with('alert', trans('setting.edit_subject_success'));
     }

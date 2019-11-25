@@ -21,7 +21,9 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::latest('id')->with('category')->paginate(self::PAGE);
+        $courses = Course::latest('id')
+                        ->with('category')
+                        ->paginate(self::PAGE);
         return view('admin.courses.index', compact('courses'));
     }
 
@@ -34,12 +36,12 @@ class CourseController extends Controller
     private function getSubCategories($parent_id, $ignore_id=null)
     {
         $categories = Category::where('parent_id', $parent_id)
-            ->where('id', '<>', $ignore_id)
-            ->get()
-            ->map(function($query) use($ignore_id){
-                $query->sub = $this->getSubCategories($query->id, $ignore_id);
-                return $query;
-            });
+                                ->where('id', '<>', $ignore_id)
+                                ->get()
+                                ->map(function($query) use($ignore_id){
+                                    $query->sub = $this->getSubCategories($query->id, $ignore_id);
+                                    return $query;
+                                });
         return $categories;
     }
 
@@ -52,7 +54,7 @@ class CourseController extends Controller
     {
         $subjects = Subject::all();
         $categories = $this->getSubCategories(0);
-        return view('admin.courses.create',compact('categories','subjects'));
+        return view('admin.courses.create', compact('categories','subjects'));
     }
 
     /**
@@ -93,29 +95,43 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        $course = Course::findOrFail($id);
-        $subject = Course::find($id)->subjects()->orderBy('name')->get();
-        $userCourse = Course::find($id)->users()->get();
-        $listUser = User::all();
-        $statusUser = DB::table('user_course')->where('course_id', $id)->get();
-        // dd($statusUser);
-        return view('admin.courses.show', compact('course','subject','userCourse','listUser','statusUser'));
+        try {
+            $course = Course::findOrFail($id);
+            $listSubject = Course::find($id)->subjects()->orderBy('name')->get();
+            $userCourse = Course::find($id)->users()->get();
+            $listUser = User::all();
+            $statusUser = DB::table('user_course')->where('course_id', $id)->get();
+
+            return view('admin.courses.show', compact('course', 'listSubject', 'userCourse', 'listUser', 'statusUser'));    
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     public function postShow(Request $request, $id)
     {
-        $course = Course::findOrFail($id);
-        $check = DB::table('user_course')->where('course_id', $id)->where('user_id', $request->user_id)->get();
-        $checkStatusUser = DB::table('user_course')->where('user_id', $request->user_id)->where('status', 0)->get();
-        if (count($checkStatusUser) >= 1) {
-            return redirect()->route('admin.courses.show', $course->id)->with('alert', 'K the dang ky nhieu hon 2 course!!!');
-        }else {
-            if (count($check) >= 1) {
-                return redirect()->route('admin.courses.show', $course->id)->with('alert', 'User Da hoc course nay r!');
-            } else {
-                Course::find($id)->users()->attach($request->user_id);
-                return redirect()->route('admin.courses.show', $course->id)->with('alert', 'Success');
-            }
+        try {
+            $course = Course::findOrFail($id);
+            $check = DB::table('user_course')
+                        ->where('course_id', $id)
+                        ->where('user_id', $request->user_id)
+                        ->get();
+            $checkStatusUser = DB::table('user_course')
+                        ->where('user_id', $request->user_id)
+                        ->where('status', 0)
+                        ->get();
+            if (count($checkStatusUser) >= 1) {
+                return redirect()->route('admin.courses.show', $course->id)->with('alert', 'K the dang ky nhieu hon 2 course!!!');
+            }else {
+                if (count($check) >= 1) {
+                    return redirect()->route('admin.courses.show', $course->id)->with('alert', 'User Da hoc course nay r!');
+                } else {
+                    Course::find($id)->users()->attach($request->user_id);
+                    return redirect()->route('admin.courses.show', $course->id)->with('alert', 'Success');
+                }
+            }    
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
         }
     }
 
@@ -136,12 +152,15 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
-        
-        $course = Course::findOrFail($id);
-        $categories = Category::all();
-        $subject = Course::find($id)->subjects()->orderBy('name')->get();
-        $subjects = Subject::all();
-        return view('admin.courses.edit', compact('course','categories','subject','subjects'));
+        try {
+            $course = Course::findOrFail($id);
+            $categories = Category::all();
+            $subject = Course::find($id)->subjects()->orderBy('name')->get();
+            $subjects = Subject::all();
+            return view('admin.courses.edit', compact('course','categories','subject','subjects'));    
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     /**
@@ -153,26 +172,30 @@ class CourseController extends Controller
      */
     public function update(CourseRequest $request, $id)
     {
-        $course = Course::findOrFail($id);
-        $attr = [
-            'category_id' => $request->get('category_id'),
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-            'status' => $request->get('status'),
-        ];
-        if ($request->hasFile('image')) {  
-            $destinationDir = public_path('images/course');
-            $fileName = uniqid('course').'.'.$request->image->extension();
-            $request->image->move($destinationDir, $fileName);
-            $attr['image'] = '/images/course/'.$fileName;
-        } else {
-            $attr['image'] = $course->image;
-        }
-        $course->update($attr);
+        try {
+            $course = Course::findOrFail($id);
+            $attr = [
+                'category_id' => $request->get('category_id'),
+                'name' => $request->get('name'),
+                'description' => $request->get('description'),
+                'status' => $request->get('status'),
+            ];
+            if ($request->hasFile('image')) {  
+                $destinationDir = public_path('images/course');
+                $fileName = uniqid('course').'.'.$request->image->extension();
+                $request->image->move($destinationDir, $fileName);
+                $attr['image'] = '/images/course/'.$fileName;
+            } else {
+                $attr['image'] = $course->image;
+            }
+            $course->update($attr);
+            $course->subjects()->detach();
+            $course->subjects()->attach($request->subject_id);
 
-        return redirect()->route('admin.courses.index')->with('alert', trans('setting.edit_course_success'));
-        // $subject = $request->subject_id;
-        // dd($subject);
+            return redirect()->route('admin.courses.index')->with('alert', trans('setting.edit_course_success'));    
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     /**
@@ -183,8 +206,12 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
-        $course = Course::findOrFail($id);
-        $course->delete();
-        return redirect()->route('admin.courses.index')->with('alert', trans('setting.delete_course_success'));
+        try {
+            $course = Course::findOrFail($id);
+            $course->delete();
+            return redirect()->route('admin.courses.index')->with('alert', trans('setting.delete_course_success'));    
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 }
