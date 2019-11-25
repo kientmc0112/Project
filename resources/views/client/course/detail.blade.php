@@ -1,24 +1,6 @@
 @extends('client.layouts.main')
 @section('content')
-    {{-- <section class="inner-header divider parallax layer-overlay overlay-dark-5" data-bg-img="{{ asset('bower_components/assets-client/images/bg/bg3.jpg') }}">
-        <div class="container pt-70 pb-20">
-            <!-- Section Content -->
-            <div class="section-content">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h2 class="title text-white">Course Details</h2>
-                        <ol class="breadcrumb text-left text-black mt-10">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Pages</a></li>
-                            <li class="active text-gray-silver">Page Title</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-
-    {{-- <section>
+    <section>
         <div class="container">
             <div class="row">
                 <div class="col-md-8 blog-pull-right">
@@ -190,31 +172,9 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="widget">
-                            <h4 class="widget-title line-bottom">Opening <span class="text-theme-color-2">Hours</span></h4>
-                            <div class="opening-hours">
-                                <ul class="list-border">
-                                    <li class="clearfix"> <span> Mon - Tues :  </span>
-                                        <div class="value pull-right"> 6.00 am - 10.00 pm </div>
-                                    </li>
-                                    <li class="clearfix"> <span> Wednes - Thurs :</span>
-                                        <div class="value pull-right"> 8.00 am - 6.00 pm </div>
-                                    </li>
-                                    <li class="clearfix"> <span> Fri : </span>
-                                        <div class="value pull-right"> 3.00 pm - 8.00 pm </div>
-                                    </li>
-                                    <li class="clearfix"> <span> Sun : </span>
-                                        <div class="value pull-right"> Colosed </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section> --}}
-    @foreach($courses as $course)
-        <p>{{ $course->name }}</p>
-    @endforeach
+    </section>
 @endsection

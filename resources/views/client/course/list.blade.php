@@ -46,8 +46,9 @@
                             <h5 class="widget-title line-bottom">{{ __('Categories') }}</h5>
                             <div class="categories">
                                 <ul class="list list-border angle-double-right">
+                                    <li><a href="{{ route('course.index') }}">{{ __('All') }}<span></span></a></li>
                                     @foreach($categories as $category)
-                                    <li><a href="#">{{ $category->name }}<span>{{ '('.$category->courses->count().')' }}</span></a></li>
+                                    <li><a href="{{ route('category.show', $category->id) }}">{{ $category->name }}<span>{{ '('.$category->courses->count().')' }}</span></a></li>
                                     @endforeach
                                 </ul>
                             </div>

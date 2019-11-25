@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
-class CourseController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -45,7 +47,10 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $courses = $category->courses->paginate(config('course.PagePaginate'));
+        $categories =  Category::all();
+        return view('client.course.list', compact('courses', 'categories'));
     }
 
     /**
