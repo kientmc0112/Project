@@ -32,22 +32,22 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         @if ($errors->any())
-                                                        <div class="alert alert-danger"><i
-                                                                class="fas fa-exclamation-triangle"></i>
-                                                            {{ $errors->first() }}</div>
+                                                            <div class="alert alert-danger"><i
+                                                                    class="fas fa-exclamation-triangle"></i>
+                                                                {{ $errors->first() }}</div>
                                                         @endif
                                                         <div class="form-group">
                                                             <label for=""> {{ trans('setting.category') }} :</label>
                                                             <select class="form-control" name="category_id" id="">
                                                                 @forelse ($categories as $category)
-                                                                <option @if ($category->id == $course->category_id)
-                                                                    selected
-                                                                    @endif
+                                                                    <option 
+                                                                        @if ($category->id == $course->category_id)
+                                                                            selected
+                                                                        @endif
                                                                     value="{{ $category->id }}">{{ $category->name }}
-                                                                </option>
+                                                                    </option>
                                                                 @empty
-                                                                <option value="">-----{{ trans('setting.empty') }}-----
-                                                                </option>
+                                                                    <option value="">-----{{ trans('setting.empty') }}-----</option>
                                                                 @endforelse
                                                             </select>
                                                         </div>
@@ -59,11 +59,12 @@
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.status') }}</label>
                                                             <select class="form-control" name="status" id="">
-                                                                <option @if ($course->status = 0)
-                                                                    selected
+                                                                <option 
+                                                                    @if ($course->status == false)
+                                                                        selected
                                                                     @endif
                                                                     value="0">{{ trans('setting.open') }}</option>
-                                                                <option @if ($course->status = 1)
+                                                                <option @if ($course->status == true)
                                                                     selected
                                                                     @endif
                                                                     value="1">{{ trans('setting.waiting') }}</option>
@@ -74,7 +75,7 @@
                                                             <button type="button" id="btn_add" name="btn_add"
                                                                 class="btn btn-primary">{{ trans('setting.add') }}</button>
                                                             @foreach ( $subject as $subject)
-                                                            <table id="add_subject_main" class="table">
+                                                            <table id="add_main" class="table">
 
                                                                 <tr>
                                                                     <td><select name="subject_id[]" id="subject_id"
@@ -92,7 +93,6 @@
                                                                 </tr>
                                                             </table>
                                                             @endforeach
-
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>
@@ -101,7 +101,8 @@
                                                                 rows="10">{{ $course->description }}</textarea>
                                                         </div>
                                                         <a href="{{ route('admin.courses.update', $course->id) }}">
-                                                            <button type="submit" class="btn btn-primary">{{ trans('setting.edit_course') }}</button>
+                                                            <button type="submit"
+                                                                class="btn btn-primary">{{ trans('setting.edit_course') }}</button>
                                                         </a>
 
                                                     </div>

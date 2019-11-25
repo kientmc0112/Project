@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Subject;
+use App\Models\User;
+use DB;
 
 class TaskController extends Controller
 {
@@ -59,7 +61,39 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        //
+        $task = Task::findOrFail($id);
+        $userTask = Task::find($id)->users()->get();
+        $listUsers = User::all();
+        $statusUser = DB::table('user_task')->where('task_id', $id)->get();
+        $subjectTask = $task->subject()->get();
+        return view('admin.tasks.show',compact('task','userTask','listUsers','statusUser','subjectTask'));
+    }
+
+    public function postShow(Request $request, $id)
+    {
+        
+        $task = Task::findOrFail($id);
+        $check = DB::table('user_task')->where('task_id', $id)->where('user_id', $request->user_id)->get();
+        $checkStatusUser = DB::table('user_task')->where('user_id', $request->user_id)->where('status', 0)->get();
+        if (count($checkStatusUser) >= 1) {
+            return redirect()->route('admin.tasks.show', $task->id)->with('alert', 'K the dang ky nhieu hon 2 course!!!');
+        }else {
+            if (count($check) >= 1) {
+                return redirect()->route('admin.tasks.show', $task->id)->with('alert', 'User Da hoc course nay r!');
+            } else {
+                Task::find($id)->users()->attach($request->user_id);
+                return redirect()->route('admin.tasks.show', $task->id)->with('alert', 'Success');
+            }
+        }
+    }
+
+    public function finishCourse(Request $request, $id)
+    {
+        // DB::table('user_task')
+        //         ->where('task_id', $id)
+        //         ->where('user_id', $request->user_id)
+        //         ->update(['status' => 1]);
+        // return redirect()->route('admin.tasks.show', $id);
     }
 
     /**
@@ -106,6 +140,6 @@ class TaskController extends Controller
         $task = Task::findOrFail($id);
         $task->delete();
 
-        return redirect()->route('admin.tasks.index')->with('alert', trans('alert', trans('setting.delete_task_success')));
+        return redirect()->route('admin.tasks.index')->with('alert', trans('setting.delete_task_success'));
     }
 }

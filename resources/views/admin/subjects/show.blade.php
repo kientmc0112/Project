@@ -70,15 +70,7 @@
                                     <div class="item-menu active">Danh mục
                                     </div>
                                     @foreach ($tasks as $item)
-                                    <div class="item-menu"><span>{{ $item->name }}</span>
-                                        {{-- <div class="category-fix">
-                                            <a class="btn-category btn-primary"
-                                                href="{{ route('admin.subjects.edit', $item->id) }}"><i
-                                                    class="fa fa-edit"></i></a>
-                                            <a class="btn-category btn-danger" href="#"><i
-                                                    class="fas fa-times"></i></i></a>
-                                        </div> --}}
-                                    </div>
+                                    <div class="item-menu"><span>{{ $item->name }}</span></div>
                                     @endforeach
                                 </div>
                             </div>
@@ -89,6 +81,7 @@
                                             <th>{{ trans('setting.id') }}</th>
                                             <th>{{ trans('setting.name') }}</th>
                                             <th>{{ trans('setting.email') }}</th>
+                                            <th>{{ trans('setting.status') }}</th>
                                             <th>{{ trans('setting.process') }}</th>
                                             <th width='15%'>{{ trans('setting.options') }}</th>
                                         </tr>
@@ -105,21 +98,35 @@
                                                 </div>
                                             </td>
                                             <td>{{ $user->email }}</td>
-                                            <td></td>
                                             <td>
-                                                {{-- <form
-                                                                action="{{ route('admin.subjects.destroy', $subject->id) }}"
-                                                method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <a href="{{ route('admin.subjects.show', $subject->id) }}"
-                                                    class="btn btn-primary"><i class="far fa-eye"></i></a>
-                                                <a href="{{ route('admin.subjects.edit', $subject->id) }}"
-                                                    class="btn btn-warning"><i class="fas fa-edit"
-                                                        aria-hidden="true"></i></a>
-                                                <button class="btn btn-danger" type="submit"><i class="fa fa-trash"
-                                                        aria-hidden="true"></i></button>
-                                                </form> --}}
+                                                @foreach ($statusUser as $item)
+                                                @if ($item->status == 0)
+                                                <button class="btn btn-warning">Ativiting</button>
+                                                @else
+                                                <button class="btn btn-success">Success</button>
+                                                @endif
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                @foreach ($statusUser as $item)
+                                                    {{ $item->process }}
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                <form id="finish-form" action="{{ route('putFinishSubject', $subject->id) }}" method="post">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    @foreach ($statusUser as $item)
+                                                        @if ($item->user_id == $user->id)
+                                                            @if ($item->status == 0)
+                                                                <input class="d-none" type="hidden" name="user_id" value="{{ $item->user_id }}">
+                                                                <button onclick="return checkConfirm()" type="submit" class="btn btn-info">Finish</button>
+                                                            @else
+                                                                <button class="btn btn-success">Finished</button>
+                                                            @endif
+                                                        @endif
+                                                    @endforeach
+                                                </form>
                                             </td>
                                         </tr>
                                         @empty

@@ -62,11 +62,11 @@
                             <div class="vertical-menu">
                                 <div class="item-menu active">Danh mục
                                 </div>
-                                @foreach ($subject as $item)
-                                <div class="item-menu"><span>{{ $item->name }}</span>
+                                @foreach ($listSubject as $subject)
+                                <div class="item-menu"><span>{{ $subject->name }}</span>
                                     <div class="category-fix">
                                         <a class="btn-category btn-primary"
-                                            href="{{ route('admin.subjects.edit', $item->id) }}"><i
+                                            href="{{ route('admin.subjects.edit', $subject->id) }}"><i
                                                 class="fa fa-edit"></i></a>
                                         <a class="btn-category btn-danger" href="#"><i class="fas fa-times"></i></i></a>
                                     </div>
@@ -109,7 +109,13 @@
                                                 @endif
                                             @endforeach
                                         </td>
-                                        <td></td>
+                                        <td>
+                                            @foreach ($statusUser as $item)
+                                                @if ($user->id == $item->user_id)
+                                                    {{ $item->process }}
+                                                @endif
+                                            @endforeach
+                                        </td>
                                         <td>
                                             <form id="finish-form" action="{{ route('postFinishCourse', $course->id) }}" method="post">
                                                 @csrf

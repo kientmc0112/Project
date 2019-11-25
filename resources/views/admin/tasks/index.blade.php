@@ -71,6 +71,8 @@
                                                                 <form action="{{ route('admin.tasks.destroy', $task->id) }}" method="post">
                                                                     @csrf
                                                                     @method('DELETE')
+                                                                    <a href="{{ route('admin.tasks.show', $task->id) }}"
+                                                                            class="btn btn-primary"><i class="far fa-eye"></i></a>
                                                                     <a href="{{ route('admin.tasks.edit', $task->id) }}" class="btn btn-warning"><i
                                                                             class="fas fa-edit"
                                                                             aria-hidden="true"></i></a>
