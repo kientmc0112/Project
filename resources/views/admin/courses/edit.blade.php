@@ -32,19 +32,17 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         @if ($errors->any())
-                                                            <div class="alert alert-danger"><i
-                                                                    class="fas fa-exclamation-triangle"></i>
-                                                                {{ $errors->first() }}</div>
+                                                        <div class="alert alert-danger"><i
+                                                                class="fas fa-exclamation-triangle"></i> {{ $errors->first() }}</div>
                                                         @endif
                                                         <div class="form-group">
                                                             <label for=""> {{ trans('setting.category') }} :</label>
                                                             <select class="form-control" name="category_id" id="">
                                                                 @forelse ($categories as $category)
-                                                                    <option 
-                                                                        @if ($category->id == $course->category_id)
-                                                                            selected
+                                                                    <option @if ($category->id == $course->category_id)
+                                                                        selected
                                                                         @endif
-                                                                    value="{{ $category->id }}">{{ $category->name }}
+                                                                        value="{{ $category->id }}">{{ $category->name }}
                                                                     </option>
                                                                 @empty
                                                                     <option value="">-----{{ trans('setting.empty') }}-----</option>
@@ -53,15 +51,13 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.name') }}</label>
-                                                            <input type="text" class="form-control" name="name" id=""
-                                                                value="{{ $course->name }}">
+                                                            <input type="text" class="form-control" name="name" id="" value="{{ $course->name }}">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.status') }}</label>
                                                             <select class="form-control" name="status" id="">
-                                                                <option 
-                                                                    @if ($course->status == false)
-                                                                        selected
+                                                                <option @if ($course->status == false)
+                                                                    selected
                                                                     @endif
                                                                     value="0">{{ trans('setting.open') }}</option>
                                                                 <option @if ($course->status == true)

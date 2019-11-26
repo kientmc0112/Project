@@ -65,7 +65,7 @@ class TaskController extends Controller
         $userTask = Task::find($id)->users()->get();
         $listUsers = User::all();
         $statusUser = DB::table('user_task')->where('task_id', $id)->get();
-        $subjectTask = $task->subject()->get();
+        
         return view('admin.tasks.show',compact('task','userTask','listUsers','statusUser','subjectTask'));
     }
 
@@ -94,6 +94,11 @@ class TaskController extends Controller
         //         ->where('user_id', $request->user_id)
         //         ->update(['status' => 1]);
         // return redirect()->route('admin.tasks.show', $id);
+        // DB::table('user_subject')
+        //         ->where('user_id', $request->user_id)
+        //         ->where('subject_id', $request->subject_id)
+        //         ->update(['process' => +1]);
+        
     }
 
     /**

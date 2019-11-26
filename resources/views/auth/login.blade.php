@@ -44,7 +44,7 @@
     <!-- CSS | Responsive media queries -->
     <link href="{{ asset('bower_components/assets-client/css/responsive.css') }}" rel="stylesheet" type="text/css">
     <!-- CSS | Style css. This is the file where you can place your own custom css code. Just uncomment it and use it. -->
-    <!-- <link href="{{ asset('bower_components/assets-client/css/style.css') }}" rel="stylesheet" type="text/css"> -->
+    {{-- <link href="{{ asset('bower_components/assets-client/css/style.css') }}" rel="stylesheet" type="text/css"> --}}
 
     <!-- CSS | Theme Color -->
     <link href="{{ asset('bower_components/assets-client/css/colors/theme-skin-color-set-1.css') }}" rel="stylesheet"

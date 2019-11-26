@@ -121,13 +121,13 @@ class CourseController extends Controller
                         ->where('status', 0)
                         ->get();
             if (count($checkStatusUser) >= 1) {
-                return redirect()->route('admin.courses.show', $course->id)->with('alert', 'K the dang ky nhieu hon 2 course!!!');
+                return redirect()->route('admin.courses.show', $course->id)->with('error', trans('setting.check_status_user'));
             }else {
                 if (count($check) >= 1) {
-                    return redirect()->route('admin.courses.show', $course->id)->with('alert', 'User Da hoc course nay r!');
+                    return redirect()->route('admin.courses.show', $course->id)->with('error', trans('setting.check_user_course'));
                 } else {
                     Course::find($id)->users()->attach($request->user_id);
-                    return redirect()->route('admin.courses.show', $course->id)->with('alert', 'Success');
+                    return redirect()->route('admin.courses.show', $course->id)->with('alert', trans('setting.assign_success'));
                 }
             }    
         } catch (Exception $e) {

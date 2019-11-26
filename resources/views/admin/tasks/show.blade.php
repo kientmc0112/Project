@@ -27,11 +27,7 @@
                                     <ul>
                                         <li><b>ID :</b> {{ $task->id }}</li>
                                         <li><b>Name :</b> {{ $task->name }}</li>
-                                        <li><b>Subject :</b> 
-                                            @foreach ($subjectTask as $item)
-                                                {{ $item->name }}
-                                            @endforeach
-                                        </li>
+                                        <li><b>Subject :</b> {{ $task->subject_id }} </li>
                                         <li><b>Status :</b>
                                             @if ($task->status == true)
                                             -----<b style="color: yellow"> Waiting</b>-----
@@ -112,7 +108,7 @@
                                                             @if ($item->user_id == $user->id)
                                                                 @if ($item->status == 0)
                                                                     <input class="d-none" type="hidden" name="user_id" value="{{ $item->user_id }}">
-                                                                    {{-- <input class="d-none" type="hidden" name="subject_id" value="{{ $data }}"> --}}
+                                                                    <input class="d-none" type="hidden" name="subject_id" value="{{ $task->subject_id }}">
                                                                     <button onclick="return checkConfirm()" type="submit" class="btn btn-info">Finish</button>
                                                                 @else
                                                                     <button class="btn btn-success">Finished</button>
