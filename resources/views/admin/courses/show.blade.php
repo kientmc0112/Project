@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', 'List Course')
+@section('title', 'Show Course')
 @section('content')
 <!-- content -->
 <div id="content-wrapper">
@@ -7,40 +7,46 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#">Dashboard</a>
+                <a href="#">{{ trans('setting.courses') }}</a>
             </li>
-            <li class="breadcrumb-item active">Tables</li>
+            <li class="breadcrumb-item active">@yield('title')</li>
         </ol>
         <!-- DataTables Example -->
         <div class="card mb-3">
             <div class="card-header">
-                <i class="fas fa-user"></i>
-                <span>List User</span>
+                <i class="fas fa-chalkboard-teacher"></i> |
+                <span>@yield('title')</span>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
                             <div>
                                 <ul>
-                                    <li><b>ID :</b> {{ $course->id }}</li>
-                                    <li><b>Name :</b> {{ $course->name }}</li>
-                                    <li><b>Status :</b>
+                                    <li><b>{{ trans('setting.id') }} :</b> {{ $course->id }}</li>
+                                    <li><b>{{ trans('setting.name') }} :</b> {{ $course->name }}</li>
+                                    <li><b>{{ trans('setting.status') }} :</b>
                                         @if ($course->status == true)
-                                        -----<b style="color: yellow"> Waiting</b>-----
+                                        -----<b style="color: yellow"> {{ trans('setting.waiting') }}</b>-----
                                         @else
-                                        -----<b style="color: Green">Open</b>-----
+                                        -----<b style="color: Green">{{ trans('setting.open') }}</b>-----
                                         @endif
                                     </li>
-                                    <li><b>Description :</b> {{ $course->description }}</li>
+                                    <li><b>{{ trans('setting.description') }} :</b> {{ $course->description }}</li>
                                     <button type="button" class="btn btn-primary" data-toggle="modal"
-                                        data-target="#myModal">Assign User</button>
+                                        data-target="#myModal">{{ trans('setting.assign') }}</button>
                                 </ul>
                             </div>
+                            @if (session('alert'))
+                                <div class="alert alert-success">{{ session('alert') }}</div>
+                            @endif
+                            @if (session('error'))
+                                <div class="alert alert-danger">{{ session('error') }}</div>
+                            @endif
                             <div class="modal fade" id="myModal" role="dialog">
                                 <div class="modal-dialog">
                                     <!-- Modal content-->
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <label for="">Assgin User</label>
+                                            <label for="">{{ trans('setting.assign') }}</label>
                                         </div>
                                         <form action="{{ route('postShowCourse', $course->id) }}" method="POST">
                                             @csrf
@@ -53,15 +59,14 @@
                                                 </select>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="submit" class="btn btn-primary">add</button>
+                                                <button type="submit" class="btn btn-primary">{{ trans('setting.add') }}</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                             <div class="vertical-menu">
-                                <div class="item-menu active">Danh mục
-                                </div>
+                                <div class="item-menu active">{{ trans('setting.list_subject') }}</div>
                                 @foreach ($listSubject as $subject)
                                 <div class="item-menu"><span>{{ $subject->name }}</span>
                                     <div class="category-fix">
@@ -102,9 +107,9 @@
                                             @foreach ($statusUser as $item)
                                                 @if ($item->user_id == $user->id)
                                                     @if ($item->status == 0)
-                                                        <button class="btn btn-warning">Ativiting</button>
+                                                        <button class="btn btn-warning">{{ trans('setting.ativiting') }}</button>
                                                     @else
-                                                        <button class="btn btn-success">Success</button>
+                                                        <button class="btn btn-success">{{ trans('setting.success') }}</button>
                                                     @endif
                                                 @endif
                                             @endforeach
@@ -124,9 +129,9 @@
                                                 @if ($item->user_id == $user->id)
                                                     @if ($item->status == 0)
                                                         <input class="d-none" type="hidden" name="user_id" value="{{ $item->user_id }}">
-                                                        <button onclick="return checkConfirm()" type="submit" class="btn btn-info">Finish</button>
+                                                        <button onclick="return checkConfirm()" type="submit" class="btn btn-info">{{ trans('setting.finish') }}</button>
                                                     @else
-                                                        <button class="btn btn-success">Finished</button>
+                                                        <button class="btn btn-success">{{ trans('setting.finished') }}</button>
                                                     @endif
                                                 @endif
                                             @endforeach
@@ -158,7 +163,7 @@
     <footer class="sticky-footer">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>Copyright © Your Website 2019</span>
+                <span>{{ trans('setting.sticky_footer') }}</span>
             </div>
         </div>
     </footer>

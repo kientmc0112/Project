@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
     <a class="navbar-brand mr-1" href="index.html">{{ trans('setting.training_system') }} <i class="far fa-registered"></i></a>
@@ -25,26 +26,26 @@
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
-                <span class="badge badge-danger">9+</span>
+                <span class="badge badge-danger"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">{{ trans('setting.action') }}</a>
+                <a class="dropdown-item" href="#">{{ trans('setting.another_acction') }}</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
+                <a class="dropdown-item" href="#">{{ trans('setting.something') }}</a>
             </div>
         </li>
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
-                <span class="badge badge-danger">7</span>
+                <span class="badge badge-danger"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">{{ trans('setting.action') }}</a>
+                <a class="dropdown-item" href="#">{{ trans('setting.another_action') }}</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
+                <a class="dropdown-item" href="#">{{ trans('setting.something') }}</a>
             </div>
         </li>
         <li class="nav-item dropdown no-arrow">
@@ -53,8 +54,8 @@
                 <i class="fas fa-user-circle fa-fw"></i>
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">Settings</a>
-                <a class="dropdown-item" href="#">Activity Log</a>
+                <a class="dropdown-item" href="#">{{ trans('setting.settings') }}</a>
+                <a class="dropdown-item" href="#">{{ trans('setting.ativity_log') }}</a>
                 <div class="dropdown-divider"></div>
             </div>
         </li>

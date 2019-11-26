@@ -2,55 +2,47 @@
     <li class="nav-item active">
         <a class="nav-link" href="{{ route('admin.dashboard.index') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i> |
-            <span>Dashboard</span>
+            <span>{{ trans('setting.dashboard') }}</span>
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.users.index') }}">
             <i class="fas fa-user-friends"></i> |
-            <span>Users</span></a>
+            <span>{{ trans('setting.users') }}</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.categories.index') }}">
             <i class="fas fa-tasks"></i> |
-            <span>Category</span></a>
+            <span>{{ trans('setting.categories') }}</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.courses.index') }}">
             <i class="fas fa-chalkboard-teacher"></i> |
-            <span>Courses</span></a>
+            <span>{{ trans('setting.courses') }}</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.subjects.index') }}">
             <i class="fas fa-atom"></i> |
-            <span>Subjects</span></a>
+            <span>{{ trans('setting.subjects') }}</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.tasks.index') }}">
             <i class="fas fa-book-open"></i> |
-            <span>Tasks</span></a>
+            <span>{{ trans('setting.tasks') }}</span></a>
     </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Pages</span>
+            <span>{{ trans('setting.pages') }}</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <h6 class="dropdown-header">Login Screens:</h6>
-            <a class="dropdown-item" href="login.html">Login</a>
-            <a class="dropdown-item" href="register.html">Register</a>
-            <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
-            <div class="dropdown-divider"></div>
-            <h6 class="dropdown-header">Other Pages:</h6>
-            <a class="dropdown-item" href="404.html">404 Page</a>
-            <a class="dropdown-item" href="blank.html">Blank Page</a>
         </div>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="charts.html">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
+            <span>{{ trans('setting.charts') }}</span></a>
     </li>
 
 </ul>

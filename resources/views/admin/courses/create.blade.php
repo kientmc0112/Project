@@ -67,7 +67,7 @@
                                                                         </select></td>
                                                                     <td><button type="button" id="btn_add"
                                                                             name="btn_add"
-                                                                            class="btn btn-primary">Add</button></td>
+                                                                            class="btn btn-primary">{{ trans('setting.add') }}</button></td>
                                                                 </tr>
                                                             </table>
                                                         </div>
@@ -81,7 +81,7 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>Course Image</label>
+                                                            <label>{{ trans('setting.course_image') }}</label>
                                                             <input id="img" type="file" name="image"
                                                                 class="form-control hidden" onchange="changeImg(this)">
                                                             <img id="image" class="thumbnail" width="100%"

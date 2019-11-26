@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>@yield('title') | Project FTMS</title>
+  <title>@yield('title') | {{ trans('setting.project') }}</title>
   {{-- <link href="{{ asset('bower_components/fontawesome/css/brands.css') }}"  --}}
   <!-- Custom fonts for this template-->
   <link href="{{ asset('bower_components/assets/admin/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -21,7 +21,6 @@
   <link href="{{ asset('bower_components/assets/admin/css/sb-admin.css') }}" rel="stylesheet">
   {{-- Datatable --}}
   <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/datatable/DataTables/datatables.min.css') }}"/>
-
 </head>
 
 <body id="page-top">
@@ -42,7 +41,7 @@
       <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright © Your Website 2019</span>
+            <span>{{ trans('setting.sticky_footer') }}</span>
           </div>
         </div>
       </footer>
@@ -57,25 +56,6 @@
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
-
-  {{-- <!-- Logout Modal-->
-  {{-- <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="{{ route('logout') }}">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div> --}}
 
   <!-- Bootstrap core JavaScript-->
   <script src="{{ asset('bower_components/assets/admin/vendor/jquery/jquery.min.js') }}"></script>
@@ -97,12 +77,7 @@
   <script src="{{ asset('bower_components/assets/admin/js/demo/chart-area-demo.js') }}"></script>
   <script src="{{ asset('js/app.js') }}"></script>
   <script type="text/javascript" src="{{ asset('bower_components/datatable/DataTables/datatables.min.js') }}"></script>
-  {{-- <script>
-    function checkConfirm() {
-      var conf = confirm("Bạn có chắc chắn muốn xóa ?");
-      return conf;
-      }
-  </script> --}}
+  <script src="{{ asset('bower_components/assets-client/js/custom.js') }}"></script>
 
 </body>
 
