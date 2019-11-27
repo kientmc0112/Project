@@ -11,9 +11,11 @@
 |
 */
 
+Route::get('category/{category}/show', 'CategoryController@show')->name('category.show');
+
 Route::group(['prefix' => 'courses'], function () {
-    Route::get('/', 'CourseController@index')->name('course.index');;
-    Route::get('/{id}/show', 'CourseController@show')->name('course.show');;
+    Route::get('/', 'CourseController@index')->name('course.index');
+    Route::get('/{course}/show', 'CourseController@show')->name('course.show');
 });
 
-Route::get('category/{id}/show', 'CategoryController@show')->name('category.show');;
+Route::get('/subjects/{subject}/show', 'SubjectController@show')->name('subject.show');

@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Course;
-use App\Models\Category;
+use App\Models\Subject;
+use App\Models\Task;
+use Illuminate\Http\Request;
 
-class CourseController extends Controller
+class SubjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +17,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::latest('created_at')->paginate(config('course.PagePaginate'));
-        $categories = Category::where('parent_id', 0)->with('categories')->paginate(config('course.PagePaginate'));
-
-        return view('client.course.index', compact('courses', 'categories'));
+        //
     }
 
     /**
@@ -51,9 +49,23 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        $course = Course::find($id);
-        $course->subjects()->get();
-        return view('client.course.course', compact('course'));
+
+        // $subject->tasks()->get();
+        // $a = $subject->courses;
+        // dd($a);
+
+        // $course = Course::find($subject->courses->id);
+        // $course->subjects()->get();
+        //
+        // return view('client.subject.abc', compact('course', 'subject'));
+
+
+        // dd($subject);
+        // return response()->json(array('success' => true, 'subject' => $subject));
+
+        $subject = Subject::find($id);
+        $subject->tasks()->get();
+        return view('client.subject.subject', compact('subject'));
     }
 
     /**
