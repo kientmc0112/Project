@@ -47,6 +47,11 @@ return [
     'something' => 'Something else here',
     'settings' => 'Setting',
     'ativity_log' => 'Activity Log',
+    'create_at' => 'Day Start',
+    'update_at' => 'Day Finish',
+    'success' => 'Success',
+    'finish' => 'Finish',
+    'delete' => 'Delete',
     //
     'parent_id_required' => 'Parent_id Trống!!! Bạn vui lòng nhập đầy đủ thông tin!!!',
     'parent_id_numeric' => 'Parent_id không phải kiểu số!!! Bạn vui lòng nhập đúng kiểu dữ liệu!!!',
@@ -87,4 +92,7 @@ return [
     'add_user_success' => 'Tạo User Thành Công!!!',
     'edit_user_success' => 'Sửa User Thành Công!!!',
     'delete_user_success' => 'Xóa User Thành Công!!!',
+
+    'assign_user_task_success' => 'Chỉ Định User Vào Task Thành Công!!!',
+    'assign_user_task_fail' => 'User Chưa Tham Gia Subject Cha!!!',
 ];

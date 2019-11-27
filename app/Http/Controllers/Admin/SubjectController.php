@@ -96,7 +96,7 @@ class SubjectController extends Controller
         DB::table('user_subject')
                 ->where('subject_id', $id)
                 ->where('user_id', $request->user_id)
-                ->update(['status' => 1]);
+                ->update(['status' => 1, 'update_at' => now()]);
         return redirect()->route('admin.subjects.show', $id);
     }
 
