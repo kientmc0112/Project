@@ -24,6 +24,7 @@ class CourseController extends Controller
         $courses = Course::latest('id')
                         ->with('category')
                         ->paginate(self::PAGE);
+
         return view('admin.courses.index', compact('courses'));
     }
 
@@ -54,6 +55,7 @@ class CourseController extends Controller
     {
         $subjects = Subject::all();
         $categories = $this->getSubCategories(0);
+
         return view('admin.courses.create', compact('categories','subjects'));
     }
 
@@ -157,6 +159,7 @@ class CourseController extends Controller
             $categories = Category::all();
             $subject = Course::find($id)->subjects()->orderBy('name')->get();
             $subjects = Subject::all();
+
             return view('admin.courses.edit', compact('course','categories','subject','subjects'));    
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
@@ -209,6 +212,7 @@ class CourseController extends Controller
         try {
             $course = Course::findOrFail($id);
             $course->delete();
+            
             return redirect()->route('admin.courses.index')->with('alert', trans('setting.delete_course_success'));    
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
