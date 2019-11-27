@@ -21,11 +21,11 @@ class Course extends Model
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class, 'course_subject');
+        return $this->belongsToMany(Subject::class, 'course_subject')->withTimestamps();;
     }
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_course');
+        return $this->belongsToMany(User::class, 'user_course')->withTimestamps();;
     }
 }

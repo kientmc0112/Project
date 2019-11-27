@@ -3,9 +3,7 @@
 @section('content')
 <!-- content -->
 <div id="content-wrapper">
-
     <div class="container-fluid">
-
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -100,16 +98,20 @@
                                             <td>{{ $user->email }}</td>
                                             <td>
                                                 @foreach ($statusUser as $item)
-                                                @if ($item->status == 0)
-                                                <button class="btn btn-warning">Ativiting</button>
-                                                @else
-                                                <button class="btn btn-success">Success</button>
-                                                @endif
+                                                    @if ($item->user_id == $user->id)
+                                                        @if ($item->status == 0)
+                                                            <button class="btn btn-warning">{{ trans('setting.ativiting') }}</button>
+                                                        @else
+                                                            <button class="btn btn-success">{{ trans('setting.success') }}</button>
+                                                        @endif
+                                                    @endif
                                                 @endforeach
                                             </td>
                                             <td>
                                                 @foreach ($statusUser as $item)
-                                                    {{ $item->process }}
+                                                    @if ($user->id == $item->user_id)
+                                                        {{ $item->process }}
+                                                    @endif
                                                 @endforeach
                                             </td>
                                             <td>

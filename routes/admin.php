@@ -36,7 +36,15 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
         'as' => 'admin',
         'parameters' => ['users' => 'id']
     ]);
-    Route::post('users/{id}', 'UserController@postShow')->name('postShowUser');
+    Route::put('users/{id}/finish_course', 'UserController@finishCourse')->name('finishCourse');
+    Route::put('users/{id}/finish_subject', 'UserController@finishSubject')->name('finishSubject');
+    Route::put('users/{id}/finish_task', 'UserController@finishTask')->name('finishTask');
+    Route::post('users/{id}/add_user_course', 'UserController@addUserCourse')->name('addUserCourse');
+    Route::post('users/{id}/add_user_subject', 'UserController@addUserSubject')->name('addUserSubject');
+    Route::post('users/{id}/add_user_task', 'UserController@addUserTask')->name('addUserTask');
+    Route::delete('users/{id}/delete_user_course', 'UserController@deleteUserCourse')->name('deleteUserCourse');
+    Route::delete('users/{id}/delete_user_subject', 'UserController@deleteUserSubject')->name('deleteUserSubject');
+    Route::delete('users/{id}/delete_user_task', 'UserController@deleteUserTask')->name('deleteUserTask');
 
     Route::post('subjects/{id}/show', 'SubjectController@postShow')->name('postShowSubject');
     Route::put('subjects/{id}/show', 'SubjectController@finishSubject')->name('putFinishSubject');
