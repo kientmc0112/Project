@@ -140,7 +140,7 @@ class CourseController extends Controller
         DB::table('user_course')
                 ->where('course_id', $id)
                 ->where('user_id', $request->user_id)
-                ->update(['status' => 1]);
+                ->update(['status' => 1, 'updated_at' => now()]);
         return redirect()->route('admin.courses.show', $id);
     }
 

@@ -14,7 +14,7 @@ class Subject extends Model
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'course_subject');
+        return $this->belongsToMany(Course::class, 'course_subject')->withTimestamps();;
     }
 
     public function tasks()
@@ -24,6 +24,6 @@ class Subject extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_subject');
+        return $this->belongsToMany(User::class, 'user_subject')->withTimestamps();;
     }
 }
