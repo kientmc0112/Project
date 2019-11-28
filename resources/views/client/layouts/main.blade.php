@@ -41,7 +41,7 @@
         </div>
         @include('client.layouts.footer')
     </div>
-
+    
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('bower_components/assets-client/js/custom.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bower_components/assets-client/js/revolution-slider/js/extensions/revolution.extension.actions.min.js') }}"></script>

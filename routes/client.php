@@ -19,3 +19,10 @@ Route::group(['prefix' => 'courses'], function () {
 });
 
 Route::get('/subjects/{subject}/show', 'SubjectController@show')->name('subject.show');
+// Route::group(['middleware' => 'checkUser'], function () {
+    Route::resource('profile', 'ProfileController', [
+        'as' => 'client',
+        'parameters' => ['profile' => 'id']
+    ]);    
+// });
+
