@@ -73,30 +73,59 @@ class SubjectController extends Controller
         return view('admin.subjects.show', compact('subject','users','listUser','tasks','statusUser'));
     }
 
-    public function postShow(Request $request, $id)
+    public function assignTraineeSubject(Request $request, $id)
     {
         $subject = Subject::findOrFail($id);
-        $user_id = $request->user_id;
-        $check = DB::table('user_subject')->where('subject_id', $id)->where('user_id', $user_id)->get();
-        $checkStatusUser = DB::table('user_subject')->where('user_id', $request->user_id)->where('status', 0)->get();
-        if (count($checkStatusUser) >= 1) {
-            return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'K the hoc 2 subject');    
-        }else {
-            if (count($check) >= 1) {
-                return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'User dang hoc tai course nay!');    
-            } else {
-                Subject::find($id)->users()->attach($request->user_id);
-                return redirect()->route('admin.subjects.show', $subject->id)->with('Assign User to Course success!');
+        $check = DB::table('user_subject')->where('subject_id', $id)->where('user_id', $request->user_id)->get();
+        $checkStatusUser = DB::table('user_subject')
+                ->where('user_id', $request->user_id)
+                ->where('status', 0)
+                ->get();
+        $course_id = Subject::find($id)->courses()->get();
+        $count = 0;
+        foreach ($course_id as $course) {
+            $checkUserCourse = DB::table('user_course')
+                    ->where('user_id', $request->user_id)
+                    ->where('course_id', $course->id)
+                    ->get();
+            if (count($checkUserCourse) >= 1) {
+                $count = ++$count;
             }
+        }
+        if ($count >= 1) {
+            if (count($checkStatusUser) >= 1) {
+                return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'K the hoc 2 subject');    
+            }else {
+                if (count($check) >= 1) {
+                    return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'User dang hoc tai course nay!');    
+                } else {
+                    Subject::find($id)->users()->attach($request->user_id);
+                    return redirect()->route('admin.subjects.show', $subject->id)->with('Assign User to Course success!');
+                }
+            }    
+        } else {
+            return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'chua dang ky hoc course cha');
         }
     }
 
-    public function finishSubject(Request $request, $id)
+    public function finishTraineeSubject(Request $request, $id)
     {
         DB::table('user_subject')
                 ->where('subject_id', $id)
                 ->where('user_id', $request->user_id)
-                ->update(['status' => 1, 'update_at' => now()]);
+                ->update(['status' => 1, 'updated_at' => now()]);
+        $check = DB::table('user_course')
+                ->where('user_id', $request->user_id)
+                ->where('status', 0)
+                ->get();
+        foreach ($check as $check) {
+            $process = $check->process;
+            $course_id = $check->course_id;
+        }
+        DB::table('user_course')
+                ->where('user_id', $request->user_id)
+                ->where('course_id', $course_id)
+                ->update(['process' => ++$process]);
         return redirect()->route('admin.subjects.show', $id);
     }
 

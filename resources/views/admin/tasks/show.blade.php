@@ -47,7 +47,7 @@
                                             <div class="modal-header">
                                                 <label for="">Assgin User</label>
                                             </div>
-                                            <form action="{{ route('postShowTask', $task->id) }}" method="POST">
+                                            <form action="{{ route('assignTraineeTask', $task->id) }}" method="POST">
                                                 @csrf
                                                 <div class="modal-body">
                                                     <select class="form-control" name="user_id">
@@ -101,7 +101,7 @@
                                                     @endforeach
                                                 </td>
                                                 <td>
-                                                    <form id="finish-form" action="{{ route('putFinishTask', $task->id) }}" method="post">
+                                                    <form id="finish-form" action="{{ route('finishTraineeTask', $task->id) }}" method="post">
                                                         @csrf
                                                         @method('PUT')
                                                         @foreach ($statusUser as $item)
