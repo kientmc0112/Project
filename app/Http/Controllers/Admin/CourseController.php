@@ -110,7 +110,7 @@ class CourseController extends Controller
         }
     }
 
-    public function postShow(Request $request, $id)
+    public function assignTraineeCourse(Request $request, $id)
     {
         try {
             $course = Course::findOrFail($id);
@@ -137,7 +137,7 @@ class CourseController extends Controller
         }
     }
 
-    public function finishCourse(Request $request, $id)
+    public function finishTraineeCourse(Request $request, $id)
     {
         DB::table('user_course')
                 ->where('course_id', $id)

@@ -69,36 +69,53 @@ class TaskController extends Controller
         return view('admin.tasks.show',compact('task','userTask','listUsers','statusUser','subjectTask'));
     }
 
-    public function postShow(Request $request, $id)
+    public function assignTraineeTask(Request $request, $id)
     {
         
         $task = Task::findOrFail($id);
         $check = DB::table('user_task')->where('task_id', $id)->where('user_id', $request->user_id)->get();
         $checkStatusUser = DB::table('user_task')->where('user_id', $request->user_id)->where('status', 0)->get();
-        if (count($checkStatusUser) >= 1) {
-            return redirect()->route('admin.tasks.show', $task->id)->with('alert', 'K the dang ky nhieu hon 2 course!!!');
-        }else {
-            if (count($check) >= 1) {
-                return redirect()->route('admin.tasks.show', $task->id)->with('alert', 'User Da hoc course nay r!');
-            } else {
-                Task::find($id)->users()->attach($request->user_id);
-                return redirect()->route('admin.tasks.show', $task->id)->with('alert', 'Success');
-            }
+        $subject_id = Task::find($id)->subject_id;
+        $checkUserSubject = DB::table('user_subject')
+                ->where('user_id', $request->user_id)
+                ->where('subject_id', $subject_id)
+                ->get();
+        if (count($checkUserSubject) >= 1) {
+            if (count($checkStatusUser) >= 1) {
+                return redirect()->route('admin.tasks.show', $task->id)->with('alert', 'K the dang ky nhieu hon 2 course!!!');
+            }else {
+                if (count($check) >= 1) {
+                    return redirect()->route('admin.tasks.show', $task->id)->with('alert', 'User Da hoc course nay r!');
+                } else {
+                    Task::find($id)->users()->attach($request->user_id);
+                    return redirect()->route('admin.tasks.show', $task->id)->with('alert', 'Success');
+                }
+            }    
+        } else {
+            return redirect()->route('admin.tasks.show', $task->id)->with('alert', 'chua hoc subject cha');
         }
     }
 
-    public function finishCourse(Request $request, $id)
+    public function finishTraineeTask(Request $request, $id)
     {
-        // DB::table('user_task')
-        //         ->where('task_id', $id)
-        //         ->where('user_id', $request->user_id)
-        //         ->update(['status' => 1]);
-        // return redirect()->route('admin.tasks.show', $id);
-        // DB::table('user_subject')
-        //         ->where('user_id', $request->user_id)
-        //         ->where('subject_id', $request->subject_id)
-        //         ->update(['process' => +1]);
+        DB::table('user_task')
+                ->where('task_id', $id)
+                ->where('user_id', $request->user_id)
+                ->update(['status' => 1]);
+        $subject = Task::find($id)->subject_id;
+        $check = DB::table('user_subject')
+                ->where('subject_id', $subject)
+                ->where('user_id', $request->user_id)
+                ->get();
+        foreach ($check as $check) {
+            $process = $check->process;
+        }
+        DB::table('user_subject')
+                ->where('subject_id', $subject)
+                ->where('user_id', $request->user_id)
+                ->update(['process' => ++$process]);
         
+        return redirect()->route('admin.tasks.show', $id);
     }
 
     /**

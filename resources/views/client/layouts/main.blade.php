@@ -6,6 +6,7 @@
     <meta name="description" content="StudyPress | Education & Courses HTML Template" />
     <meta name="keywords" content="academy, course, education, education html theme, elearning, learning," />
     <meta name="author" content="ThemeMascot" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ __('FTMS | Framgia Training Manage System') }}</title>
     <link href="{{ asset('bower_components/assets-client/images/favicon.png') }}" rel="shortcut icon" type="image/png">
     <link href="{{ asset('bower_components/assets-client/images/apple-touch-icon.png') }}" rel="apple-touch-icon">
@@ -40,6 +41,7 @@
         </div>
         @include('client.layouts.footer')
     </div>
+    
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('bower_components/assets-client/js/custom.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bower_components/assets-client/js/revolution-slider/js/extensions/revolution.extension.actions.min.js') }}"></script>
@@ -51,6 +53,5 @@
     <script type="text/javascript" src="{{ asset('bower_components/assets-client/js/revolution-slider/js/extensions/revolution.extension.parallax.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bower_components/assets-client/js/revolution-slider/js/extensions/revolution.extension.slideanims.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bower_components/assets-client/js/revolution-slider/js/extensions/revolution.extension.video.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/ajax.js') }}"></script>
 </body>
 </html>
