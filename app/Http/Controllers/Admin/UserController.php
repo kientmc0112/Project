@@ -251,9 +251,15 @@ class UserController extends Controller
 
     public function deleteUserCourse(Request $request, $id)
     {
-        $user_id = $request->user_id;
-        $course_id = $id;
-        
+        $course = Course::findOrFail($id);
+        $course->users()->detach($request->user_id);
+        // $subjects = $course->subjects()->get();
+        // foreach ($subjects as $subject) {
+        //     $user = User::find($request->user_id);
+        //     $user->subjects()->detach($subject->id);        
+        // }
+        // dd($subject_id);
+        // return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_task_success'));
     }
 
     public function deleteUserSubject(Request $request, $id)
@@ -263,6 +269,8 @@ class UserController extends Controller
         $tasks = $subject->tasks()->get();
         $user->tasks()->detach($tasks);
         $subject->users()->detach($request->user_id);
+
+        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_task_success'));
     }
 
     public function deleteUserTask(Request $request, $id)
