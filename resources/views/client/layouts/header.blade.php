@@ -21,9 +21,7 @@
                                 <a class="text-white" href="#">{{ __('Help Desk') }}</a>
                             </li>
                             <li class="text-white">|</li>
-                            <li>
-                                <a class="text-white" href="#">{{ __('Login') }}</a>
-                            </li>
+                            
                         </ul>
                     </div>
                 </div>
@@ -88,37 +86,5 @@
             </div>
         </div>
     </div>
-    <div class="header-nav">
-        <div class="header-nav-wrapper navbar-scrolltofixed bg-theme-colored border-bottom-theme-color-2-1px">
-            <div class="container">
-                <nav id="menuzord" class="menuzord bg-theme-colored pull-left flip menuzord-responsive">
-                    <ul class="menuzord-menu">
-                        <li class="active">
-                            <a href="#home">{{ __('Home') }}</a>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Categories') }} <span class="label label-info">{{ __('New') }}</span></a>
-                        </li>
-                        <li><a href="#">{{ __('Courses') }}</a>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Subject') }} <span class="label label-info">{{ __('New') }}</span></a>
-                        </li>
-                        <li>
-                            <a href="#home">{{ __('Supervisor') }}</a>
-                        </li>
-                        <li>
-                            <a href="#home">{{ __('Task') }}</a>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Activities') }}</a>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Calender') }}</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+    @include('client.layouts.sidebar')
 </header>
