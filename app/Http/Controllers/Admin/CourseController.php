@@ -72,12 +72,12 @@ class CourseController extends Controller
             'status' => $request->get('status'),
         ];
         if ($request->hasFile('image')) {  
-            $destinationDir = public_path('images/course');
-            $fileName = uniqid('course').'.'.$request->image->extension();
+            $destinationDir = public_path(config('configcourse.public_path'));
+            $fileName = uniqid('course') . '.' . $request->image->extension();
             $request->image->move($destinationDir, $fileName);
-            $attr['image'] = '/images/course/'.$fileName;
+            $attr['image'] = config('configcourse.image_course').$fileName;
         } else {
-            $attr['image'] = '/images/courses.png';
+            $attr['image'] = config('configcourse.image_default');
         }
         $course = Course::create($attr);
         $course_id = $course->id;
@@ -182,7 +182,7 @@ class CourseController extends Controller
             ];
             if ($request->hasFile('image')) {  
                 $destinationDir = public_path('images/course');
-                $fileName = uniqid('course').'.'.$request->image->extension();
+                $fileName = uniqid('course') . '.' . $request->image->extension();
                 $request->image->move($destinationDir, $fileName);
                 $attr['image'] = '/images/course/'.$fileName;
             } else {
