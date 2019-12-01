@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', 'List Course')
+@section('title', config('configsubject.create_course'))
 @section('content')
 <div id="content-wrapper">
     <div class="container-fluid">
@@ -54,7 +54,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>
-                                                            <textarea class="form-control" name="description" id="" cols="30" rows="10"></textarea>
+                                                            <textarea class="form-control" name="description" id="" cols="{{ config('configsubject.cols_textarea') }}" rows="{{ config('configsubject.rows_textarea') }}"></textarea>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">{{ trans('setting.add_subject') }}</button>
                                                     </form>
@@ -80,7 +80,7 @@
                         </select>
                     </td>
                     <td>
-                        <button type="button" id="btn_remove" name="btn_remove" class="btn btn-danger">X</button>
+                        <button type="button" id="btn_remove" name="btn_remove" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
                     </td>
                 </tr>
             </table>

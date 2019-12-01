@@ -20,5 +20,6 @@ mix.js([
         'resources/js/datatable.js',
         'resources/js/addsubject.js',
         'resources/js/checkconfirm.js',
+        'resources/js/ajax.js',
    ], 'public/js')
     .sass('resources/sass/app.scss', 'public/css');

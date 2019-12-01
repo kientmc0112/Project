@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', 'List Subject')
+@section('title', config('configsubject.show_subject'))
 @section('content')
 <div id="content-wrapper">
     <div class="container-fluid">
@@ -29,6 +29,7 @@
                                             @endif
                                         </li>
                                         <li><b>{{ trans('setting.description') }}</b> {{ $subject->description }}</li>
+                                        <hr>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">{{ trans('setting.assign_user') }}</button>
                                     </ul>
                                 </div>
@@ -93,8 +94,8 @@
                                             <td>
                                                 @foreach ($statusUser as $item)
                                                     @if ($item->user_id == $user->id)
-                                                        @if ($item->status == 0)
-                                                            <button class="btn btn-warning">{{ trans('setting.ativiting') }}</button>
+                                                        @if ($item->status == config('configsubject.status_user_activity'))
+                                                            <button class="btn btn-warning">{{ trans('setting.activity') }}</button>
                                                         @else
                                                             <button class="btn btn-success">{{ trans('setting.success') }}</button>
                                                         @endif
@@ -114,7 +115,7 @@
                                                     @method('PUT')
                                                     @foreach ($statusUser as $item)
                                                         @if ($item->user_id == $user->id)
-                                                            @if ($item->status == 0)
+                                                            @if ($item->status == config('configsubject.status_user_activity'))
                                                                 <input class="d-none" type="hidden" name="user_id" value="{{ $item->user_id }}">
                                                                 <button onclick="return checkConfirm()" type="submit" class="btn btn-info">{{ trans('setting.finish') }}</button>
                                                             @else

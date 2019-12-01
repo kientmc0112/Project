@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', 'List Course')
+@section('title', config('configsubject.edit_course'))
 @section('content')
 <div id="content-wrapper">
     <div class="container-fluid">
@@ -32,12 +32,12 @@
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.status') }}</label>
                                                             <select class="form-control" name="status" id="">
-                                                                <option value="0" 
+                                                                <option value="{{ config('configsubject.status_subject_open') }}" 
                                                                     @if ($subject->status == false)
                                                                         selected
                                                                     @endif >{{ trans('setting.open') }}
                                                                 </option>
-                                                                <option value="1" 
+                                                                <option value="{{ config('configsubject.status_subject_waiting') }}" 
                                                                     @if ($subject->status == true)
                                                                         selected
                                                                     @endif>{{ trans('setting.waiting') }}
@@ -50,31 +50,31 @@
                                                                 <button type="button" id="btn_add" name="btn_add" class="btn btn-primary">{{ trans('setting.add') }}</button>
                                                             </td>
                                                             @foreach ($course as $item)
-                                                            <table id="add_main" class="table">
-                                                                <tr>
-                                                                    <td>
-                                                                        <select name="course_id[]" id="course_id" class="form-control">
-                                                                            @foreach ($courses as $course)
-                                                                                <option 
-                                                                                    @if ($item->id == $course->id)
-                                                                                        selected
-                                                                                    @endif
-                                                                                value="{{ $course->id }}">
-                                                                                    {{ $course->name }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button type="button" id="btn_remove_edit" name="btn_remove_edit" class="btn btn-danger">X</button>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
+                                                                <table id="add_main" class="table">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <select name="course_id[]" id="course_id" class="form-control">
+                                                                                @foreach ($courses as $course)
+                                                                                    <option 
+                                                                                        @if ($item->id == $course->id)
+                                                                                            selected
+                                                                                        @endif
+                                                                                    value="{{ $course->id }}">
+                                                                                        {{ $course->name }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="button" id="btn_remove_edit" name="btn_remove_edit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
                                                             @endforeach
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>
-                                                            <textarea class="form-control" name="description" id="" cols="30" rows="10">{{ $subject->description }}</textarea>
+                                                            <textarea class="form-control" name="description" id="" cols="{{ config('configsubject.cols_textarea') }}" rows="{{ config('configsubject.rows_textarea') }}">{{ $subject->description }}</textarea>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">{{ trans('setting.edit_subject') }}</button>
                                                     </form>
@@ -102,7 +102,7 @@
                             </select>
                         </td>
                         <td>
-                            <button type="button" id="btn_remove" name="btn_remove"class="btn btn-danger">X</button>
+                            <button type="button" id="btn_remove" name="btn_remove"class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
                         </td>
                     </tr>
                 </table>

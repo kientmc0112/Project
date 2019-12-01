@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', 'List Subject')
+@section('title', 'Create Subject')
 @section('content')
 <div id="content-wrapper">
     <div class="container-fluid">
@@ -21,20 +21,21 @@
                                     <div class="panel-body">
                                         <div class="bootstrap-table">
                                             <div class="table-responsive">
-                                                <a href="{{ route('admin.subjects.create') }}" class="btn btn-primary">Thêm sản phẩm</a>
+                                                <a href="{{ route('admin.subjects.create') }}" class="btn btn-primary">{{ trans('setting.add_course') }}</a>
+                                                <hr>
                                                     <table class="table table-bordered" id="table-show">
                                                         <thead>
                                                             <tr class="bg-primary">
                                                                 <th>{{ trans('setting.id') }}</th>
                                                                 <th>{{ trans('setting.name') }}</th>
-                                                                <th>{{ trans('setting.course') }}</th>
+                                                                <th>{{ trans('setting.courses') }}</th>
                                                                 <th>{{ trans('setting.status') }}</th>
                                                                 <th>{{ trans('setting.description') }}</th>
-                                                                <th>{{ trans('setting.option') }}</th>
+                                                                <th id="option">{{ trans('setting.options') }}</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @forelse ($subjects as $subject)
+                                                            @foreach ($subjects as $subject)
                                                             <tr>
                                                                 <td>{{ $subject->id }}</td>
                                                                 <td>
@@ -75,9 +76,7 @@
                                                                     </form>
                                                                 </td>
                                                             </tr>
-                                                            @empty
-
-                                                            @endforelse
+                                                            @endforeach
                                                         </tbody>
                                                     </table>
                                                 </form>
