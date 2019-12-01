@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Course;
+use DB;
+use Auth;
 
 class ProfileController extends Controller
 {
@@ -46,7 +50,23 @@ class ProfileController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $course = $user->courses()->get();
+        $userCourse = DB::table('user_course')
+        ->where('user_id', $id)
+        ->get();
+        $subject = $user->subjects()->get();
+        $userSubject = DB::table('user_subject')
+        ->where('user_id', $id)
+        ->get();
+        $task = $user->tasks()->get();
+        $userTask = DB::table('user_task')
+        ->where('user_id', $id)
+        ->get();
+        $check = Auth::user();
+        
+        return view('client.profile.detail_profile', compact('user', 'userCourse', 'course', 'userSubject',
+                    'subject', 'task', 'userTask','check'));
     }
 
     /**
@@ -57,7 +77,8 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('client.profile.edit_profile', compact('user'));
     }
 
     /**

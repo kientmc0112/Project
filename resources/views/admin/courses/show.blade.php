@@ -48,7 +48,7 @@
                                         <div class="modal-header">
                                             <label for="">{{ trans('setting.assign') }}</label>
                                         </div>
-                                        <form action="{{ route('postShowCourse', $course->id) }}" method="POST">
+                                        <form action="{{ route('assignTraineeCourse', $course->id) }}" method="POST">
                                             @csrf
                                             <div class="modal-body">
                                                 <select class="form-control" name="user_id">
@@ -122,7 +122,7 @@
                                             @endforeach
                                         </td>
                                         <td>
-                                            <form id="finish-form" action="{{ route('postFinishCourse', $course->id) }}" method="post">
+                                            <form id="finish-form" action="{{ route('finishTraineeCourse', $course->id) }}" method="post">
                                                 @csrf
                                                 @method('PUT')
                                             @foreach ($statusUser as $item)

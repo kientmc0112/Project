@@ -74,12 +74,12 @@ class CourseController extends Controller
             'status' => $request->get('status'),
         ];
         if ($request->hasFile('image')) {  
-            $destinationDir = public_path('images/course');
-            $fileName = uniqid('course').'.'.$request->image->extension();
+            $destinationDir = public_path(config('configcourse.public_path'));
+            $fileName = uniqid('course') . '.' . $request->image->extension();
             $request->image->move($destinationDir, $fileName);
-            $attr['image'] = '/images/course/'.$fileName;
+            $attr['image'] = config('configcourse.image_course').$fileName;
         } else {
-            $attr['image'] = '/images/courses.png';
+            $attr['image'] = config('configcourse.image_default');
         }
         $course = Course::create($attr);
         $course_id = $course->id;
@@ -110,7 +110,7 @@ class CourseController extends Controller
         }
     }
 
-    public function postShow(Request $request, $id)
+    public function assignTraineeCourse(Request $request, $id)
     {
         try {
             $course = Course::findOrFail($id);
@@ -137,7 +137,7 @@ class CourseController extends Controller
         }
     }
 
-    public function finishCourse(Request $request, $id)
+    public function finishTraineeCourse(Request $request, $id)
     {
         DB::table('user_course')
                 ->where('course_id', $id)
@@ -185,7 +185,7 @@ class CourseController extends Controller
             ];
             if ($request->hasFile('image')) {  
                 $destinationDir = public_path('images/course');
-                $fileName = uniqid('course').'.'.$request->image->extension();
+                $fileName = uniqid('course') . '.' . $request->image->extension();
                 $request->image->move($destinationDir, $fileName);
                 $attr['image'] = '/images/course/'.$fileName;
             } else {

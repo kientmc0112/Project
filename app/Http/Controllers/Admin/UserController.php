@@ -251,9 +251,8 @@ class UserController extends Controller
 
     public function deleteUserCourse(Request $request, $id)
     {
-        $user_id = $request->user_id;
-        $course_id = $id;
-        
+        $user_id = $request->id;
+     
     }
 
     public function deleteUserSubject(Request $request, $id)

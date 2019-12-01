@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Course;
+use Illuminate\Support\Collection;
 
 class CategoryController extends Controller
 {
@@ -47,10 +49,32 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = Category::findOrFail($id);
-        $courses = $category->courses->paginate(config('course.PagePaginate'));
-        $categories =  Category::all();
-        return view('client.course.list', compact('courses', 'categories'));
+
+
+        /*
+        Tạo collection query từ 2 bảng:
+        $category = Category::where('id', $id)
+            ->orWhere('parent_id', $id)
+            ->with('courses')
+            ->get();
+        $courses = collect();
+        foreach($category as $a) {
+            foreach($a->courses as $b) {
+                $courses->push($b);
+            }
+        }
+         */
+
+
+        $category = Category::where('id', $id)
+            ->orWhere('parent_id', $id)
+            ->get('id');
+        $category = $category->toArray();
+        $courses = Course::whereIn('category_id', $category)->paginate(config('course.PagePaginate'));
+
+        $categories = Category::where('parent_id', 0)->with('categories')->paginate(config('course.PagePaginate'));
+
+        return view('client.course.index', compact('courses', 'categories'));
     }
 
     /**
