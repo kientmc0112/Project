@@ -37,7 +37,7 @@
                                         @if($user->pivot->status == 1)
                                             <i class="fas fa-check-circle check"></i>
                                         @elseif($user->pivot->status == 0)
-                                            <i class="fas fa-check-circle"></i>
+                                            <i class="fas fa-check-circle nocheck"></i>
                                         @endif
                                     @endif
                                 @endforeach
