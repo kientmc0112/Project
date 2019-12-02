@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Course;
-use App\Models\Category;
 use App\Models\User;
+use App\Models\Task;
+use DB;
 
-class CourseController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,11 +17,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with('users')->paginate(config('course.PagePaginate'));
-
-        $categories = Category::where('parent_id', 0)->with('categories')->paginate(config('course.PagePaginate'));
-
-        return view('client.course.index', compact('courses', 'categories'));
+        //
     }
 
     /**
@@ -42,7 +38,18 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $report = DB::table('user_task');
+        $attr = [
+            'user_id' => $request->get('user_id'),
+            'report' => $request->get('report'),
+            'task_id' => $request->get('task_id'),
+            'status' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+        $report->insert($attr);
+
+        return response()->json(['report' => $report], config('user.200-OK'));
     }
 
     /**
@@ -51,13 +58,16 @@ class CourseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $course = Course::find($id);
-        $course->subjects()->get();
-        $course->users()->get();
+        $user_id = $request->get('user_id');
+        $task_id = $request->get('task_id');
+        $report = DB::table('user_task')->where([
+            ['user_id', '=', $user_id],
+            ['task_id', '=', $task_id],
+        ])->get();
 
-        return view('client.course.course', compact('course'));
+        return response()->json(['report' => $report], config('user.200-OK'));
     }
 
     /**

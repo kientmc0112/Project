@@ -37,6 +37,7 @@
     "Categories": "Thể loại",
     "Category": "Thể loại",
     "Disable Preloader": "Disable Preloader",
+    "Logout": "Đăng xuất",
 
     "New": "New",
     "Home": "Home",
@@ -51,7 +52,22 @@
     "View details": "Xem chi tiết",
     "Search": "Tìm kiếm",
     "All": "Tất cả",
+    "Member": "Thành viên",
 
     "All Task": "Nhiệm vụ",
-    "Introduction": "Giới thiệu"
+    "Introduction": "Giới thiệu",
+    "View profile": "Xem hồ sơ",
+    "Email": "Email",
+    "Phone": "Số điện thoại",
+    "Edit Profile": "Sửa",
+    "Name": "Tên",
+    "Close": "Đóng",
+    "Save": "Lưu",
+    "Avatar": "Ảnh đại diện",
+    "Address": "Địa chỉ",
+    "Report": "Báo cáo",
+    "Status": "Trạng thái",
+    "Comment": "Comment",
+    "Send": "Gửi",
+    "Completed": "Hoàn thành"
 }

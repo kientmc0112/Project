@@ -64,8 +64,9 @@ class SubjectController extends Controller
         // return response()->json(array('success' => true, 'subject' => $subject));
 
         $subject = Subject::find($id);
-        $subject->tasks()->get();
-        return view('client.subject.subject', compact('subject'));
+        $tasks = $subject->tasks()->with('users')->get();
+        $subject->users()->get();
+        return view('client.subject.subject', compact('subject', 'tasks'));
     }
 
     /**
