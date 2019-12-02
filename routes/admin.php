@@ -45,7 +45,7 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
     Route::delete('users/{id}/delete_user_course', 'UserController@deleteUserCourse')->name('deleteUserCourse');
     Route::delete('users/{id}/delete_user_subject', 'UserController@deleteUserSubject')->name('deleteUserSubject');
     Route::delete('users/{id}/delete_user_task', 'UserController@deleteUserTask')->name('deleteUserTask');
-    Route::post('users/{id}/export_subject', 'UserController@exportSubject')->name('exportSubject');
+    Route::get('users/{id}/export_subject', 'UserController@exportSubject')->name('exportSubject');
 
     Route::post('subjects/{id}/assing_trainee_subject', 'SubjectController@assignTraineeSubject')->name('assignTraineeSubject');
     Route::put('subjects/{id}/finish_trainee_subject', 'SubjectController@finishTraineeSubject')->name('finishTraineeSubject');

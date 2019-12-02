@@ -102,10 +102,10 @@ class UserController extends Controller
         
     }
 
-    public function exportSubject(Request $request)
+    public function exportSubject($id)
     {
         $listSubject = DB::table('course_subject')
-            ->where('course_id', $request->courseId)
+            ->where('course_id', '=', $id)
             ->get();
         
         return response()->json(['listSubject' => $listSubject], 200);
@@ -177,16 +177,20 @@ class UserController extends Controller
                 ->where('user_id', $id)
                 ->where('status', 0)
                 ->get();
-        if (count($checkStatusUser) >= 1) {
-            return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
-        }else {
-            if (count($check) >= 1) {
-                return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
-            } else {
-                User::find($id)->courses()->attach($request->course_id);
-                return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
-            }
-        }    
+        $subject_id = $request->subject_id;
+        // if (count($checkStatusUser) >= 1) {
+        //     return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
+        // }else {
+        //     if (count($check) >= 1) {
+        //         return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
+        //     } else {
+                
+        //         // User::find($id)->courses()->attach($request->course_id);
+
+        //         return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
+        //     }
+        // }
+        User::find($id)->subjects()->attach($request->subject_id);
     }
 
     public function addUserSubject(Request $request, $id)

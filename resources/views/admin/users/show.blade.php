@@ -1,17 +1,14 @@
 @extends('admin.layouts.main')
 @section('title', 'Show User')
 @section('content')
-<!-- content -->
 <div id="content-wrapper">
     <div class="container-fluid">
-        <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="#">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">Tables</li>
         </ol>
-        <!-- DataTables Example -->
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fas fa-user"></i>
@@ -59,13 +56,14 @@
                                                         @csrf
                                                         <label for="">Course</label>
                                                         <select name="course_id" id="course_id" class="form-control">
+                                                            <option value="">Course</option>
                                                             @foreach ($courses as $course)
-                                                                <option data-courseId="{{ $course->id }}" value="{{ $course->id }}">{{ $course->name }}</option>
+                                                                <option value="{{ $course->id }}">{{ $course->name }}</option>
                                                             @endforeach
                                                         </select>
                                                         <label for="">Subject</label>
-                                                        <select name="subject_id" id="" class="form-control">
-                                                            <option value=""></option>
+                                                        <select name="subject_id" id="subject_id" class="form-control">
+                                                            <option value="">Subject</option>
                                                         </select>
                                                         <hr>
                                                         <input type="hidden" data-id="{{ $userDetail->id }}" value="{{ $userDetail->id }}">
@@ -342,21 +340,7 @@
         </div>
     </div>
 </div>
-<!-- /.container-fluid -->
-
-<!-- Sticky Footer -->
-<footer class="sticky-footer">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright © Your Website 2019</span>
-        </div>
-    </div>
-</footer>
-
+@include('admin.layouts.footer')
 </div>
-<!-- end content -->
-<!-- /.content-wrapper -->
-
 </div>
-<!-- /#wrapper -->
 @endsection

@@ -82,7 +82,11 @@ class CourseController extends Controller
         $course = Course::create($attr);
         $course_id = $course->id;
         $course = Course::find($course_id);
-        $course->subjects()->attach($request->subject_id);
+        $subject = $request->subject_id;
+        foreach ($subject as $value) {
+            $subjectName = Subject::find($value)->name;
+            $course->subjects()->attach($value, ['subject_name' => $subjectName]);    
+        }
         
         return redirect()->route('admin.courses.index')->with('alert', trans('setting.add_course_success'));
     }
@@ -199,7 +203,11 @@ class CourseController extends Controller
             }
             $course->update($attr);
             $course->subjects()->detach();
-            $course->subjects()->attach($request->subject_id);
+            $subject = $request->subject_id;
+            foreach ($subject as $value) {
+                $subjectName = Subject::find($value)->name;
+                $course->subjects()->attach($value, ['subject_name' => $subjectName]);    
+            }
 
             return redirect()->route('admin.courses.index')->with('alert', trans('setting.edit_course_success'));    
         } catch (Exception $e) {

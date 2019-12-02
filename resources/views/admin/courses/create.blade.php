@@ -64,6 +64,7 @@
                                                                                 <option value="{{ $subject->id }}">
                                                                                     {{ $subject->name }}</option>
                                                                             @endforeach
+                                                                            <
                                                                         </select></td>
                                                                     <td><button type="button" id="btn_add"
                                                                             name="btn_add"
@@ -125,7 +126,6 @@
     </div>
     <!-- end content -->
     <!-- /.content-wrapper -->
-
 </div>
 <!-- /#wrapper -->
 @endsection

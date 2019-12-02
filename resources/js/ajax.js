@@ -4,23 +4,22 @@ $.ajaxSetup({
     }
 });
 $(document).ready(function () {
-    $('#course_id').on('click', function (event) {
+    $('#course_id').on('change', function (event) {
         event.preventDefault();
-        // let id = $(this).attr('data-courseId');
-        // let _this = $(this);
+        $("#subject_id").html('');
+        var id = $('#course_id').val();
         $.ajax({
-            url: '/admin/user/' + id + '/export_subject',
-            method: 'POST',
-            data: {
-                // id: courseId,
-            },
-            success: function () {
-                alert('ok');
+            url: '/admin/users/' + id + '/export_subject',
+            method: 'get',
+            success: function (response) {
+                $.each(response.listSubject, function (key, value) {
+                    var option = "<option value=" + value.id + ">" + value.subject_name + "</option>";
+                    $("#subject_id").append(option);
+                });
             },
             error: function () {
                 alert('error');
             }
         });
-
     });
 });
