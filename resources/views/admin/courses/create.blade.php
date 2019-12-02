@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', 'Create Course')
+@section('title', config('configcourse.create_course'))
 @section('content')
 <!-- content -->
 <div id="content-wrapper">

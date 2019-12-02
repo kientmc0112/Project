@@ -13,7 +13,6 @@ use DB;
 
 class UserController extends Controller
 {
-    const PAGE = 10;
     /**
      * Display a listing of the resource.
      *
@@ -21,7 +20,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest('role_id')->paginate(self::PAGE);
+        $users = User::latest('role_id')->paginate(config('configtask.page_paginate'));
+        
         return view('admin.users.index', compact('users'));
     }
 
@@ -86,19 +86,29 @@ class UserController extends Controller
         $tasks = Task::all();
         $userCourse = User::find($id)->courses()->get();
         $userCourseDetail = DB::table('user_course')
-                ->where('user_id', $id)
-                ->get();
+            ->where('user_id', $id)
+            ->get();
         $userSubject = User::find($id)->subjects()->get();
         $userSubjectDetail = DB::table('user_subject')
-                ->where('user_id', $id)
-                ->get();
+            ->where('user_id', $id)
+            ->get();
         $userTask = User::find($id)->tasks()->get();
         $userTaskDetail = DB::table('user_task')
-                ->where('user_id', $id)
-                ->get();
+            ->where('user_id', $id)
+            ->get();
 
         return view('admin.users.show', compact('userDetail', 'courses', 'userCourse', 'userCourseDetail', 
-                        'userSubject', 'userSubjectDetail','userTask','userTaskDetail', 'subjects', 'tasks'));
+            'userSubject', 'userSubjectDetail','userTask','userTaskDetail', 'subjects', 'tasks'));
+        
+    }
+
+    public function exportSubject(Request $request)
+    {
+        $listSubject = DB::table('course_subject')
+            ->where('course_id', $request->courseId)
+            ->get();
+        
+        return response()->json(['listSubject' => $listSubject], 200);
     }
 
     public function finishCourse(Request $request, $id)
