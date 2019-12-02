@@ -34,6 +34,7 @@
     "Help Desk": "Support",
     "Courses": "Courses",
     "Categories": "Categories",
+    "Logout": "Logout",
 
     "New": "New",
     "Home": "Home",
@@ -48,7 +49,23 @@
     "View details": "View details",
     "Search": "Search",
     "All": "All",
+    "Member": "Member",
 
     "All Task": "All Task",
-    "Introduction": "Introduction"
+    "Introduction": "Introduction",
+    "View profile": "View profile",
+    "Email": "Email",
+    "Phone": "Phone",
+    "Edit Profile": "Edit Profile",
+    "Name": "Name",
+    "Close": "Close",
+    "Save": "Save",
+    "Avatar": "Avatar",
+    "Address": "Address",
+    "Report": "Report",
+    "Content": "Content",
+    "Status": "Status",
+    "Comment": "Comment",
+    "Send": "Send",
+    "Completed": "Completed"
 }
