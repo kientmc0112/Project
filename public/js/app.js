@@ -299,7 +299,7 @@ $(document).ready(function () {
   \************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
-
+  
 __webpack_require__(/*! /var/www/html/Project/resources/js/app.js */"./resources/js/app.js");
 __webpack_require__(/*! /var/www/html/Project/resources/js/logout.js */"./resources/js/logout.js");
 __webpack_require__(/*! /var/www/html/Project/resources/js/courses.js */"./resources/js/courses.js");
@@ -310,7 +310,6 @@ __webpack_require__(/*! /var/www/html/Project/resources/js/addsubject.js */"./re
 __webpack_require__(/*! /var/www/html/Project/resources/js/checkconfirm.js */"./resources/js/checkconfirm.js");
 __webpack_require__(/*! /var/www/html/Project/resources/js/ajax.js */"./resources/js/ajax.js");
 module.exports = __webpack_require__(/*! /var/www/html/Project/resources/sass/app.scss */"./resources/sass/app.scss");
-
 
 /***/ })
 
