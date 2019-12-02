@@ -45,13 +45,14 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
     Route::delete('users/{id}/delete_user_course', 'UserController@deleteUserCourse')->name('deleteUserCourse');
     Route::delete('users/{id}/delete_user_subject', 'UserController@deleteUserSubject')->name('deleteUserSubject');
     Route::delete('users/{id}/delete_user_task', 'UserController@deleteUserTask')->name('deleteUserTask');
+    Route::post('users/{id}/export_subject', 'UserController@exportSubject')->name('exportSubject');
 
-    Route::post('subjects/{id}/show', 'SubjectController@postShow')->name('postShowSubject');
-    Route::put('subjects/{id}/show', 'SubjectController@finishSubject')->name('putFinishSubject');
+    Route::post('subjects/{id}/assing_trainee_subject', 'SubjectController@assignTraineeSubject')->name('assignTraineeSubject');
+    Route::put('subjects/{id}/finish_trainee_subject', 'SubjectController@finishTraineeSubject')->name('finishTraineeSubject');
 
-    Route::post('courses/{id}/show', 'CourseController@postShow')->name('postShowCourse');
-    Route::put('courses/{id}/show', 'CourseController@finishCourse')->name('postFinishCourse');
+    Route::post('courses/{id}/assing_trainee_course', 'CourseController@assignTraineeCourse')->name('assignTraineeCourse');
+    Route::put('courses/{id}/finish_trainee_course', 'CourseController@finishTraineeCourse')->name('finishTraineeCourse');
 
-    Route::post('tasks/{id}/show', 'TaskController@postShow')->name('postShowTask');
-    Route::put('tasks/{id}/show', 'TaskController@finishCourse')->name('putFinishTask');
+    Route::post('tasks/{id}/assing_trainee_task', 'TaskController@assignTraineeTask')->name('assignTraineeTask');
+    Route::put('tasks/{id}/finish_trainee_task', 'TaskController@finishTraineeTask')->name('finishTraineeTask');
 });

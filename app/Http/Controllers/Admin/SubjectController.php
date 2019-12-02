@@ -11,7 +11,6 @@ use DB;
 
 class SubjectController extends Controller
 {
-    const PAGE = 10;
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +19,7 @@ class SubjectController extends Controller
     public function index()
     {
         $courses = Course::all();
-        $subjects = Subject::latest('id')->with('courses')->paginate(self::PAGE);
+        $subjects = Subject::latest('id')->with('courses')->paginate(config('configsubject.page_paginate'));
 
         return view('admin.subjects.index', compact('courses', 'subjects'));
     }
@@ -33,6 +32,7 @@ class SubjectController extends Controller
     public function create()
     {
         $courses = Course::all();
+
         return view('admin.subjects.create', compact('courses'));
     }
 
@@ -53,8 +53,8 @@ class SubjectController extends Controller
         $subject_id = $subject->id;
         $subject = Subject::find($subject_id);
         $subject->courses()->attach($request->course_id);
+
         return redirect()->route('admin.subjects.index')->with('alert', trans('setting.add_subject_success'));
-        
     }
 
     /**
@@ -65,38 +65,82 @@ class SubjectController extends Controller
      */
     public function show($id)
     {
-        $subject = Subject::findOrFail($id);
-        $users = Subject::find($id)->users()->get();
-        $tasks = Subject::find($id)->tasks()->get();
-        $listUser = User::all();
-        $statusUser = DB::table('user_subject')->where('subject_id', $id)->get();
-        return view('admin.subjects.show', compact('subject','users','listUser','tasks','statusUser'));
+        try {
+            $subject = Subject::findOrFail($id);
+            $users = Subject::find($id)->users()->get();
+            $tasks = Subject::find($id)->tasks()->get();
+            $listUser = User::all();
+            $statusUser = DB::table('user_subject')->where('subject_id', $id)->get();
+    
+            return view('admin.subjects.show', compact('subject', 'users', 'listUser', 'tasks', 'statusUser'));    
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
+        
     }
 
-    public function postShow(Request $request, $id)
+    public function assignTraineeSubject(Request $request, $id)
     {
-        $subject = Subject::findOrFail($id);
-        $user_id = $request->user_id;
-        $check = DB::table('user_subject')->where('subject_id', $id)->where('user_id', $user_id)->get();
-        $checkStatusUser = DB::table('user_subject')->where('user_id', $request->user_id)->where('status', 0)->get();
-        if (count($checkStatusUser) >= 1) {
-            return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'K the hoc 2 subject');    
-        }else {
-            if (count($check) >= 1) {
-                return redirect()->route('admin.subjects.show', $subject->id)->with('alert', 'User dang hoc tai course nay!');    
-            } else {
-                Subject::find($id)->users()->attach($request->user_id);
-                return redirect()->route('admin.subjects.show', $subject->id)->with('Assign User to Course success!');
+        try {
+            $subject = Subject::findOrFail($id);
+            $check = DB::table('user_subject')
+                ->where('subject_id', $id)
+                ->where('user_id', $request->user_id)
+                ->get();
+            $checkStatusUser = DB::table('user_subject')
+                ->where('user_id', $request->user_id)
+                ->where('status', config('configsubject.status_user_activity'))
+                ->get();
+            $course_id = Subject::find($id)->courses()->get();
+            $count = config('configsubject.count_default');
+            foreach ($course_id as $course) {
+                $checkUserCourse = DB::table('user_course')
+                    ->where('user_id', $request->user_id)
+                    ->where('course_id', $course->id)
+                    ->get();
+                if (count($checkUserCourse) >= config('configsubject.count_check')) {
+                    $count = ++$count;
+                }
             }
+            if ($count >= config('configsubject.count_check')) {
+                if (count($checkStatusUser) >= config('configsubject.count_check')) {
+                    return redirect()->route('admin.subjects.show', $subject->id)->with('error', trans('setting.error_join_subject'));    
+                }else {
+                    if (count($check) >= config('configsubject.count_check')) {
+                        return redirect()->route('admin.subjects.show', $subject->id)->with('error', trans('setting.error_subject_exist'));    
+                    } else {
+                        Subject::find($id)->users()->attach($request->user_id);
+
+                        return redirect()->route('admin.subjects.show', $subject->id)->with('alert', trans('setting.assign_trainee_success'));
+                    }
+                }    
+            } else {
+                return redirect()->route('admin.subjects.show', $subject->id)->with('error', trans('setting.error_do_not_course'));
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
         }
     }
 
-    public function finishSubject(Request $request, $id)
+    public function finishTraineeSubject(Request $request, $id)
     {
         DB::table('user_subject')
-                ->where('subject_id', $id)
-                ->where('user_id', $request->user_id)
-                ->update(['status' => 1, 'update_at' => now()]);
+            ->where('subject_id', $id)
+            ->where('user_id', $request->user_id)
+            ->update(['status' => config('configsubject.status_user_finished'), 'updated_at' => now()]);
+        $check = DB::table('user_course')
+            ->where('user_id', $request->user_id)
+            ->where('status', config('configsubject.status_user_activity'))
+            ->get();
+        foreach ($check as $check) {
+            $process = $check->process;
+            $course_id = $check->course_id;
+        }
+        DB::table('user_course')
+            ->where('user_id', $request->user_id)
+            ->where('course_id', $course_id)
+            ->update(['process' => ++$process]);
+
         return redirect()->route('admin.subjects.show', $id);
     }
 
@@ -108,10 +152,15 @@ class SubjectController extends Controller
      */
     public function edit($id)
     {
-        $subject = Subject::findOrFail($id);
-        $courses = Course::all();
-        $course = Subject::find($id)->courses()->get();
-        return view('admin.subjects.edit', compact('subject','courses','course'));
+        try {
+            $subject = Subject::findOrFail($id);
+            $courses = Course::all();
+            $course = Subject::find($id)->courses()->get();
+
+            return view('admin.subjects.edit', compact('subject', 'courses', 'course'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     /**
@@ -123,18 +172,22 @@ class SubjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $subject = Subject::findOrFail($id);
-        $attr = [
-            'name' => $request->get('name'),
-            'status' => $request->get('status'),
-            'description' => $request->get('description'),
-        ];
-        $subject->update($attr);
-        $course_id = $request->course_id;
-        $subject->courses()->detach();
-        $subject->courses()->attach($request->course_id);
+        try {
+            $subject = Subject::findOrFail($id);
+            $attr = [
+                'name' => $request->get('name'),
+                'status' => $request->get('status'),
+                'description' => $request->get('description'),
+            ];
+            $subject->update($attr);
+            $course_id = $request->course_id;
+            $subject->courses()->detach();
+            $subject->courses()->attach($request->course_id);
 
-        return redirect()->route('admin.subjects.index')->with('alert', trans('setting.edit_subject_success'));
+            return redirect()->route('admin.subjects.index')->with('alert', trans('setting.edit_subject_success'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     /**
@@ -145,9 +198,13 @@ class SubjectController extends Controller
      */
     public function destroy($id)
     {
-        $subject = Subject::findOrFail($id);
-        $subject->delete();
+        try {
+            $subject = Subject::findOrFail($id);
+            $subject->delete();
 
-        return redirect()->route('admin.subjects.index')->with('alert', trans('setting.delete_subject_success'));
+            return redirect()->route('admin.subjects.index')->with('alert', trans('setting.delete_subject_success'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 }

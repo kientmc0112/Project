@@ -24,6 +24,7 @@ class CourseController extends Controller
         $courses = Course::latest('id')
                         ->with('category')
                         ->paginate(self::PAGE);
+
         return view('admin.courses.index', compact('courses'));
     }
 
@@ -54,6 +55,7 @@ class CourseController extends Controller
     {
         $subjects = Subject::all();
         $categories = $this->getSubCategories(0);
+
         return view('admin.courses.create', compact('categories','subjects'));
     }
 
@@ -65,26 +67,32 @@ class CourseController extends Controller
      */
     public function store(CourseRequest $request)
     {
+        if ($request->hasFile('image')) {
+            $image = $this->uploadImage($request);
+        } else {
+            $image = config('configcourse.image_default');
+        }
         $attr = [
             'category_id' => $request->get('category_id'),
             'name' => $request->get('name'),
             'description' => $request->get('description'),
             'status' => $request->get('status'),
+            'image' => $image,
         ];
-        if ($request->hasFile('image')) {  
-            $destinationDir = public_path('images/course');
-            $fileName = uniqid('course').'.'.$request->image->extension();
-            $request->image->move($destinationDir, $fileName);
-            $attr['image'] = '/images/course/'.$fileName;
-        } else {
-            $attr['image'] = '/images/courses.png';
-        }
         $course = Course::create($attr);
         $course_id = $course->id;
         $course = Course::find($course_id);
         $course->subjects()->attach($request->subject_id);
         
         return redirect()->route('admin.courses.index')->with('alert', trans('setting.add_course_success'));
+    }
+
+    private function uploadImage(CourseRequest $request)
+    {
+        $destinationDir = public_path(config('configcourse.public_path'));
+        $fileName = uniqid('course') . '.' . $request->image->extension();
+        $request->image->move($destinationDir, $fileName);
+        return $image = config('configcourse.image_course').$fileName;
     }
 
     /**
@@ -108,7 +116,7 @@ class CourseController extends Controller
         }
     }
 
-    public function postShow(Request $request, $id)
+    public function assignTraineeCourse(Request $request, $id)
     {
         try {
             $course = Course::findOrFail($id);
@@ -135,7 +143,7 @@ class CourseController extends Controller
         }
     }
 
-    public function finishCourse(Request $request, $id)
+    public function finishTraineeCourse(Request $request, $id)
     {
         DB::table('user_course')
                 ->where('course_id', $id)
@@ -157,6 +165,7 @@ class CourseController extends Controller
             $categories = Category::all();
             $subject = Course::find($id)->subjects()->orderBy('name')->get();
             $subjects = Subject::all();
+
             return view('admin.courses.edit', compact('course','categories','subject','subjects'));    
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
@@ -182,7 +191,7 @@ class CourseController extends Controller
             ];
             if ($request->hasFile('image')) {  
                 $destinationDir = public_path('images/course');
-                $fileName = uniqid('course').'.'.$request->image->extension();
+                $fileName = uniqid('course') . '.' . $request->image->extension();
                 $request->image->move($destinationDir, $fileName);
                 $attr['image'] = '/images/course/'.$fileName;
             } else {
@@ -209,6 +218,7 @@ class CourseController extends Controller
         try {
             $course = Course::findOrFail($id);
             $course->delete();
+            
             return redirect()->route('admin.courses.index')->with('alert', trans('setting.delete_course_success'));    
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());

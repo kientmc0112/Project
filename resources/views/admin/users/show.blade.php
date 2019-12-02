@@ -57,12 +57,18 @@
                                                     <h3>Courses</h3>
                                                     <form action="{{ route('addUserCourse', $userDetail->id) }}" method="post">
                                                         @csrf
-                                                        <select name="course_id" id="" class="form-control">
+                                                        <label for="">Course</label>
+                                                        <select name="course_id" id="course_id" class="form-control">
                                                             @foreach ($courses as $course)
-                                                                <option value="{{ $course->id }}">{{ $course->name }}</option>
+                                                                <option data-courseId="{{ $course->id }}" value="{{ $course->id }}">{{ $course->name }}</option>
                                                             @endforeach
                                                         </select>
+                                                        <label for="">Subject</label>
+                                                        <select name="subject_id" id="" class="form-control">
+                                                            <option value=""></option>
+                                                        </select>
                                                         <hr>
+                                                        <input type="hidden" data-id="{{ $userDetail->id }}" value="{{ $userDetail->id }}">
                                                         <button type="submit" class="btn btn-primary">Add</button>
                                                     </form>
                                                 </div>
