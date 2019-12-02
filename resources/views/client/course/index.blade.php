@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-9 blog-pull-right">
-                    @foreach($courses as $course)
+                    {{-- @foreach($courses as $course)
                         <div class="row mb-15">
                         <div class="col-sm-6 col-md-4">
                             <div class="thumb">
@@ -13,9 +13,39 @@
                         </div>
                         <div class="col-sm-6 col-md-8">
                             <h4 class="line-bottom mt-0 mt-sm-20">{{ $course->name }}</h4>
-                            <p>{{ $course->description }}</p>
+                            @if($course->users->pivot->status == 1 && $course->users->id == Auth::User()->id)
+                            <p><span class="badge badge-info">Actived</span></p>
+                            @endif
+                            <em>{{ $course->users->count() }} {{ __('Trainee') }}</em><br>
                             <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="{{ route('course.show', $course->id) }}">{{ __('view details') }}</a>
                         </div>
+                        </div>
+                        <hr>
+                    @endforeach --}}
+
+                    @foreach($courses as $course)
+                        <div class="row mb-15">
+                            <div class="col-sm-6 col-md-4">
+                                <div class="thumb">
+                                    <img alt="featured project" src="{{ $course->image }}" class="img-fullwidth">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-8">
+                                <h4 class="line-bottom mt-0 mt-sm-20">{{ $course->name }}
+                                @foreach($course->users as $user)
+                                    @if($user->id == Auth::User()->id)
+                                        @if($user->pivot->status == 1)
+                                            <i class="fas fa-check-circle check"></i>
+                                        @elseif($user->pivot->status == 0)
+                                            <i class="fas fa-check-circle"></i>
+                                        @endif
+                                    @endif
+                                @endforeach
+                                </h4>
+                                <p>{{ $course->description }}</p>
+                                <em>{{ $course->users->count() }} {{ __('Member') }}</em><br>
+                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="{{ route('course.show', $course->id) }}">{{ __('view details') }}</a>
+                            </div>
                         </div>
                         <hr>
                     @endforeach

@@ -26,12 +26,17 @@
     <link href="{{ asset('bower_components/assets-client/js/revolution-slider/css/layers.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('bower_components/assets-client/js/revolution-slider/css/navigation.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('bower_components/assets-client/css/colors/theme-skin-color-set-1.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('bower_components/assets-client/css/mycss.css') }}" rel="stylesheet" type="text/css">
     <script src="{{ asset('bower_components/assets-client/js/jquery-2.2.4.min.js') }}"></script>
     <script src="{{ asset('bower_components/assets-client/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('bower_components/assets-client/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('bower_components/assets-client/js/jquery-plugin-collection.js') }}"></script>
     <script src="{{ asset('bower_components/assets-client/js/revolution-slider/js/jquery.themepunch.tools.min.js') }}"></script>
     <script src="{{ asset('bower_components/assets-client/js/revolution-slider/js/jquery.themepunch.revolution.min.js') }}"></script>
+
+    <link href="{{ asset('bower_components/fontawesome/css/brands.css') }}" rel="stylesheet">
+    <link href="{{ asset('bower_components/fontawesome/css/fontawesome.css') }}" rel="stylesheet">
+    <link href="{{ asset('bower_components/fontawesome/css/solid.css') }}" rel="stylesheet">
 </head>
 <body class="">
     <div id="wrapper" class="clearfix">

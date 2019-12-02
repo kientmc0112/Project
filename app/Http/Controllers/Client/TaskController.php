@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Course;
-use App\Models\Category;
 use App\Models\User;
+use App\Models\Task;
 
-class CourseController extends Controller
+class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,11 +15,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with('users')->paginate(config('course.PagePaginate'));
-
-        $categories = Category::where('parent_id', 0)->with('categories')->paginate(config('course.PagePaginate'));
-
-        return view('client.course.index', compact('courses', 'categories'));
+        //
     }
 
     /**
@@ -42,7 +36,16 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $attr = [
+            'user_id' => $request->get('user_id'),
+            'report' => $request->get('report'),
+            'task_id' => $request->get('task_id'),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+        DB::table('user_task')->insert($attr);
+
+        return response()->json(['report' => $report], config('user.200-OK'));
     }
 
     /**
@@ -53,11 +56,10 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        $course = Course::find($id);
-        $course->subjects()->get();
-        $course->users()->get();
-
-        return view('client.course.course', compact('course'));
+        // $report = DB::table('user_task')->where([
+        //    ['user_id', '=', Auth::User()->id],
+        //    ['task_id', '=', $id],
+        // ])->get();
     }
 
     /**

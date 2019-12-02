@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Task;
+use DB;
 
-class ProfileController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +38,18 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $report = DB::table('user_task');
+        $attr = [
+            'user_id' => $request->get('user_id'),
+            'report' => $request->get('report'),
+            'task_id' => $request->get('task_id'),
+            'status' => 0,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+        $report->insert($attr);
+
+        return response()->json(['report' => $report], config('user.200-OK'));
     }
 
     /**
@@ -44,9 +58,16 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $user_id = $request->get('user_id');
+        $task_id = $request->get('task_id');
+        $report = DB::table('user_task')->where([
+            ['user_id', '=', $user_id],
+            ['task_id', '=', $task_id],
+        ])->get();
+
+        return response()->json(['report' => $report], config('user.200-OK'));
     }
 
     /**

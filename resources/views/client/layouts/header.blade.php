@@ -22,7 +22,10 @@
                             </li>
                             <li class="text-white">|</li>
                             <li>
-                                <a class="text-white" href="#">{{ __('Login') }}</a>
+                                <a class="text-white" id="logout" href="{{ route('logout') }}">{{ __('Logout') }}</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
                             </li>
                         </ul>
                     </div>
