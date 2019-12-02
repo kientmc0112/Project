@@ -272,6 +272,8 @@ class UserController extends Controller
         $tasks = $subject->tasks()->get();
         $user->tasks()->detach($tasks);
         $subject->users()->detach($request->user_id);
+
+        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_task_success'));
     }
 
     public function deleteUserTask(Request $request, $id)

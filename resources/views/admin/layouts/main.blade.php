@@ -16,7 +16,7 @@
 
   <!-- Page level plugin CSS-->
   <link href="{{ asset('bower_components/assets/admin/vendor/datatables/dataTables.bootstrap4.css') }}" rel="stylesheet">
-  
+
   <!-- Custom styles for this template-->
   <link href="{{ asset('bower_components/assets/admin/css/sb-admin.css') }}" rel="stylesheet">
   {{-- Datatable --}}
@@ -57,7 +57,9 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
+
   <!-- Bootstrap core JavaScript-->
+  <script src="{{ asset('js/app.js') }}"></script>
   <script src="{{ asset('bower_components/assets/admin/vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{ asset('bower_components/assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 

@@ -63,7 +63,7 @@
             <a class="nav-link dropdown-toggle" href="{{ route('logout') }}" id="logout" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-sign-out-alt"></i>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST">
                     @csrf
                 </form>
             </a>

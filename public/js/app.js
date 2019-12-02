@@ -311,7 +311,6 @@ __webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/checkconfirm.js
 __webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/ajax.js */"./resources/js/ajax.js");
 module.exports = __webpack_require__(/*! /home/duytu/Desktop/Project/resources/sass/app.scss */"./resources/sass/app.scss");
 
-
 /***/ })
 
 /******/ });
