@@ -6,21 +6,21 @@ $.ajaxSetup({
 $(document).ready(function () {
     $('#course_id').on('click', function (event) {
         event.preventDefault();
-        let id = $(this).attr('data-courseId');
-        let _this = $(this);
+        // let id = $(this).attr('data-courseId');
+        // let _this = $(this);
         $.ajax({
             url: '/admin/user/' + id + '/export_subject',
             method: 'POST',
             data: {
                 // id: courseId,
             },
-            success: function() {
+            success: function () {
                 alert('ok');
             },
-            error: function() {
+            error: function () {
                 alert('error');
             }
         });
-        
+
     });
 });

@@ -67,26 +67,32 @@ class CourseController extends Controller
      */
     public function store(CourseRequest $request)
     {
+        if ($request->hasFile('image')) {
+            $image = $this->uploadImage($request);
+        } else {
+            $image = config('configcourse.image_default');
+        }
         $attr = [
             'category_id' => $request->get('category_id'),
             'name' => $request->get('name'),
             'description' => $request->get('description'),
             'status' => $request->get('status'),
+            'image' => $image,
         ];
-        if ($request->hasFile('image')) {  
-            $destinationDir = public_path(config('configcourse.public_path'));
-            $fileName = uniqid('course') . '.' . $request->image->extension();
-            $request->image->move($destinationDir, $fileName);
-            $attr['image'] = config('configcourse.image_course').$fileName;
-        } else {
-            $attr['image'] = config('configcourse.image_default');
-        }
         $course = Course::create($attr);
         $course_id = $course->id;
         $course = Course::find($course_id);
         $course->subjects()->attach($request->subject_id);
         
         return redirect()->route('admin.courses.index')->with('alert', trans('setting.add_course_success'));
+    }
+
+    private function uploadImage(CourseRequest $request)
+    {
+        $destinationDir = public_path(config('configcourse.public_path'));
+        $fileName = uniqid('course') . '.' . $request->image->extension();
+        $request->image->move($destinationDir, $fileName);
+        return $image = config('configcourse.image_course').$fileName;
     }
 
     /**
