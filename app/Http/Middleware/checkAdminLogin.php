@@ -21,7 +21,7 @@ class checkAdminLogin
             if ($user->role_id >= 1) {
                 return $next($request);
             } else {
-                return redirect('/');
+                return redirect()->route('course.index');
             }
         } else {
             return redirect()->route('getLogin');
