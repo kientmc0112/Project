@@ -115,6 +115,7 @@ class UserController extends Controller
     {
         $courseSubject = Course::find($id)->subjects()->get();
         $count = 0;
+        dd($courseSubject);
         foreach ($courseSubject as $value) {
             $check = DB::table('user_subject')
             ->where('user_id', $id)

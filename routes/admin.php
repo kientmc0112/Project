@@ -16,26 +16,27 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
         'as' => 'admin.dashboard.index',
         'uses' => 'DashboardController@index'
     ]);
-    Route::resource('categories', 'CategoryController', [
-        'as' => 'admin',
-        'parameters' => ['categories' => 'id']
-    ]);
-    Route::resource('courses', 'CourseController', [
-        'as' => 'admin',
-        'parameters' => ['courses' => 'id']
-    ]);
-    Route::resource('subjects', 'SubjectController', [
-        'as' => 'admin',
-        'parameters' => ['subjects' => 'id']
-    ]);
-    Route::resource('tasks', 'TaskController', [
-        'as' => 'admin',
-        'parameters' => ['tasks' => 'id']
-    ]);
-    Route::resource('users', 'UserController', [
-        'as' => 'admin',
-        'parameters' => ['users' => 'id']
-    ]);
+        Route::resource('categories', 'CategoryController', [
+            'as' => 'admin',
+            'parameters' => ['categories' => 'id']
+        ]);
+        Route::resource('courses', 'CourseController', [
+            'as' => 'admin',
+            'parameters' => ['courses' => 'id']
+        ]);
+        Route::resource('subjects', 'SubjectController', [
+            'as' => 'admin',
+            'parameters' => ['subjects' => 'id']
+        ]);
+        Route::resource('tasks', 'TaskController', [
+            'as' => 'admin',
+            'parameters' => ['tasks' => 'id']
+        ]);
+        Route::resource('users', 'UserController', [
+            'as' => 'admin',
+            'parameters' => ['users' => 'id']
+        ]);    
+    
     Route::put('users/{id}/finish_course', 'UserController@finishCourse')->name('finishCourse');
     Route::put('users/{id}/finish_subject', 'UserController@finishSubject')->name('finishSubject');
     Route::put('users/{id}/finish_task', 'UserController@finishTask')->name('finishTask');
@@ -55,4 +56,8 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
 
     Route::post('tasks/{id}/assing_trainee_task', 'TaskController@assignTraineeTask')->name('assignTraineeTask');
     Route::put('tasks/{id}/finish_trainee_task', 'TaskController@finishTraineeTask')->name('finishTraineeTask');
+
+    Route::get('reports', 'ReportController@index')->name('admin.reports.index');
+    Route::post('reports/{id}', 'ReportController@store')->name('admin.reports.store');
+    Route::get('reports/comment', 'ReportController@showComment')->name('admin.reports.comment');
 });

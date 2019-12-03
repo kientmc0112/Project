@@ -10,7 +10,7 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-
+        
 mix.js([
         'resources/js/app.js',
         'resources/js/logout.js',
@@ -21,5 +21,6 @@ mix.js([
         'resources/js/addsubject.js',
         'resources/js/checkconfirm.js',
         'resources/js/ajax.js',
+        'resources/js/calendarevent.js',
    ], 'public/js')
     .sass('resources/sass/app.scss', 'public/css');
