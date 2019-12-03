@@ -36,13 +36,13 @@
                                                 <table class="table table-bordered" style="margin-top:20px;">
                                                     <thead>
                                                         <tr class="bg-primary">
-                                                            <th>{{ trans('setting.id') }}</th>
+                                                            <th id="th-id">{{ trans('setting.id') }}</th>
                                                             <th>{{ trans('setting.name') }}</th>
                                                             <th>{{ trans('setting.image') }}</th>
                                                             <th>{{ trans('setting.categories') }}</th>
-                                                            <th>{{ trans('setting.status') }}</th>
+                                                            <th id="th-status">{{ trans('setting.status') }}</th>
                                                             <th>{{ trans('setting.description') }}</th>
-                                                            <th width='15%'>{{ trans('setting.options') }}</th>
+                                                            <th id="th-option">{{ trans('setting.options') }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -86,7 +86,7 @@
                                                                     <a href="{{ route('admin.courses.edit', $course->id) }}"
                                                                             class="btn btn-warning"><i class="fas fa-edit"
                                                                                 aria-hidden="true"></i></a>
-                                                                    <button class="btn btn-danger" type="submit"><i
+                                                                    <button class="btn btn-danger checkconfirm" type="submit"><i
                                                                             class="fa fa-trash"
                                                                             aria-hidden="true"></i></button>
                                                                 </form>

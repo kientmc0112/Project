@@ -19,17 +19,17 @@
                             <div class="col-md-12">
                                 <div>
                                     <ul>
-                                        <li><b>{{ trans('setting.id') }} :</b> {{ $task->id }}</li>
-                                        <li><b>{{ trans('setting.name') }} :</b> {{ $task->name }}</li>
-                                        <li><b>{{ trans('setting.subject') }} :</b> {{ $task->subject_id }} </li>
-                                        <li><b>{{ trans('setting.status') }} :</b>
+                                        <li><b>{{ trans('setting.id') }} </b> {{ $task->id }}</li>
+                                        <li><b>{{ trans('setting.name') }} </b> {{ $task->name }}</li>
+                                        <li><b>{{ trans('setting.subject') }} </b> {{ $task->subject_id }} </li>
+                                        <li><b>{{ trans('setting.status') }} </b>
                                             @if ($task->status == true)
                                                 <b>{{ trans('setting.waiting') }}</b>
                                             @else
                                                 <b>{{ trans('setting.open') }}</b>
                                             @endif
                                         </li>
-                                        <li><b>{{ trans('setting.description') }} :</b> {{ $task->description }}</li>
+                                        <li><b>{{ trans('setting.description') }} </b> {{ $task->description }}</li>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">{{ trans('setting.assign_user') }}</button>
                                     </ul>
                                 </div>
@@ -57,6 +57,9 @@
                                 </div>
                                 @if (session('alert'))
                                     <div class="alert alert-success">{{ session('alert') }}</div>
+                                @endif
+                                @if (session('error'))
+                                    <div class="alert alert-success">{{ session('error') }}</div>
                                 @endif
                                 <table class="table table-bordered" id="table-show">
                                     <thead>

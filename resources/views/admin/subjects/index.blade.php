@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', 'Create Subject')
+@section('title', config('configsubject.list_subject'))
 @section('content')
 <div id="content-wrapper">
     <div class="container-fluid">
@@ -21,15 +21,21 @@
                                     <div class="panel-body">
                                         <div class="bootstrap-table">
                                             <div class="table-responsive">
-                                                <a href="{{ route('admin.subjects.create') }}" class="btn btn-primary">{{ trans('setting.add_course') }}</a>
+                                                <a href="{{ route('admin.subjects.create') }}" class="btn btn-primary">{{ trans('setting.add_subject') }}</a>
                                                 <hr>
-                                                    <table class="table table-bordered" id="table-show">
+                                                @if (session('alert'))
+                                                    <div class="alert alert-success">{{ session('alert') }}</div>
+                                                @endif
+                                                @if (session('error'))
+                                                    <div class="alert alert-error">{{ session('error') }}</div>
+                                                @endif
+                                                    <table class="table table-bordered text-center" id="table-show">
                                                         <thead>
                                                             <tr class="bg-primary">
-                                                                <th>{{ trans('setting.id') }}</th>
+                                                                <th id="id">{{ trans('setting.id') }}</th>
                                                                 <th>{{ trans('setting.name') }}</th>
-                                                                <th>{{ trans('setting.courses') }}</th>
-                                                                <th>{{ trans('setting.status') }}</th>
+                                                                <th id="courses">{{ trans('setting.courses') }}</th>
+                                                                <th id="status">{{ trans('setting.status') }}</th>
                                                                 <th>{{ trans('setting.description') }}</th>
                                                                 <th id="option">{{ trans('setting.options') }}</th>
                                                             </tr>
@@ -72,7 +78,7 @@
                                                                         <a href="{{ route('admin.subjects.edit', $subject->id) }}" class="btn btn-warning">
                                                                             <i class="fas fa-edit" aria-hidden="true"></i>
                                                                         </a>
-                                                                        <button type="submit" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                                                        <button type="submit" class="btn btn-danger checkconfirm"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                                                     </form>
                                                                 </td>
                                                             </tr>

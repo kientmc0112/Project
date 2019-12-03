@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', config('configsubject.edit_course'))
+@section('title', config('configsubject.edit_subject'))
 @section('content')
 <div id="content-wrapper">
     <div class="container-fluid">
@@ -22,6 +22,11 @@
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-md-6">
+                                                    @if ($errors->any())
+                                                        <div class="alert alert-danger">
+                                                            <i class="fas fa-exclamation-triangle"></i> {{ $errors->first() }}
+                                                        </div>
+                                                    @endif
                                                     <form action="{{ route('admin.subjects.update', $subject->id) }}" method="post">
                                                         @csrf
                                                         @method('PUT')
@@ -44,13 +49,13 @@
                                                                 </option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group">
+                                                        <div class="form-group" id="add_main">
                                                             <label for="">{{ trans('setting.subject') }}</label> | 
                                                             <td>
-                                                                <button type="button" id="btn_add" name="btn_add" class="btn btn-primary">{{ trans('setting.add') }}</button>
+                                                                <button type="button" id="btn_add" name="btn_add" class="btn btn-primary"><i class="fas fa-plus"></i></button>
                                                             </td>
                                                             @foreach ($course as $item)
-                                                                <table id="add_main" class="table">
+                                                                <table class="table">
                                                                     <tr>
                                                                         <td>
                                                                             <select name="course_id[]" id="course_id" class="form-control">

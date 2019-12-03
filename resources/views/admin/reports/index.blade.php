@@ -1,5 +1,5 @@
 @extends('admin.layouts.main') 
-@section('title', config('configsubject.list_reports')) 
+@section('title', config('configreport.list_reports')) 
 @section('content')
 <div id="content-wrapper">
     <div class="container-fluid">
@@ -7,7 +7,7 @@
             <li class="breadcrumb-item">
                 <a href="#">Dashboard</a>
             </li>
-            <li class="breadcrumb-item active">Tables</li>
+            <li class="breadcrumb-item active">@yield('title')</li>
         </ol>
         <div class="card mb-3">
             <div class="card-header">

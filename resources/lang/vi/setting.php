@@ -57,6 +57,7 @@ return [
     'assign_user' => 'Assign User',
     'edit' => 'Edit',
     'add_task' => 'Add Task',
+    'reports' => 'Reports',
     //
     'parent_id_required' => 'Parent_id Trống!!! Bạn vui lòng nhập đầy đủ thông tin!!!',
     'parent_id_numeric' => 'Parent_id không phải kiểu số!!! Bạn vui lòng nhập đúng kiểu dữ liệu!!!',
@@ -95,7 +96,8 @@ return [
     'alert_assign_task' => 'Chỉ Định User Vào Task Thành Công!',
     'error_do_not_subject' => 'Chưa Tham Gia Subject Nào Có Task Này!',
     'finish_task_success' => 'Finish Task Success',
-
+    'finish_course_success' => 'Finish Course Success',
+    'error_course_fail' => 'Chưa Hoàn Thành Đủ Số Subject! Không thể Finish Course!',
     'add_category_success' => 'Thêm Danh Mục Thành Công!!!',
     'edit_category_success' => 'Sửa Danh Mục Thành Công!!!',
     'delete_category_success' => 'Xóa Danh Mục Thành Công!!!',
@@ -106,6 +108,10 @@ return [
     'add_user_success' => 'Tạo User Thành Công!!!',
     'edit_user_success' => 'Sửa User Thành Công!!!',
     'delete_user_success' => 'Xóa User Thành Công!!!',
+    'delete_subject_success' => 'Xóa Subject Thành Công!!!',
+    'subject_id_required' => 'Subject Trống!!! Vui Lòng Nhập Đầy Đủ Thông Tin',
+    'subject_id_min' => 'Subject < 0',
+    'subject_id_numeric' => 'Vui Lòng Chọn Lại Subject',
 
     'assign_user_task_success' => 'Chỉ Định User Vào Task Thành Công!!!',
     'assign_user_task_fail' => 'User Chưa Tham Gia Subject Cha!!!',

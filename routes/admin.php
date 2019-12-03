@@ -16,27 +16,23 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
         'as' => 'admin.dashboard.index',
         'uses' => 'DashboardController@index'
     ]);
+    Route::group(['as' => 'admin.'], function () {
         Route::resource('categories', 'CategoryController', [
-            'as' => 'admin',
             'parameters' => ['categories' => 'id']
         ]);
         Route::resource('courses', 'CourseController', [
-            'as' => 'admin',
             'parameters' => ['courses' => 'id']
         ]);
         Route::resource('subjects', 'SubjectController', [
-            'as' => 'admin',
             'parameters' => ['subjects' => 'id']
         ]);
         Route::resource('tasks', 'TaskController', [
-            'as' => 'admin',
             'parameters' => ['tasks' => 'id']
         ]);
         Route::resource('users', 'UserController', [
-            'as' => 'admin',
             'parameters' => ['users' => 'id']
         ]);    
-    
+    });
     Route::put('users/{id}/finish_course', 'UserController@finishCourse')->name('finishCourse');
     Route::put('users/{id}/finish_subject', 'UserController@finishSubject')->name('finishSubject');
     Route::put('users/{id}/finish_task', 'UserController@finishTask')->name('finishTask');

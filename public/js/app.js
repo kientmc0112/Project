@@ -235,10 +235,16 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function checkConfirm() {
-  var conf = confirm("Bạn có chắc chắn muốn xóa ?");
-  return conf;
-}
+// function checkConfirm() {
+//     var conf = confirm("Bạn có chắc chắn muốn xóa ?");
+//     return conf;
+// }
+$(document).ready(function () {
+  $('.checkconfirm').on('click', function () {
+    var conf = confirm("Bạn có chắc chắn muốn xóa ?");
+    return conf;
+  });
+});
 
 /***/ }),
 
@@ -325,17 +331,17 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/logout.js */"./resources/js/logout.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/courses.js */"./resources/js/courses.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/changeimg.js */"./resources/js/changeimg.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/option.js */"./resources/js/option.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/datatable.js */"./resources/js/datatable.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/addsubject.js */"./resources/js/addsubject.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/checkconfirm.js */"./resources/js/checkconfirm.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/ajax.js */"./resources/js/ajax.js");
-__webpack_require__(/*! /home/duytu/Desktop/Project/resources/js/calendarevent.js */"./resources/js/calendarevent.js");
-module.exports = __webpack_require__(/*! /home/duytu/Desktop/Project/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/logout.js */"./resources/js/logout.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/courses.js */"./resources/js/courses.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/changeimg.js */"./resources/js/changeimg.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/option.js */"./resources/js/option.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/datatable.js */"./resources/js/datatable.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/addsubject.js */"./resources/js/addsubject.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/checkconfirm.js */"./resources/js/checkconfirm.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/ajax.js */"./resources/js/ajax.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/calendarevent.js */"./resources/js/calendarevent.js");
+module.exports = __webpack_require__(/*! /home/chitt/Desktop/Project/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

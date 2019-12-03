@@ -22,14 +22,14 @@
                                         <div class="bootstrap-table">
                                             <div class="table-responsive">
                                                 <a href="{{ route('admin.tasks.create') }}" class="btn btn-primary">{{ trans('setting.add_task') }}</a>
-                                                <table class="table table-bordered" style="margin-top:20px;">
+                                                <table class="table table-bordered" id="table-show">
                                                     <thead>
                                                         <tr class="bg-primary">
-                                                            <th>{{ trans('setting.id') }}</th>
+                                                            <th id="th-id">{{ trans('setting.id') }}</th>
                                                             <th>{{ trans('setting.name') }}</th>
                                                             <th>{{ trans('setting.subject') }}</th>
                                                             <th>{{ trans('setting.description') }}</th>
-                                                            <th id="option">{{ trans('setting.options') }}</th>
+                                                            <th id="th-option">{{ trans('setting.options') }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -53,7 +53,7 @@
                                                                     @method('DELETE')
                                                                     <a href="{{ route('admin.tasks.show', $task->id) }}" class="btn btn-primary"><i class="far fa-eye"></i></a>
                                                                     <a href="{{ route('admin.tasks.edit', $task->id) }}" class="btn btn-warning"><i class="fas fa-edit" aria-hidden="true"></i></a>
-                                                                    <button class="btn btn-danger" type="submit"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                                                    <button class="btn btn-danger checkconfirm" type="submit"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                                                 </form>
                                                             </td>
                                                         </tr>

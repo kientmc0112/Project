@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', config('configsubject.create_course'))
+@section('title', config('configsubject.create_subject'))
 @section('content')
 <div id="content-wrapper">
     <div class="container-fluid">
@@ -22,11 +22,16 @@
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-md-6">
+                                                    @if ($errors->any())
+                                                        <div class="alert alert-danger">
+                                                            <i class="fas fa-exclamation-triangle"></i> {{ $errors->first() }}
+                                                        </div>
+                                                    @endif
                                                     <form action="{{ route('admin.subjects.store') }}" method="post">
                                                         @csrf
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.name') }}</label>
-                                                            <input type="text" class="form-control" name="name" id="">
+                                                            <input type="text" class="form-control" name="name" id="" value="{{ old('name') }}">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.status') }}</label>
@@ -35,26 +40,13 @@
                                                                 <option value="{{ config('configsubject.status_subject_waiting') }}">{{ trans('setting.waiting') }}</option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <table id="add_main" class="table">
-                                                                <label for="">{{ trans('setting.subject') }}</label>
-                                                                <tr>
-                                                                    <td>
-                                                                        <select name="course_id[]" id="course_id" class="form-control">
-                                                                            @foreach ($courses as $course)
-                                                                                <option value="{{ $course->id }}"> {{ $course->name }}</option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button type="button" id="btn_add" name="btn_add" class="btn btn-primary">{{ trans('setting.add') }}</button>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
+                                                        <div class="form-group"  id="add_main">
+                                                            <label for="">{{ trans('setting.subject') }}</label> |
+                                                            <button type="button" id="btn_add" name="btn_add" class="btn btn-primary"><i class="fas fa-plus"></i></button>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>
-                                                            <textarea class="form-control" name="description" id="" cols="{{ config('configsubject.cols_textarea') }}" rows="{{ config('configsubject.rows_textarea') }}"></textarea>
+                                                            <textarea class="form-control" name="description" id="" cols="{{ config('configsubject.cols_textarea') }}" rows="{{ config('configsubject.rows_textarea') }}">{{ old('description') }}</textarea>
                                                         </div>
                                                         <button type="submit" class="btn btn-primary">{{ trans('setting.add_subject') }}</button>
                                                     </form>
