@@ -13,7 +13,7 @@ $(document).ready(function () {
             method: 'get',
             success: function (response) {
                 $.each(response.listSubject, function (key, value) {
-                    var option = "<option value=" + value.id + ">" + value.subject_name + "</option>";
+                    var option = "<option value=" + value.subject_id + ">" + value.subject_name + "</option>";
                     $("#subject_id").append(option);
                 });
             },

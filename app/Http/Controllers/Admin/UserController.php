@@ -113,12 +113,28 @@ class UserController extends Controller
 
     public function finishCourse(Request $request, $id)
     {
-        $attr = DB::table('user_course')
+        $courseSubject = Course::find($id)->subjects()->get();
+        $count = 0;
+        foreach ($courseSubject as $value) {
+            $check = DB::table('user_subject')
+            ->where('user_id', $id)
+            ->where('subject_id', $value->id)
+            ->where('status', 1)
+            ->get();
+            if (count($check) >= 1) {
+                $count = ++$count;
+            }
+        }
+        if ($count == count($courseSubject)) {
+            DB::table('user_course')
                 ->where('course_id', $request->course_id)
                 ->where('user_id', $id)
                 ->update(['status' => 1, 'updated_at' => now()]);
 
-        return redirect()->route('admin.users.show', $id);
+            return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.finish_course_success'));
+        } else {
+            return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.finish_course_fail'));
+        }
     }
 
     public function finishSubject(Request $request, $id)
@@ -177,20 +193,18 @@ class UserController extends Controller
                 ->where('user_id', $id)
                 ->where('status', 0)
                 ->get();
-        $subject_id = $request->subject_id;
-        // if (count($checkStatusUser) >= 1) {
-        //     return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
-        // }else {
-        //     if (count($check) >= 1) {
-        //         return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
-        //     } else {
+        if (count($checkStatusUser) >= 1) {
+            return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
+        }else {
+            if (count($check) >= 1) {
+                return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
+            } else {
                 
-        //         // User::find($id)->courses()->attach($request->course_id);
-
-        //         return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
-        //     }
-        // }
-        User::find($id)->subjects()->attach($request->subject_id);
+                User::find($id)->courses()->attach($request->course_id);
+                User::find($id)->subjects()->attach($request->subject_id);
+                return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
+            }
+        }
     }
 
     public function addUserSubject(Request $request, $id)
@@ -265,8 +279,10 @@ class UserController extends Controller
 
     public function deleteUserCourse(Request $request, $id)
     {
-        $user_id = $request->id;
-     
+        $course = Course::findOrFail($id);
+        $course->users()->detach($request->user_id);
+
+        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_course_success'));
     }
 
     public function deleteUserSubject(Request $request, $id)
@@ -277,7 +293,7 @@ class UserController extends Controller
         $user->tasks()->detach($tasks);
         $subject->users()->detach($request->user_id);
 
-        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_task_success'));
+        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_subject_success'));
     }
 
     public function deleteUserTask(Request $request, $id)
