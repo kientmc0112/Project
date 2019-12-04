@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Task;
+use App\Models\User;
+use Auth;
 use DB;
 
 class CalendarController extends Controller
@@ -38,8 +41,9 @@ class CalendarController extends Controller
         // $calendar = Calendar::addEvents($events);
         // return view('client.calender.index', compact('calendar'));
 
-        $tasks = DB::table('user_task');
-        return view('client.calender.index', compact('tasks'));
+        // $tasks = DB::table('user_task');
+        // return view('client.calender.index', compact('tasks'));
+        // return view('client.calendars.calendar');
     }
 
     /**
@@ -69,9 +73,13 @@ class CalendarController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $user_id = Auth::User()->id;
+        $user = User::find($user_id);
+        $tasks = DB::table('user_task')->where('user_id', $user_id)->get();
+
+        return view('client.calendars.calendar', compact('tasks'));
     }
 
     /**
