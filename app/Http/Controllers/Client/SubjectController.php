@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use DB;
 use App\Models\Course;
+use App\Models\User;
 use App\Models\Subject;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Auth;
 
 class SubjectController extends Controller
 {
@@ -47,7 +50,7 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
 
         // $subject->tasks()->get();
@@ -63,10 +66,24 @@ class SubjectController extends Controller
         // dd($subject);
         // return response()->json(array('success' => true, 'subject' => $subject));
 
+        $course_id = $request->course_id;
+        $user_id = Auth::User()->id;
+        $permiss = DB::table('user_course')->where([
+            ['user_id', $user_id],
+            ['course_id', $course_id],
+        ])->get('status');
+        // $permiss = 0;
+        // $course = Course::find($course_id);
+        // $course->users()->get();
+        // foreach($course->users as $user) {
+        //     if($user->id == $user_id) $permiss = $user->pivot->status;
+        // }
+
         $subject = Subject::find($id);
         $tasks = $subject->tasks()->with('users')->get();
         $subject->users()->get();
-        return view('client.subject.subject', compact('subject', 'tasks'));
+
+        return view('client.subject.subject', compact('subject', 'tasks', 'permiss'));
     }
 
     /**
@@ -101,5 +118,17 @@ class SubjectController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function history($id) {
+        $user_id = Auth::User()->id;
+        $tasks = DB::table('user_task')->where([
+            ['user_id', $user_id],
+            ['task_id', $id],
+        ])->orderBy('created_at', 'DESC');
+        // $subject = Subject::find($id);
+        // $tasks = $subject->tasks()->pivot->orderBy('updated_at', 'DESC')->get();
+
+        return view('client.history.tasks', compact('tasks'));
     }
 }

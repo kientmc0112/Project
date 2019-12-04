@@ -17,9 +17,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'courses'], function () {
         Route::get('/', 'CourseController@index')->name('course.index');
         Route::get('/{course}/show', 'CourseController@show')->name('course.show');
+        Route::get('/{course}/history', 'CourseController@history')->name('course.history');
     });
-
-    Route::get('/subjects/{subject}/show', 'SubjectController@show')->name('subject.show');
+    Route::group(['prefix' => 'subjects'], function () {
+        Route::post('/{subject}/show', 'SubjectController@show')->name('subject.show');
+        Route::post('/{subject}/history', 'SubjectController@history')->name('subject.history');
+    });
 
     Route::get('/users/{profile}/show', 'UserController@show')->name('user.show');
 
@@ -27,6 +30,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/{user}/update', 'UserController@update')->name('user.update');
     });
 
-    Route::post('/report/store', 'ReportController@store')->name('report.store');
-    Route::post('/report/show', 'ReportController@show')->name('report.show');
+    Route::group(['prefix' => '/report'], function () {
+        Route::post('/store', 'ReportController@store')->name('report.store');
+        Route::post('/show', 'ReportController@show')->name('report.show');
+    });
+
+    Route::get('/calender', 'CalendarController@index');
 });
