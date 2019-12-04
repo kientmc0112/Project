@@ -18,32 +18,7 @@ class CalendarController extends Controller
      */
     public function index()
     {
-        // $events = [];
-        // $data = DB::table('user_task');
-        // if($data->count())
-        //  {
-        //     foreach ($data as $key => $value)
-        //     {
-        //         $events[] = Calendar::event(
-        //             $value->id,
-        //             true,
-        //             new \DateTime($value->created_at),
-        //             new \DateTime($value->updated_at.'+1 day'),
-        //             null,
-        //             // Add color
-        //             [
-        //                 'color' => '#000000',
-        //                 'textColor' => '#008000',
-        //             ]
-        //         );
-        //     }
-        // }
-        // $calendar = Calendar::addEvents($events);
-        // return view('client.calender.index', compact('calendar'));
-
-        // $tasks = DB::table('user_task');
-        // return view('client.calender.index', compact('tasks'));
-        // return view('client.calendars.calendar');
+        //
     }
 
     /**
@@ -79,7 +54,7 @@ class CalendarController extends Controller
         $user = User::find($user_id);
         $tasks = DB::table('user_task')->where('user_id', $user_id)->get();
 
-        return view('client.calendars.calendar', compact('tasks'));
+        return view('client.calendar.index', compact('tasks'));
     }
 
     /**

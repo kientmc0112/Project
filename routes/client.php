@@ -35,5 +35,5 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/show', 'ReportController@show')->name('report.show');
     });
 
-    Route::get('/calender', 'CalendarController@index');
+    Route::get('calendars', 'CalendarController@show')->name('calendar.show');
 });
