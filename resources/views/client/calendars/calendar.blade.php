@@ -64,8 +64,66 @@
         </div>
     </section>
 </div>
+{{-- <input type="hidden" id="calendarEvents" value="{{ json_encode($calendarEvents) }}"> --}}
+<input type="hidden" id="calendar" value="{{ json_encode($tasks) }}">
+
 <script>
-    var calendarEvents = [];
+    var calendarEvents = new Array();
+    var tasks = $("#calendar").val();
+    tasks = JSON.parse(tasks);
+    for(var i=0; i<tasks.length; i++) {
+        calendarEvents[i] = [
+            'title': tasks[i]['id'],
+            'start': tasks[i]['created_at'].slice(0, 10),
+            'end': tasks[i]['updated_at'].slice(0, 10),
+        ];
+        $('#full-event-calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            selectable: true,
+            selectHelper: true,
+            editable: true,
+            eventLimit: true,
+            events: calendarEvents[i]
+        });
+    }
+
+
+
+    // var a = $('#calendarEvents').val();
+    // @foreach($tasks as $task)
+    //     var calendarEvents;
+    //     calendarEvents = [
+    //         {
+    //             title: '{{ $task->id }}',
+    //             start: '{{ substr($task->created_at, 0, 10) }}',
+    //             end: '{{ substr($task->updated_at, 0, 10) }}',
+    //         }
+    //     ];
+    // @endforeach
+
+    // $.ajax({
+    //     type: 'POST',
+    //     url: '/calendars/show',
+    //     success: function (response) {
+    //         $.each(response.tasks, function (key, value) {
+    //             calendarEvents = [
+    //                 {
+    //                     title: "'" + value.id.toString() + "'",
+    //                     start: "'" + value.created_at.slice(0, 10) + "'",
+    //                     end: "'" + value.updated_at.slice(0, 10) + "'",
+    //                 }
+    //             ];
+    //         });
+    //     },
+    //     error: function(response) {
+    //         console.log(response);
+    //         alert("Error! Please refresh");
+    //     }
+    // });
 
 </script>
 @endsection
