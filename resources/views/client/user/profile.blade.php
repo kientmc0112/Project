@@ -94,15 +94,12 @@
                         <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation" class="active"><a href="#courses" aria-controls="courses" role="tab"
                                     data-toggle="tab" class="font-15 text-uppercase">Courses <span
-                                        class="badge">4</span></a></li>
+                                        class="badge"> {{ $courses->count() }}</span></a></li>
                             <li role="presentation"><a href="#subjects" aria-controls="subjects" role="tab"
                                     data-toggle="tab" class="font-15 text-uppercase">Subjects<span
-                                        class="badge">3</span></a></li>
+                                        class="badge"> {{ $subjects->count() }}</span></a></li>
                             <li role="presentation"><a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab"
-                                    class="font-15 text-uppercase">Tasks<span class="badge">5</span></a></li>
-                            <li role="presentation"><a href="#activity" aria-controls="activity" role="tab"
-                                    data-toggle="tab" class="font-15 text-uppercase">Activity<span
-                                        class="badge">5</span></a></li>
+                                    class="font-15 text-uppercase">Tasks<span class="badge"> {{ $tasks->count() }}</span></a></li>
                         </ul>
 
                         <!-- Tab panes -->
@@ -140,7 +137,7 @@
                                                     <button class="btn btn-success btn-xs">Finished</button>
                                                     @endif
                                                 </td>
-                                                <td><a class="btn btn-info btn-xs" href="#">View</a></td>
+                                                <td><a class="btn btn-info btn-xs" href="{{ route('course.show', $course->id) }}">View</a></td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -154,8 +151,9 @@
                                             <th>ID</th>
                                             <th>Name</th>
                                             <th>Process</th>
+                                            <th>Date Start</th>
+                                            <th>Date Finish</th>
                                             <th>Status</th>
-                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -173,13 +171,18 @@
                                                 {{ $subject->process }}
                                             </td>
                                             <td>
+                                                {{ $subject->created_at }}
+                                            </td>
+                                            <td>
+                                                {{ $subject->updated_at }}
+                                            </td>
+                                            <td>
                                                 @if ($subject->status == false)
                                                 <button class="btn btn-warning btn-xs">Activity</button>
                                                 @else
                                                 <button class="btn btn-success btn-xs">Success</button>
                                                 @endif
                                             </td>
-                                            <td><a class="btn btn-success btn-xs" href="#">View Order</a></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -191,8 +194,9 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
+                                            <th>Date Start</th>
+                                            <th>Date Finish</th>
                                             <th>Status</th>
-                                            <th>View</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -207,32 +211,20 @@
                                                 @endforeach
                                             </td>
                                             <td>
+                                                {{ $task->created_at }}
+                                            </td>
+                                            <td>
+                                                {{ $task->updated_at }}
+                                            </td>
+                                            <td>
                                                 @if ($task->status == false)
                                                 <button class="btn btn-warning btn-xs">Activity</button>
                                                 @else
                                                 <button class="btn btn-success btn-xs">Finished</button>
                                                 @endif
                                             </td>
-                                            <td><a class="btn btn-info btn-xs" href="#">View</a></td>
                                         </tr>
                                         @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="activity">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                            <th>View</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
