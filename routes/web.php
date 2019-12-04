@@ -10,11 +10,5 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/index', function () {
-    return view('client.index');
-})->name('home');
-
-Route::get('/', 'Auth\LoginController@showLoginForm')->name('getLogin');
-
 Auth::routes();
 
