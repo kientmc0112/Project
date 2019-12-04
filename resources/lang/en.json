@@ -67,5 +67,6 @@
     "Status": "Status",
     "Comment": "Comment",
     "Send": "Send",
-    "Completed": "Completed"
+    "Completed": "Completed",
+    "Waiting": "Waiting"
 }

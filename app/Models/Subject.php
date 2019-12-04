@@ -24,6 +24,6 @@ class Subject extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'user_subject')->withPivot('status')->withTimestamps();;
+        return $this->belongsToMany(User::class, 'user_subject')->withPivot('status', 'process', 'created_at')->withTimestamps();;
     }
 }

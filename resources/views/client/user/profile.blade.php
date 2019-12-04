@@ -66,7 +66,7 @@
                                                 <div class="col-xs-5">
                                                     <div class="form-group">
                                                         <label>{{ __('Avatar') }}</label><br>
-                                                        <input type="file" name="avatar" id="avatar" onchange="readURL(this)" value="{{ $user->avatar }}">
+                                                        <input type="file" name="avatar" id="avatar" value="{{ $user->avatar }}">
                                                         <img id="imageAvatar" class="thumbnail" src="{{ $user->avatar }}">
                                                     </div>
                                                 </div>
@@ -123,17 +123,27 @@
         </div>
     </section>
     <script type="text/javascript">
-        function readURL(input) {
-            if(input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    $("#imageAvatar").attr("src", e.target.result);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+        // function readURL(input) {
+        //     if(input.files && input.files[0]) {
+        //         var reader = new FileReader();
+        //         reader.onload = function(e) {
+        //             $("#imageAvatar").attr("src", e.target.result);
+        //         };
+        //         reader.readAsDataURL(input.files[0]);
+        //     }
+        // }
 
         $(document).ready( function () {
+            $("#avatar").on('change', function () {
+                if(this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $("#imageAvatar").attr("src", e.target.result);
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
             $("#formEdit").submit(function (e) {
                 e.preventDefault();
                 var url = '/users/' + $("#formEdit").attr('name') +'/update';

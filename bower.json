@@ -19,6 +19,7 @@
     "assets": "https://github.com/DinhDuyTu/assets.git",
     "bootstrap": "^4.3.1",
     "fontawesome": "^5.11.2",
-    "jquery": "^3.4.1"
+    "jquery": "^3.4.1",
+    "bower_FTMS": "*"
   }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Task;
 use DB;
+use Auth;
 
 class ReportController extends Controller
 {
@@ -38,18 +39,18 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        $report = DB::table('user_task');
+        $result = DB::table('user_task');
         $attr = [
-            'user_id' => $request->get('user_id'),
+            'user_id' => Auth::User()->id,
             'report' => $request->get('report'),
             'task_id' => $request->get('task_id'),
             'status' => 0,
             'created_at' => now(),
             'updated_at' => now(),
         ];
-        $report->insert($attr);
+        $result->insert($attr);
 
-        return response()->json(['report' => $report], config('user.200-OK'));
+        return response()->json(['result' => $result], config('user.200-OK'));
     }
 
     /**
@@ -60,14 +61,14 @@ class ReportController extends Controller
      */
     public function show(Request $request)
     {
-        $user_id = $request->get('user_id');
+        $user_id = Auth::User()->id;
         $task_id = $request->get('task_id');
-        $report = DB::table('user_task')->where([
+        $result = DB::table('user_task')->where([
             ['user_id', '=', $user_id],
             ['task_id', '=', $task_id],
         ])->get();
 
-        return response()->json(['report' => $report], config('user.200-OK'));
+        return response()->json(['result' => $result], config('user.200-OK'));
     }
 
     /**

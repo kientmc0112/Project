@@ -93,4 +93,13 @@ class CourseController extends Controller
     {
         //
     }
+
+    public function history($id) {
+        $course = Course::find($id);
+        $subjects = $course->subjects()->latest('created_at')->paginate(config('course.PagePaginate'));
+        // $subjects->users()->get();
+        // $tasks = $subjects->tasks()->get();
+        // $task = $subject->tasks()->get();
+        return view('client.history.subjects', compact('subjects'));
+    }
 }
