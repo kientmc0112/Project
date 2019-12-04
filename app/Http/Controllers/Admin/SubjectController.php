@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Subject;
 use App\Models\User;
+use App\Http\Requests\SubjectRequest;
 use DB;
 
 class SubjectController extends Controller
@@ -42,7 +43,7 @@ class SubjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SubjectRequest $request)
     {
         $attr= [
             'name' => $request->get('name'),
@@ -170,7 +171,7 @@ class SubjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SubjectRequest $request, $id)
     {
         try {
             $subject = Subject::findOrFail($id);

@@ -26,5 +26,5 @@ Route::get('/', 'Auth\LoginController@showLoginForm')->name('getLogin');
 
 Auth::routes();
 
-
+Route::get('calendars', 'Client\CalendarController@index');
 

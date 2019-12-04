@@ -51,10 +51,18 @@
                                         <form action="{{ route('assignTraineeCourse', $course->id) }}" method="POST">
                                             @csrf
                                             <div class="modal-body">
+                                                <label for="">User</label>
                                                 <select class="form-control" name="user_id">
                                                     @foreach ($listUser as $user)
                                                     <option value="{{ $user->id }}">{{ $user->name }} |
                                                         {{ $user->email }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <br>
+                                                <label for="">Subject</label>
+                                                <select class="form-control" name="subject_id" id="">
+                                                    @foreach ($listSubject as $value)
+                                                        <option value="{{ $value->id }}">{{ $value->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -107,7 +115,7 @@
                                             @foreach ($statusUser as $item)
                                                 @if ($item->user_id == $user->id)
                                                     @if ($item->status == 0)
-                                                        <button class="btn btn-warning">{{ trans('setting.ativiting') }}</button>
+                                                        <button class="btn btn-warning">{{ trans('setting.activity') }}</button>
                                                     @else
                                                         <button class="btn btn-success">{{ trans('setting.success') }}</button>
                                                     @endif

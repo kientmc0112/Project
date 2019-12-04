@@ -16,26 +16,23 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
         'as' => 'admin.dashboard.index',
         'uses' => 'DashboardController@index'
     ]);
-    Route::resource('categories', 'CategoryController', [
-        'as' => 'admin',
-        'parameters' => ['categories' => 'id']
-    ]);
-    Route::resource('courses', 'CourseController', [
-        'as' => 'admin',
-        'parameters' => ['courses' => 'id']
-    ]);
-    Route::resource('subjects', 'SubjectController', [
-        'as' => 'admin',
-        'parameters' => ['subjects' => 'id']
-    ]);
-    Route::resource('tasks', 'TaskController', [
-        'as' => 'admin',
-        'parameters' => ['tasks' => 'id']
-    ]);
-    Route::resource('users', 'UserController', [
-        'as' => 'admin',
-        'parameters' => ['users' => 'id']
-    ]);
+    Route::group(['as' => 'admin.'], function () {
+        Route::resource('categories', 'CategoryController', [
+            'parameters' => ['categories' => 'id']
+        ]);
+        Route::resource('courses', 'CourseController', [
+            'parameters' => ['courses' => 'id']
+        ]);
+        Route::resource('subjects', 'SubjectController', [
+            'parameters' => ['subjects' => 'id']
+        ]);
+        Route::resource('tasks', 'TaskController', [
+            'parameters' => ['tasks' => 'id']
+        ]);
+        Route::resource('users', 'UserController', [
+            'parameters' => ['users' => 'id']
+        ]);    
+    });
     Route::put('users/{id}/finish_course', 'UserController@finishCourse')->name('finishCourse');
     Route::put('users/{id}/finish_subject', 'UserController@finishSubject')->name('finishSubject');
     Route::put('users/{id}/finish_task', 'UserController@finishTask')->name('finishTask');
@@ -45,7 +42,7 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
     Route::delete('users/{id}/delete_user_course', 'UserController@deleteUserCourse')->name('deleteUserCourse');
     Route::delete('users/{id}/delete_user_subject', 'UserController@deleteUserSubject')->name('deleteUserSubject');
     Route::delete('users/{id}/delete_user_task', 'UserController@deleteUserTask')->name('deleteUserTask');
-    Route::post('users/{id}/export_subject', 'UserController@exportSubject')->name('exportSubject');
+    Route::get('users/{id}/export_subject', 'UserController@exportSubject')->name('exportSubject');
 
     Route::post('subjects/{id}/assing_trainee_subject', 'SubjectController@assignTraineeSubject')->name('assignTraineeSubject');
     Route::put('subjects/{id}/finish_trainee_subject', 'SubjectController@finishTraineeSubject')->name('finishTraineeSubject');
@@ -55,4 +52,8 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
 
     Route::post('tasks/{id}/assing_trainee_task', 'TaskController@assignTraineeTask')->name('assignTraineeTask');
     Route::put('tasks/{id}/finish_trainee_task', 'TaskController@finishTraineeTask')->name('finishTraineeTask');
+
+    Route::get('reports', 'ReportController@index')->name('admin.reports.index');
+    Route::post('reports/{id}', 'ReportController@store')->name('admin.reports.store');
+    Route::get('reports/comment', 'ReportController@showComment')->name('admin.reports.comment');
 });

@@ -120,17 +120,18 @@ $.ajaxSetup({
   }
 });
 $(document).ready(function () {
-  $('#course_id').on('click', function (event) {
-    event.preventDefault(); // let id = $(this).attr('data-courseId');
-    // let _this = $(this);
-
+  $('#course_id').on('change', function (event) {
+    event.preventDefault();
+    $("#subject_id").html('');
+    var id = $('#course_id').val();
     $.ajax({
-      url: '/admin/user/' + id + '/export_subject',
-      method: 'POST',
-      data: {// id: courseId,
-      },
-      success: function success() {
-        alert('ok');
+      url: '/admin/users/' + id + '/export_subject',
+      method: 'get',
+      success: function success(response) {
+        $.each(response.listSubject, function (key, value) {
+          var option = "<option value=" + value.subject_id + ">" + value.subject_name + "</option>";
+          $("#subject_id").append(option);
+        });
       },
       error: function error() {
         alert('error');
@@ -176,6 +177,30 @@ $(document).ready(function () {
 
 /***/ }),
 
+/***/ "./resources/js/calendarevent.js":
+/*!***************************************!*\
+  !*** ./resources/js/calendarevent.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+if (typeof calendarEvents !== "undefined") {
+  $('#full-event-calendar').fullCalendar({
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'month,agendaWeek,agendaDay'
+    },
+    selectable: true,
+    selectHelper: true,
+    editable: true,
+    eventLimit: true,
+    events: calendarEvents
+  });
+}
+
+/***/ }),
+
 /***/ "./resources/js/changeimg.js":
 /*!***********************************!*\
   !*** ./resources/js/changeimg.js ***!
@@ -210,10 +235,16 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function checkConfirm() {
-  var conf = confirm("Bạn có chắc chắn muốn xóa ?");
-  return conf;
-}
+// function checkConfirm() {
+//     var conf = confirm("Bạn có chắc chắn muốn xóa ?");
+//     return conf;
+// }
+$(document).ready(function () {
+  $('.checkconfirm').on('click', function () {
+    var conf = confirm("Bạn có chắc chắn muốn xóa ?");
+    return conf;
+  });
+});
 
 /***/ }),
 
@@ -294,22 +325,24 @@ $(document).ready(function () {
 /***/ }),
 
 /***/ 0:
-/*!************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/js/logout.js ./resources/js/courses.js ./resources/js/changeimg.js ./resources/js/option.js ./resources/js/datatable.js ./resources/js/addsubject.js ./resources/js/checkconfirm.js ./resources/js/ajax.js ./resources/sass/app.scss ***!
-  \************************************************************************************************************************************************************************************************************************************************************************************/
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/js/logout.js ./resources/js/courses.js ./resources/js/changeimg.js ./resources/js/option.js ./resources/js/datatable.js ./resources/js/addsubject.js ./resources/js/checkconfirm.js ./resources/js/ajax.js ./resources/js/calendarevent.js ./resources/sass/app.scss ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
-  
-__webpack_require__(/*! /var/www/html/Project/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /var/www/html/Project/resources/js/logout.js */"./resources/js/logout.js");
-__webpack_require__(/*! /var/www/html/Project/resources/js/courses.js */"./resources/js/courses.js");
-__webpack_require__(/*! /var/www/html/Project/resources/js/changeimg.js */"./resources/js/changeimg.js");
-__webpack_require__(/*! /var/www/html/Project/resources/js/option.js */"./resources/js/option.js");
-__webpack_require__(/*! /var/www/html/Project/resources/js/datatable.js */"./resources/js/datatable.js");
-__webpack_require__(/*! /var/www/html/Project/resources/js/addsubject.js */"./resources/js/addsubject.js");
-__webpack_require__(/*! /var/www/html/Project/resources/js/checkconfirm.js */"./resources/js/checkconfirm.js");
-__webpack_require__(/*! /var/www/html/Project/resources/js/ajax.js */"./resources/js/ajax.js");
-module.exports = __webpack_require__(/*! /var/www/html/Project/resources/sass/app.scss */"./resources/sass/app.scss");
+
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/logout.js */"./resources/js/logout.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/courses.js */"./resources/js/courses.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/changeimg.js */"./resources/js/changeimg.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/option.js */"./resources/js/option.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/datatable.js */"./resources/js/datatable.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/addsubject.js */"./resources/js/addsubject.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/checkconfirm.js */"./resources/js/checkconfirm.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/ajax.js */"./resources/js/ajax.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/calendarevent.js */"./resources/js/calendarevent.js");
+module.exports = __webpack_require__(/*! /home/chitt/Desktop/Project/resources/sass/app.scss */"./resources/sass/app.scss");
+
 
 /***/ })
 

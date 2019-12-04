@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Subject;
 use App\Models\User;
+use App\Http\Requests\TaskRequest;
 use DB;
 
 class TaskController extends Controller
@@ -41,7 +42,7 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
         $task = new Task;
         $attr = [
@@ -147,7 +148,7 @@ class TaskController extends Controller
             $task = Task::findOrFail($id);
             $subjects = Subject::all();
             
-            return view('admin.tasks.edit', compact('subjects', 'task'));
+            return view('admin.tasks.edit', compact('subjects', 'task'))->with('alert', trans('setting.edit_task_success'));
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
         }
@@ -160,7 +161,7 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(TaskRequest $request, $id)
     {
         try {
             $task = Task::findOrFail($id);

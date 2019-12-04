@@ -58,6 +58,9 @@
                                 @if (session('alert'))
                                     <div class="alert alert-success">{{ session('alert') }}</div>
                                 @endif
+                                @if (session('error'))
+                                    <div class="alert alert-success">{{ session('error') }}</div>
+                                @endif
                                 <div class="vertical-menu">
                                     <div class="item-menu active">{{ trans('setting.list_task') }}</div>
                                     @foreach ($tasks as $item)

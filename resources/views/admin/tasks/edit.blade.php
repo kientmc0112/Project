@@ -22,6 +22,11 @@
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-md-6">
+                                                    @if ($errors->any())
+                                                        <div class="alert alert-danger">
+                                                            <i class="fas fa-exclamation-triangle"></i> {{ $errors->first() }}
+                                                        </div>
+                                                    @endif
                                                     <form action="{{ route('admin.tasks.update', $task->id) }}" method="post">
                                                         @csrf
                                                         @method('PUT')

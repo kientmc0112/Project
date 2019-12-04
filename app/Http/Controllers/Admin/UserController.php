@@ -20,7 +20,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest('role_id')->paginate(config('configtask.page_paginate'));
+        $users = User::latest('role_id')->paginate(config('configuser.page_paginate'));
         
         return view('admin.users.index', compact('users'));
     }
@@ -46,30 +46,37 @@ class UserController extends Controller
         $password = $request->password;
         $repassword = $request->repassword;
         if ($password == $repassword) {
-            $user = new User;
+            if ($request->hasFile('avatar')) {  
+                $destinationDir = public_path('images/avatar');
+                $fileName = uniqid('avatar').'.'.$request->avatar->extension();
+                $request->avatar->move($destinationDir, $fileName);
+                $avatar = '/images/avatar/'.$fileName;
+            } else {
+                $avatar = '/images/avatar.jpg';
+            }
             $attr = [
                 'name' => $request->get('name'),
                 'email' => $request->get('email'),
                 'password' => bcrypt($request->get('password')),
                 'phone' => $request->get('phone'),
                 'address' => $request->get('address'),
-                'role_id' => $request->get('role_id')
+                'role_id' => $request->get('role_id'),
+                'avatar' => $avatar,
             ];
-            if ($request->hasFile('avatar')) {  
-                $destinationDir = public_path('images/avatar');
-                $fileName = uniqid('avatar').'.'.$request->avatar->extension();
-                $request->avatar->move($destinationDir, $fileName);
-                $attr['avatar'] = '/images/avatar/'.$fileName;
-            } else {
-                $attr['avatar'] = '/images/avatar.jpg';
-            }
-            
-            $user->create($attr);
+            User::create($attr);
 
             return redirect()->route('admin.users.index')->with('alert', trans('setting.add_user_success'));    
         } else {
             return redirect()->route('admin.users.create')->with('alert', trans('setting.checkpassoword'));
         }
+    }
+
+    public function uploadAvatar(UserRequest $request)
+    {
+        $destinationDir = public_path('images/avatar');
+        $fileName = uniqid('avatar').'.'.$request->avatar->extension();
+        $request->avatar->move($destinationDir, $fileName);
+        $avatar = '/images/avatar/'.$fileName;
     }
 
     /**
@@ -102,10 +109,10 @@ class UserController extends Controller
         
     }
 
-    public function exportSubject(Request $request)
+    public function exportSubject($id)
     {
         $listSubject = DB::table('course_subject')
-            ->where('course_id', $request->courseId)
+            ->where('course_id', '=', $id)
             ->get();
         
         return response()->json(['listSubject' => $listSubject], 200);
@@ -113,12 +120,28 @@ class UserController extends Controller
 
     public function finishCourse(Request $request, $id)
     {
-        $attr = DB::table('user_course')
+        $courseSubject = Course::find($request->course_id)->subjects()->get();
+        $count = 0;
+        foreach ($courseSubject as $value) {
+            $check = DB::table('user_subject')
+            ->where('user_id', $id)
+            ->where('subject_id', $value->id)
+            ->where('status', 1)
+            ->get();
+            if (count($check) >= 1) {
+                $count = ++$count;
+            }
+        }
+        if ($count == count($courseSubject)) {
+            DB::table('user_course')
                 ->where('course_id', $request->course_id)
                 ->where('user_id', $id)
                 ->update(['status' => 1, 'updated_at' => now()]);
 
-        return redirect()->route('admin.users.show', $id);
+            return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.finish_course_success'));
+        } else {
+            return redirect()->route('admin.users.show', $id)->with('error', trans('setting.error_course_fail'));
+        }
     }
 
     public function finishSubject(Request $request, $id)
@@ -183,10 +206,12 @@ class UserController extends Controller
             if (count($check) >= 1) {
                 return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
             } else {
+                
                 User::find($id)->courses()->attach($request->course_id);
+                User::find($id)->subjects()->attach($request->subject_id);
                 return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
             }
-        }    
+        }
     }
 
     public function addUserSubject(Request $request, $id)
@@ -261,8 +286,10 @@ class UserController extends Controller
 
     public function deleteUserCourse(Request $request, $id)
     {
-        $user_id = $request->id;
-     
+        $course = Course::findOrFail($id);
+        $course->users()->detach($request->user_id);
+
+        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_course_success'));
     }
 
     public function deleteUserSubject(Request $request, $id)
@@ -273,7 +300,7 @@ class UserController extends Controller
         $user->tasks()->detach($tasks);
         $subject->users()->detach($request->user_id);
 
-        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_task_success'));
+        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_subject_success'));
     }
 
     public function deleteUserTask(Request $request, $id)

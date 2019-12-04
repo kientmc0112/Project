@@ -82,7 +82,11 @@ class CourseController extends Controller
         $course = Course::create($attr);
         $course_id = $course->id;
         $course = Course::find($course_id);
-        $course->subjects()->attach($request->subject_id);
+        $subject = $request->subject_id;
+        foreach ($subject as $value) {
+            $subjectName = Subject::find($value)->name;
+            $course->subjects()->attach($value, ['subject_name' => $subjectName]);    
+        }
         
         return redirect()->route('admin.courses.index')->with('alert', trans('setting.add_course_success'));
     }
@@ -108,7 +112,9 @@ class CourseController extends Controller
             $listSubject = Course::find($id)->subjects()->orderBy('name')->get();
             $userCourse = Course::find($id)->users()->get();
             $listUser = User::all();
-            $statusUser = DB::table('user_course')->where('course_id', $id)->get();
+            $statusUser = DB::table('user_course')
+                ->where('course_id', $id)
+                ->get();
 
             return view('admin.courses.show', compact('course', 'listSubject', 'userCourse', 'listUser', 'statusUser'));    
         } catch (Exception $e) {
@@ -135,6 +141,7 @@ class CourseController extends Controller
                     return redirect()->route('admin.courses.show', $course->id)->with('error', trans('setting.check_user_course'));
                 } else {
                     Course::find($id)->users()->attach($request->user_id);
+                    Subject::find($id)->users()->attach($request->user_id);
                     return redirect()->route('admin.courses.show', $course->id)->with('alert', trans('setting.assign_success'));
                 }
             }    
@@ -145,11 +152,28 @@ class CourseController extends Controller
 
     public function finishTraineeCourse(Request $request, $id)
     {
-        DB::table('user_course')
+        $courseSubject = Course::find($id)->subjects()->get();
+        $count = 0;
+        foreach ($courseSubject as $value) {
+            $check = DB::table('user_subject')
+            ->where('user_id', $id)
+            ->where('subject_id', $value->id)
+            ->where('status', 1)
+            ->get();
+            if (count($check) >= 1) {
+                $count = ++$count;
+            }
+        }
+        if ($count == count($courseSubject)) {
+            DB::table('user_course')
                 ->where('course_id', $id)
                 ->where('user_id', $request->user_id)
                 ->update(['status' => 1, 'updated_at' => now()]);
-        return redirect()->route('admin.courses.show', $id);
+            return redirect()->route('admin.courses.show', $id)->with('alert', trans('setting.finish_course_success'));    
+        } else {
+            return redirect()->route('admin.courses.show', $id)->with('error', trans('setting.error_course_fail'));
+        }
+        
     }
 
     /**
@@ -199,7 +223,11 @@ class CourseController extends Controller
             }
             $course->update($attr);
             $course->subjects()->detach();
-            $course->subjects()->attach($request->subject_id);
+            $subject = $request->subject_id;
+            foreach ($subject as $value) {
+                $subjectName = Subject::find($value)->name;
+                $course->subjects()->attach($value, ['subject_name' => $subjectName]);    
+            }
 
             return redirect()->route('admin.courses.index')->with('alert', trans('setting.edit_course_success'));    
         } catch (Exception $e) {

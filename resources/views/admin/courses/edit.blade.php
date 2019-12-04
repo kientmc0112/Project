@@ -66,29 +66,11 @@
                                                                     value="1">{{ trans('setting.waiting') }}</option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group">
+                                                        <div class="form-group" id="add_main">
                                                             <label for="">{{ trans('setting.subject') }}</label> |
-                                                            <button type="button" id="btn_add" name="btn_add"
-                                                                class="btn btn-primary">{{ trans('setting.add') }}</button>
-                                                            @foreach ( $subject as $subject)
-                                                            <table id="add_main" class="table">
-
-                                                                <tr>
-                                                                    <td><select name="subject_id[]" id="subject_id"
-                                                                            class="form-control">
-                                                                            @foreach ($subjects as $item)
-                                                                            <option @if ($subject->id == $item->id)
-                                                                                selected
-                                                                                @endif value="{{ $item->id }}">
-                                                                                {{ $item->name }} </option>
-                                                                            @endforeach
-                                                                        </select></td>
-                                                                    <td><button type="button" id="btn_remove_edit"
-                                                                            name="btn_remove_edit"
-                                                                            class="btn btn-danger">X</button></td>
-                                                                </tr>
-                                                            </table>
-                                                            @endforeach
+                                                            <button type="button" id="btn_add" name="btn_add" class="btn btn-primary">
+                                                                {{ trans('setting.add') }}
+                                                            </button>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>
@@ -132,7 +114,7 @@
                             <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                             @endforeach
                         </select></td>
-                    <td><button type="button" id="btn_remove" name="btn_remove" class="btn btn-danger">X</button></td>
+                    <td><button type="button" id="btn_remove" name="btn_remove" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></td>
                 </tr>
             </table>
         </div>

@@ -22,6 +22,11 @@
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-md-6">
+                                                    @if ($errors->any())
+                                                        <div class="alert alert-danger">
+                                                            <i class="fas fa-exclamation-triangle"></i> {{ $errors->first() }}
+                                                        </div>
+                                                    @endif
                                                     <form action="{{ route('admin.tasks.store') }}" method="post">
                                                         @csrf
                                                         <div class="form-group">
