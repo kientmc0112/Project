@@ -69,5 +69,6 @@
     "Status": "Trạng thái",
     "Comment": "Comment",
     "Send": "Gửi",
-    "Completed": "Hoàn thành"
+    "Completed": "Hoàn thành",
+    "Waiting": "Chờ"
 }

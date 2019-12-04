@@ -32,6 +32,11 @@
                             </div>
                         </div>
                         <p>{{ $course->description }}</p>
+                        @foreach($course->users as $user)
+                            @if($user->id == Auth::User()->id)
+                                <p>Complete: {{ $user->pivot->status . '/' . $course->subjects->count() }}</p>
+                            @endif
+                        @endforeach
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-4">
@@ -42,8 +47,9 @@
                                 <ul class="list list-border angle-double-right" id="list">
                                     <li class="active"><a href="{{ route('course.show', $course->id) }}">{{ __('Introduction') }}</a></li>
                                     @foreach($course->subjects as $subject)
-                                        <li class="" id="{{ $subject->id }}" onclick="readSubject(this.id)"><a>{{ $subject->name }}</a></li>
+                                        <li id="subject{{ $subject->id }}" value="{{ $course->id }}"><a>{{ $subject->name }}</a></li>
                                     @endforeach
+                                    <li id="history{{ $course->id }}" value="{{ $course->id }}"><a>History</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -53,22 +59,65 @@
         </div>
     </section>
     <script type="text/javascript">
-        function readSubject(id) {
-            var idJquery = "#" + id;
-            $.ajax({
-                method: 'GET',
-                dataType: 'html',
-                url: '/subjects/' + id + '/show',
-                success: function (response) {
-                    $("#content").html(response);
-                    $('#list li').removeClass('active');
-                    $('#list ' + idJquery).addClass('active');
-                },
-                error: function (e) {
-                    console.log(e.message);
+        $(document).ready( function () {
+            $("#list li").on('click', function () {
+                var id = this.id;
+                var course_id = this.value;
+                $("#list li").removeClass('active');
+                $("#" + id).addClass('active');
+                if(id.replace('history', '') != course_id) {
+                    id = id.replace('subject', '');
+                    $.ajax({
+                        method: 'POST',
+                        dataType: 'html',
+                        url: '/subjects/' + id + '/show',
+                        data: {
+                            course_id: course_id,
+                        },
+                        success: function (response) {
+                            $("#content").html(response);
+                        },
+                        error: function (e) {
+                            console.log(e.message);
+                        }
+                    });
+                }
+                else {
+                    $.ajax({
+                        method: 'GET',
+                        dataType: 'html',
+                        url: '/courses/' + course_id + '/history',
+                        success: function (response) {
+                            $("#content").html(response);
+                        },
+                        error: function (e) {
+                            console.log(e.message);
+                        }
+                    });
                 }
             });
-        }
+        });
+        // function readSubject(id, course_id, user_id) {
+        //     var idJquery = "#" + id;
+        //     $.ajax({
+        //         method: 'POST',
+        //         dataType: 'html',
+        //         url: '/subjects/' + id + '/show',
+        //         data: {
+        //             course_id: course_id,
+        //             user_id: user_id,
+        //         },
+        //         success: function (response) {
+        //             $("#content").html(response);
+        //             $('#list li').removeClass('active');
+        //             $('#list ' + idJquery).addClass('active');
+        //         },
+        //         error: function (e) {
+        //             console.log(e.message);
+        //         }
+        //     });
+        // }
+
         // $(document).ready( function () {
         //     @foreach($course->subjects as $subject)
         //     $("#{{ $subject->id }}").on('click', function () {

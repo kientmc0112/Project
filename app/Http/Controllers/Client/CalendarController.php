@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Course;
-use App\Models\Category;
-use App\Models\User;
+use DB;
 
-class CourseController extends Controller
+class CalendarController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,11 +15,31 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with('users')->paginate(config('course.PagePaginate'));
+        // $events = [];
+        // $data = DB::table('user_task');
+        // if($data->count())
+        //  {
+        //     foreach ($data as $key => $value)
+        //     {
+        //         $events[] = Calendar::event(
+        //             $value->id,
+        //             true,
+        //             new \DateTime($value->created_at),
+        //             new \DateTime($value->updated_at.'+1 day'),
+        //             null,
+        //             // Add color
+        //             [
+        //                 'color' => '#000000',
+        //                 'textColor' => '#008000',
+        //             ]
+        //         );
+        //     }
+        // }
+        // $calendar = Calendar::addEvents($events);
+        // return view('client.calender.index', compact('calendar'));
 
-        $categories = Category::where('parent_id', 0)->with('categories')->paginate(config('course.PagePaginate'));
-
-        return view('client.course.index', compact('courses', 'categories'));
+        $tasks = DB::table('user_task');
+        return view('client.calender.index', compact('tasks'));
     }
 
     /**
@@ -53,11 +71,7 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        $course = Course::find($id);
-        $course->subjects()->get();
-        $course->users()->get();
-
-        return view('client.course.course', compact('course'));
+        //
     }
 
     /**
@@ -92,14 +106,5 @@ class CourseController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function history($id) {
-        $course = Course::find($id);
-        $subjects = $course->subjects()->latest('created_at')->paginate(config('course.PagePaginate'));
-        // $subjects->users()->get();
-        // $tasks = $subjects->tasks()->get();
-        // $task = $subject->tasks()->get();
-        return view('client.history.subjects', compact('subjects'));
     }
 }
