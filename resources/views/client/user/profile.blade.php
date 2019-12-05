@@ -94,12 +94,12 @@
                         <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation" class="active"><a href="#courses" aria-controls="courses" role="tab"
                                     data-toggle="tab" class="font-15 text-uppercase">Courses <span
-                                        class="badge"> {{ $courses->count() }}</span></a></li>
+                                        class="badge">{{ $courses->count() }}</span></a></li>
                             <li role="presentation"><a href="#subjects" aria-controls="subjects" role="tab"
-                                    data-toggle="tab" class="font-15 text-uppercase">Subjects<span
-                                        class="badge"> {{ $subjects->count() }}</span></a></li>
+                                    data-toggle="tab" class="font-15 text-uppercase">Subjects <span
+                                        class="badge">{{ $subjects->count() }}</span></a></li>
                             <li role="presentation"><a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab"
-                                    class="font-15 text-uppercase">Tasks<span class="badge"> {{ $tasks->count() }}</span></a></li>
+                                    class="font-15 text-uppercase">Tasks <span class="badge">{{ $tasks->count() }}</span></a></li>
                         </ul>
 
                         <!-- Tab panes -->
@@ -175,7 +175,7 @@
                                             </td>
                                             <td>
                                                 @if ($subject->created_at != $subject->updated_at)
-                                                    {{ $subject->updated_at }}    
+                                                    {{ $subject->updated_at }}
                                                 @endif
                                             </td>
                                             <td>
@@ -217,7 +217,7 @@
                                             </td>
                                             <td>
                                                 @if ($subject->created_at != $subject->updated_at)
-                                                    {{ $subject->updated_at }}    
+                                                    {{ $subject->updated_at }}
                                                 @endif
                                             </td>
                                             <td>

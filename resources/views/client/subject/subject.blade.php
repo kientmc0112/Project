@@ -4,7 +4,7 @@
     <p>{{ $subject->description }}</p>
     <br>
     {{-- @if($permiss == 1) --}}
-    @if($permiss->first()->status == 1)
+    @if($permiss->first()->status == 0)
         @foreach($subject->users as $user)
             @if(Auth::User()->id == $user->id)
                 <p>Complete: {{ $user->pivot->process . '/' . $subject->tasks->count() }}</p>

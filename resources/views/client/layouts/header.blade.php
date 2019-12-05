@@ -13,17 +13,8 @@
                 <div class="col-md-4">
                     <div class="widget no-border m-0">
                         <ul class="list-inline font-13 sm-text-center mt-5">
-                            <li>
-                                <a class="text-white" href="#">{{ __('FAQ') }}</a>
-                            </li>
-                            <li class="text-white">|</li>
-                            <li>
-                                <a class="text-white" href="#">{{ __('Help Desk') }}</a>
-                            </li>
-                            <li class="text-white">|</li>
-                            <li>
                                 <a class="text-white" id="logout" href="{{ route('logout') }}">{{ __('Logout') }}</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                     @csrf
                                 </form>
                             </li>
@@ -31,6 +22,12 @@
                             <li class="text-white">
                                 <a class="text-white"  href="{{ route('user.show', Auth::user()->id) }}">My Profile</a>
                             </li>
+                            @if(Auth::User()->role_id == 1)
+                                <li class="text-white">|</li>
+                                <li class="text-white">
+                                    <a class="text-white"  href="{{ route('admin.dashboard.index') }}">MyAdmin</a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -101,18 +98,12 @@
                 <nav id="menuzord" class="menuzord bg-theme-colored pull-left flip menuzord-responsive">
                     <ul class="menuzord-menu">
                         <li class="active">
-                            <a href="#home">{{ __('Home') }}</a>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Categories') }} <span class="label label-info">{{ __('New') }}</span></a>
+                            <a href="{{ route('home') }}">{{ __('Home') }}</a>
                         </li>
                         <li><a href="{{ route('course.index') }}">{{ __('Courses') }}</a>
                         </li>
                         <li>
                             <a href="">{{ __('Subject') }} <span class="label label-info">{{ __('New') }}</span></a>
-                        </li>
-                        <li>
-                            <a href="#home">{{ __('Supervisor') }}</a>
                         </li>
                         <li>
                             <a href="#home">{{ __('Task') }}</a>

@@ -11,7 +11,7 @@
 |
 */
 
-// Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
+Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
     Route::get('', [
         'as' => 'admin.dashboard.index',
         'uses' => 'DashboardController@index'
@@ -31,7 +31,7 @@
         ]);
         Route::resource('users', 'UserController', [
             'parameters' => ['users' => 'id']
-        ]);    
+        ]);
     });
     Route::put('users/{id}/finish_course', 'UserController@finishCourse')->name('finishCourse');
     Route::put('users/{id}/finish_subject', 'UserController@finishSubject')->name('finishSubject');
@@ -56,4 +56,4 @@
     Route::get('reports', 'ReportController@index')->name('admin.reports.index');
     Route::post('reports/{id}', 'ReportController@store')->name('admin.reports.store');
     Route::get('reports/comment', 'ReportController@showComment')->name('admin.reports.comment');
-// });
+});
