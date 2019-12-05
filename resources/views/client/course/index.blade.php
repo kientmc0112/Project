@@ -34,9 +34,9 @@
                                 <h4 class="line-bottom mt-0 mt-sm-20">{{ $course->name }}
                                 @foreach($course->users as $user)
                                     @if($user->id == Auth::User()->id)
-                                        @if($user->pivot->status == 1)
+                                        @if($user->pivot->status == 0)
                                             <i class="fas fa-check-circle check"></i>
-                                        @elseif($user->pivot->status == 0)
+                                        @elseif($user->pivot->status == 1)
                                             <i class="fas fa-check-circle nocheck"></i>
                                         @endif
                                     @endif

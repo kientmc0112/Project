@@ -8,5 +8,5 @@ $('#full-event-calendar').fullCalendar({
     selectHelper: true,
     editable: true,
     eventLimit: true,
-    events: calendarEvents
+    events: calendarEvents,
 });

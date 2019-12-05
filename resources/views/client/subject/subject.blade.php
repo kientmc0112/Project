@@ -4,7 +4,7 @@
     <p>{{ $subject->description }}</p>
     <br>
     {{-- @if($permiss == 1) --}}
-    @if($permiss->first()->status)
+    @if($permiss->first()->status == 1)
         @foreach($subject->users as $user)
             @if(Auth::User()->id == $user->id)
                 <p>Complete: {{ $user->pivot->process . '/' . $subject->tasks->count() }}</p>
@@ -31,10 +31,10 @@
                                     @foreach($task->users as $user)
                                         @if(Auth::User()->id == $user->pivot->user_id)
                                             @if($user->pivot->status == 1)
-                                                <button id="task{{ $task->id }}" data-toggle="modal" data-target="#modal{{ $task->id }}" class="btn btn-success text-center">{{ __('Completed') }}</button>
+                                                <button id="task{{ $task->id }}" data-toggle="modal" data-target="#modal{{ $task->id }}" class="btn btn-success text-center btn-report">{{ __('Completed') }}</button>
                                                 @php $status = 1 @endphp
                                             @elseif($user->pivot->status == 0)
-                                                <button id="task{{ $task->id }}" data-toggle="modal" data-target="#modal{{ $task->id }}" class="btn btn-warning text-center">{{ __('Waiting') }}</button>
+                                                <button id="task{{ $task->id }}" data-toggle="modal" data-target="#modal{{ $task->id }}" class="btn btn-warning text-center btn-report">{{ __('Waiting') }}</button>
                                                 @php $status = 1 @endphp
                                             @endif
                                             <div class="modal fade" id="modal{{ $task->id }}">
@@ -54,7 +54,7 @@
                                         @endif
                                     @endforeach
                                     @if($status == 0)
-                                        <a id="btn{{ $task->id }}" data-toggle="modal" data-target="#modal{{ $task->id }}" class="btn btn-info text-center">{{ __('Report') }}</a>
+                                        <a id="btn{{ $task->id }}" data-toggle="modal" data-target="#modal{{ $task->id }}" class="btn btn-info text-center btn-report">{{ __('Report') }}</a>
                                         <div class="modal fade" id="modal{{ $task->id }}">
                                             <div class="modal-dialog bg-white widget border-1px p-30">
                                                 <h5 class="widget-title line-bottom">{{ __('Report') }}</h5>
