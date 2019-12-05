@@ -178,102 +178,18 @@
             </div>
             <div class="section-content">
                 <div class="row">
-                    <div class="col-sm-6 col-md-3">
-                        <div class="service-block bg-white">
-                            <div class="thumb"> <img alt="featured project" src="images/project/4.jpg" class="img-fullwidth">
-                                <h4 class="text-white mt-0 mb-0"><span class="price">$125</span></h4>
-                            </div>
-                            <div class="content text-left flip p-25 pt-0">
-                                <h4 class="line-bottom mb-10">Accounting Technologie</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam ipsum quis ipsum facilisis sit amet.</p>
-                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="#">view details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="service-block bg-white">
-                            <div class="thumb"> <img alt="featured project" src="images/project/5.jpg" class="img-fullwidth">
-                                <h4 class="text-white mt-0 mb-0"><span class="price">$125</span></h4>
-                            </div>
-                            <div class="content text-left flip p-25 pt-0">
-                                <h4 class="line-bottom mb-10">Modern Technologies</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam ipsum quis ipsum facilisis sit amet.</p>
-                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="#">view details</a>
+                    @foreach ($courses as $course)
+                        <div class="col-sm-6 col-md-3">
+                            <div class="service-block bg-white">
+                                <div class="thumb"> <img alt="featured project" src="{{ $course->image }}" class="img-fullwidth"> </div>
+                                <div class="content text-left flip p-25 pt-0">
+                                    <h4 class="line-bottom mb-10">{{ $course->name }}</h4>
+                                    <p>{{ $course->description }}</p>
+                                    <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="{{ route('course.show', $course->id) }}">view details</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="service-block bg-white">
-                            <div class="thumb"> <img alt="featured project" src="images/project/6.jpg" class="img-fullwidth">
-                                <h4 class="text-white mt-0 mb-0"><span class="price">$125</span></h4>
-                            </div>
-                            <div class="content text-left flip p-25 pt-0">
-                                <h4 class="line-bottom mb-10">Modern Languages</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam ipsum quis ipsum facilisis sit amet.</p>
-                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="#">view details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="service-block bg-white">
-                            <div class="thumb"> <img alt="featured project" src="images/project/8.jpg" class="img-fullwidth">
-                                <h4 class="text-white mt-0 mb-0"><span class="price">$125</span></h4>
-                            </div>
-                            <div class="content text-left flip p-25 pt-0">
-                                <h4 class="line-bottom mb-10">Computer Technologies</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam ipsum quis ipsum facilisis sit amet.</p>
-                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="#">view details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="service-block bg-white">
-                            <div class="thumb"> <img alt="featured project" src="images/project/8.jpg" class="img-fullwidth">
-                                <h4 class="text-white mt-0 mb-0"><span class="price">$125</span></h4>
-                            </div>
-                            <div class="content text-left flip p-25 pt-0">
-                                <h4 class="line-bottom mb-10">Chemical Engineering</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam ipsum quis ipsum facilisis sit amet.</p>
-                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="#">view details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="service-block bg-white">
-                            <div class="thumb"> <img alt="featured project" src="images/project/7.jpg" class="img-fullwidth">
-                                <h4 class="text-white mt-0 mb-0"><span class="price">$125</span></h4>
-                            </div>
-                            <div class="content text-left flip p-25 pt-0">
-                                <h4 class="line-bottom mb-10">Development Studies</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam ipsum quis ipsum facilisis sit amet.</p>
-                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="#">view details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="service-block bg-white">
-                            <div class="thumb"> <img alt="featured project" src="images/project/5.jpg" class="img-fullwidth">
-                                <h4 class="text-white mt-0 mb-0"><span class="price">$125</span></h4>
-                            </div>
-                            <div class="content text-left flip p-25 pt-0">
-                                <h4 class="line-bottom mb-10">Software Engineering</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam ipsum quis ipsum facilisis sit amet.</p>
-                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="#">view details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="service-block mb-0 bg-white">
-                            <div class="thumb"> <img alt="featured project" src="images/project/4.jpg" class="img-fullwidth">
-                                <h4 class="text-white mt-0 mb-0"><span class="price">$125</span></h4>
-                            </div>
-                            <div class="content text-left flip p-25 pt-0">
-                                <h4 class="line-bottom mb-10">Electrical & Electronic </h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam ipsum quis ipsum facilisis sit amet.</p>
-                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="#">view details</a>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -322,73 +238,29 @@
             <div class="section-title mb-0">
                 <div class="row">
                     <div class="col-md-8">
-                        <h2 class="mt-0 text-uppercase font-28 line-bottom">Our <span class="text-theme-color-2 font-weight-400">Teachers</span></h2>
+                        <h2 class="mt-0 text-uppercase font-28 line-bottom">Our <span class="text-theme-color-2 font-weight-400">TRAINER</span></h2>
                         <h4 class="pb-20">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</h4>
                     </div>
                 </div>
             </div>
             <div class="section-content">
                 <div class="row multi-row-clearfix">
-                    <div class="col-sm-6 col-md-3 mb-sm-30 sm-text-center">
-                        <div class="team maxwidth400">
-                            <div class="thumb"><img class="img-fullwidth" src="images/team/team5.jpg" alt=""></div>
-                            <div class="content border-1px p-15 bg-light clearfix">
-                                <h4 class="name text-theme-color-2 mt-0">David Jakaria - <small>Teacher</small></h4>
-                                <p class="mb-20">Lorem ipsum dolor sit amet, con amit sectetur adipisicing elit.</p>
-                                <ul class="styled-icons icon-dark icon-circled icon-theme-colored icon-sm pull-left flip">
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                                <a class="btn btn-theme-colored btn-sm pull-right flip" href="page-teachers-details.html">view details</a>
+                    @foreach ($users as $user)
+                        <div class="col-sm-6 col-md-3 mb-sm-30 sm-text-center">
+                            <div class="team maxwidth400">
+                                <div class="thumb"><img class="img-fullwidth" src="{{ $user->avatar }}" alt=""></div>
+                                <div class="content border-1px p-15 bg-light clearfix">
+                                    <h4 class="name text-theme-color-2 mt-0">{{ $user->name }} - <small>Trainer</small></h4>
+                                    <ul class="styled-icons icon-dark icon-circled icon-theme-colored icon-sm pull-left flip">
+                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                    </ul>
+                                    <a class="btn btn-theme-colored btn-sm pull-right flip" href="{{ route('user.show', $user->id) }}">view details</a>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3 mb-sm-30 sm-text-center">
-                        <div class="team maxwidth400">
-                            <div class="thumb"><img class="img-fullwidth" src="images/team/team6.jpg" alt=""></div>
-                            <div class="content border-1px p-15 bg-light clearfix">
-                                <h4 class="name mt-0 text-theme-color-2">Sakib Smith - <small>Teacher</small></h4>
-                                <p class="mb-20">Lorem ipsum dolor sit amet, con amit sectetur adipisicing elit.</p>
-                                <ul class="styled-icons icon-dark icon-circled icon-theme-colored icon-sm pull-left flip">
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                                <a class="btn btn-theme-colored btn-sm pull-right flip" href="page-teachers-details.html">view details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3 mb-sm-30 sm-text-center">
-                        <div class="team maxwidth400">
-                            <div class="thumb"><img class="img-fullwidth" src="images/team/team7.jpg" alt=""></div>
-                            <div class="content border-1px p-15 bg-light clearfix">
-                                <h4 class="name mt-0 text-theme-color-2">Ismail Jon - <small>Teacher</small></h4>
-                                <p class="mb-20">Lorem ipsum dolor sit amet, con amit sectetur adipisicing elit.</p>
-                                <ul class="styled-icons icon-dark icon-circled icon-theme-colored icon-sm pull-left flip">
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                                <a class="btn btn-theme-colored btn-sm pull-right flip" href="page-teachers-details.html">view details</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3 sm-text-center">
-                        <div class="team maxwidth400">
-                            <div class="thumb"><img class="img-fullwidth" src="images/team/team8.jpg" alt=""></div>
-                            <div class="content border-1px p-15 bg-light clearfix">
-                                <h4 class="name mt-0 text-theme-color-2">Andre Smith - <small>Teacher</small></h4>
-                                <p class="mb-20">Lorem ipsum dolor sit amet, con amit sectetur adipisicing elit.</p>
-                                <ul class="styled-icons icon-dark icon-circled icon-theme-colored icon-sm pull-left flip">
-                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                                <a class="btn btn-theme-colored btn-sm pull-right flip" href="page-teachers-details.html">view details</a>
-                            </div>
-                        </div>
-                    </div>
+                        </div>    
+                    @endforeach
                 </div>
             </div>
         </div>

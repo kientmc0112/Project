@@ -36,4 +36,6 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::get('calendars', 'CalendarController@show')->name('calendar.show');
+
+    Route::get('/', 'HomeController@index')->name('home');
 });

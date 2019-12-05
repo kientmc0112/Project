@@ -27,6 +27,10 @@
                                     @csrf
                                 </form>
                             </li>
+                            <li class="text-white">|</li>
+                            <li class="text-white">
+                                <a class="text-white"  href="{{ route('user.show', Auth::user()->id) }}">My Profile</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -102,10 +106,10 @@
                         <li>
                             <a href="#">{{ __('Categories') }} <span class="label label-info">{{ __('New') }}</span></a>
                         </li>
-                        <li><a href="#">{{ __('Courses') }}</a>
+                        <li><a href="{{ route('course.index') }}">{{ __('Courses') }}</a>
                         </li>
                         <li>
-                            <a href="#">{{ __('Subject') }} <span class="label label-info">{{ __('New') }}</span></a>
+                            <a href="">{{ __('Subject') }} <span class="label label-info">{{ __('New') }}</span></a>
                         </li>
                         <li>
                             <a href="#home">{{ __('Supervisor') }}</a>
@@ -117,7 +121,7 @@
                             <a href="#">{{ __('Activities') }}</a>
                         </li>
                         <li>
-                            <a href="#">{{ __('Calender') }}</a>
+                            <a href="{{ route('calendar.show') }}">{{ __('Calender') }}</a>
                         </li>
                     </ul>
                 </nav>

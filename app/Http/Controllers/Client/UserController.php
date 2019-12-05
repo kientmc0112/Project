@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\ClientRequest;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Course;
+use App\Models\Subject;
+use App\Models\Task;
+use DB;
 
 class UserController extends Controller
 {
@@ -50,8 +54,20 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        $user->courses()->get();
-        return view('client.user.profile', compact('user'));
+        $courses = DB::table('user_course')
+            ->where('user_id', $id)
+            ->get();
+        $listCourse = Course::all();
+        $subjects = DB::table('user_subject')
+            ->where('user_id', $id)
+            ->get();
+        $listSubject = Subject::all();
+        $tasks = DB::table('user_task')
+        ->where('user_id', $id)
+        ->get();
+        $listTask = Task::all();
+        return view('client.user.profile', compact('user', 'courses', 'listCourse', 'subjects', 
+            'listSubject', 'tasks', 'listTask', 'count'));
     }
 
     /**
