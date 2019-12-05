@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use DB;
 use App\Models\Course;
 use App\Models\User;
 use App\Models\Subject;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Auth;
+use DB;
 
 class SubjectController extends Controller
 {
@@ -121,14 +121,48 @@ class SubjectController extends Controller
     }
 
     public function history($id) {
-        $user_id = Auth::User()->id;
-        $tasks = DB::table('user_task')->where([
-            ['user_id', $user_id],
-            ['task_id', $id],
-        ])->orderBy('created_at', 'DESC');
         // $subject = Subject::find($id);
         // $tasks = $subject->tasks()->pivot->orderBy('updated_at', 'DESC')->get();
 
-        return view('client.history.tasks', compact('tasks'));
+        // $user_id = Auth::User()->id;
+        // $tasks = DB::table('user_task')->where([
+        //     ['user_id', $user_id],
+        //     ['task_id', $id],
+        // ])->orderBy('created_at', 'DESC');
+
+        // return view('client.history.tasks', compact('tasks'));
+        $tasksSubject = Subject::find($id)->tasks()->get();
+
+        $tasks = DB::table('user_task')->where('user_id', Auth::User()->id)->get();
+        // $tasksHistory = collect();
+        $tasksHistory = [];
+        foreach($tasks as $task) {
+            $task1['time'] = strtotime($task->created_at);
+            $task1['date'] = $task->created_at;
+            $task1['task_id'] = $task->task_id;
+            $task1['content'] = 'You started ' . Task::find($task->task_id)->name;
+            // $tasksHistory->push($task1);
+            $tasksHistory[] = $task1;
+        }
+        foreach($tasks as $task) {
+            if($task->status == 1) {
+                $task2['time'] = strtotime($task->updated_at);
+                $task2['date'] = $task->updated_at;
+                $task2['task_id'] = $task->task_id;
+                $task2['content'] = 'You completed ' . Task::find($task->task_id)->name;
+                // $tasksHistory->push($task2);
+                // $tasksHistory[] = $task2;
+            } else {
+                $task2['time'] = strtotime($task->updated_at);
+                $task2['date'] = $task->updated_at;
+                $task2['task_id'] = $task->task_id;
+                $task2['content'] = 'You sent a report for ' . Task::find($task->task_id)->name;
+            }
+            $tasksHistory[] = $task2;
+        }
+        $columns = array_column($tasksHistory, 'time');
+        array_multisort($columns, SORT_ASC, $tasksHistory);
+        $tasksHistory = array_reverse($tasksHistory);
+        return view('client.history.tasks', compact('tasksHistory', 'tasksSubject'));
     }
 }
