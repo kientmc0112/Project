@@ -174,7 +174,9 @@
                                                 {{ $subject->created_at }}
                                             </td>
                                             <td>
-                                                {{ $subject->updated_at }}
+                                                @if ($subject->created_at != $subject->updated_at)
+                                                    {{ $subject->updated_at }}    
+                                                @endif
                                             </td>
                                             <td>
                                                 @if ($subject->status == false)
@@ -214,7 +216,9 @@
                                                 {{ $task->created_at }}
                                             </td>
                                             <td>
-                                                {{ $task->updated_at }}
+                                                @if ($subject->created_at != $subject->updated_at)
+                                                    {{ $subject->updated_at }}    
+                                                @endif
                                             </td>
                                             <td>
                                                 @if ($task->status == false)
