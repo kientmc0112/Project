@@ -8,10 +8,28 @@ use App\Models\Course;
 use App\Models\Subject;
 use App\Models\User;
 use App\Http\Requests\SubjectRequest;
+use App\Repositories\Course\CourseRepositoryInterface;
+use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use DB;
 
 class SubjectController extends Controller
 {
+    private $courseRepository;
+    private $subjectRepository;
+    private $userRepository;
+
+    public function __construct (
+        CourseRepositoryInterface  $courseRepository,
+        SubjectRepositoryInterface  $subjectRepository,
+        UserRepositoryInterface  $userRepository
+    )
+    {
+        $this->courseRepository = $courseRepository;
+        $this->subjectRepository = $subjectRepository;
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,8 +37,8 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $courses = Course::all();
-        $subjects = Subject::latest('id')->with('courses')->paginate(config('configsubject.page_paginate'));
+        $courses = $this->courseRepository->getAll();
+        $subjects = $this->subjectRepository->getLatest()->with('courses')->paginate(config('configsubject.page_paginate'));
 
         return view('admin.subjects.index', compact('courses', 'subjects'));
     }
@@ -32,7 +50,7 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        $courses = Course::all();
+        $courses = $this->courseRepository->getAll();
 
         return view('admin.subjects.create', compact('courses'));
     }
@@ -45,16 +63,23 @@ class SubjectController extends Controller
      */
     public function store(SubjectRequest $request)
     {
-        $attr= [
-            'name' => $request->get('name'),
-            'status' => $request->get('status'),
-            'description' => $request->get('description'),
-        ];
-        $subject = Subject::create($attr);
+        $attributes = $request->only([
+            'name',
+            'status',
+            'description',
+        ]);
+        $subject = $this->subjectRepository->create($attributes);
         $subject_id = $subject->id;
-        $subject = Subject::find($subject_id);
-        $subject->courses()->attach($request->course_id);
-
+        try {
+            $subject = $this->subjectRepository->find($subject_id);
+            if ($request->course_id) {
+                $subjectName = $subject->name;
+                $subject->courses()->attach($request->course_id, ['subject_name' => $subjectName]);
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
+        
         return redirect()->route('admin.subjects.index')->with('alert', trans('setting.add_subject_success'));
     }
 
@@ -67,11 +92,13 @@ class SubjectController extends Controller
     public function show($id)
     {
         try {
-            $subject = Subject::findOrFail($id);
-            $users = Subject::find($id)->users()->get();
-            $tasks = Subject::find($id)->tasks()->get();
-            $listUser = User::all();
-            $statusUser = DB::table('user_subject')->where('subject_id', $id)->get();
+            $subject = $this->subjectRepository->find($id);
+            $users = $subject->users;
+            $tasks = $subject->tasks;
+            $listUser = $this->userRepository->getAll();
+            $statusUser = DB::table('user_subject')
+                ->where('subject_id', $id)
+                ->get();
 
             return view('admin.subjects.show', compact('subject', 'users', 'listUser', 'tasks', 'statusUser'));
         } catch (Exception $e) {
@@ -83,7 +110,7 @@ class SubjectController extends Controller
     public function assignTraineeSubject(Request $request, $id)
     {
         try {
-            $subject = Subject::findOrFail($id);
+            $subject = $this->subjectRepository->find($id);
             $check = DB::table('user_subject')
                 ->where('subject_id', $id)
                 ->where('user_id', $request->user_id)
@@ -92,7 +119,7 @@ class SubjectController extends Controller
                 ->where('user_id', $request->user_id)
                 ->where('status', config('configsubject.status_user_activity'))
                 ->get();
-            $course_id = Subject::find($id)->courses()->get();
+            $course_id = $subject->courses;
             $count = config('configsubject.count_default');
             foreach ($course_id as $course) {
                 $checkUserCourse = DB::table('user_course')
@@ -100,7 +127,7 @@ class SubjectController extends Controller
                     ->where('course_id', $course->id)
                     ->get();
                 if (count($checkUserCourse) >= config('configsubject.count_check')) {
-                    $count = ++$count;
+                    $count++;
                 }
             }
             if ($count >= config('configsubject.count_check')) {
@@ -110,7 +137,7 @@ class SubjectController extends Controller
                     if (count($check) >= config('configsubject.count_check')) {
                         return redirect()->route('admin.subjects.show', $subject->id)->with('error', trans('setting.error_subject_exist'));
                     } else {
-                        Subject::find($id)->users()->attach($request->user_id);
+                        $subject->users()->attach($request->user_id);
 
                         return redirect()->route('admin.subjects.show', $subject->id)->with('alert', trans('setting.assign_trainee_success'));
                     }
@@ -154,9 +181,9 @@ class SubjectController extends Controller
     public function edit($id)
     {
         try {
-            $subject = Subject::findOrFail($id);
-            $courses = Course::all();
-            $course = Subject::find($id)->courses()->get();
+            $subject = $this->subjectRepository->find($id);
+            $courses = $this->courseRepository->getAll();
+            $course = $subject->courses;
 
             return view('admin.subjects.edit', compact('subject', 'courses', 'course'));
         } catch (Exception $e) {
@@ -174,16 +201,14 @@ class SubjectController extends Controller
     public function update(SubjectRequest $request, $id)
     {
         try {
-            $subject = Subject::findOrFail($id);
-            $attr = [
-                'name' => $request->get('name'),
-                'status' => $request->get('status'),
-                'description' => $request->get('description'),
-            ];
-            $subject->update($attr);
-            $course_id = $request->course_id;
+            $attributes = $request->only([
+                'name',
+                'status',
+                'desciption',
+            ]);
+            $subject = $this->subjectRepository->update($id, $attributes);
             $subject->courses()->detach();
-            $subject->courses()->attach($request->course_id);
+            $subject->courses()->attach($request->course_id, ['subject_name' => $subject->name]);
 
             return redirect()->route('admin.subjects.index')->with('alert', trans('setting.edit_subject_success'));
         } catch (Exception $e) {
@@ -200,8 +225,7 @@ class SubjectController extends Controller
     public function destroy($id)
     {
         try {
-            $subject = Subject::findOrFail($id);
-            $subject->delete();
+            $this->subjectRepository->delete($id);
 
             return redirect()->route('admin.subjects.index')->with('alert', trans('setting.delete_subject_success'));
         } catch (Exception $e) {

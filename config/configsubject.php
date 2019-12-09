@@ -12,4 +12,5 @@ return [
     'show_subject' => 'Show Subject',
     'status_user_activity' => 0,
     'status_user_finished' => 1,
+    'count_check' => 1,
 ];

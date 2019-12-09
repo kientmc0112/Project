@@ -41,9 +41,9 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($subjects as $subject)
+                                                            @foreach ($subjects as $key => $subject)
                                                             <tr>
-                                                                <td>{{ $subject->id }}</td>
+                                                                <td>{{ $key+1 }}</td>
                                                                 <td>
                                                                     <div class="row">
                                                                         <div class="col-md-12">
