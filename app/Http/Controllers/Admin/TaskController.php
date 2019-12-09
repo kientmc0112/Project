@@ -8,10 +8,23 @@ use App\Models\Task;
 use App\Models\Subject;
 use App\Models\User;
 use App\Http\Requests\TaskRequest;
+use App\Repositories\Task\TaskRepositoryInterface;
+use App\Repositories\Subject\SubjectRepositoryInterface;
 use DB;
 
 class TaskController extends Controller
 {
+    private $taskRepository;
+
+    public function __construct(
+        TaskRepositoryInterface  $taskRepository,
+        SubjectRepositoryInterface  $subjectRepository
+    )
+    {
+        $this->taskRepository = $taskRepository;
+        $this->subjectRepository = $subjectRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +32,7 @@ class TaskController extends Controller
      */
     public function index()
     {   
-        $tasks = Task::latest('id')->with('subject')->paginate(config('page_paginate'));
+        $tasks = $this->taskRepository->getPaginate();
 
         return view('admin.tasks.index', compact('tasks'));
     }
@@ -31,7 +44,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $subjects = Subject::all();
+        $subjects = $this->subjectRepository->getAll();
         
         return view('admin.tasks.create', compact('subjects'));
     }
@@ -44,13 +57,12 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        $task = new Task;
-        $attr = [
-            'subject_id' => $request->get('subject_id'),
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-        ];
-        $task->create($attr);
+        $attributes = $request->only([
+            'subject_id',
+            'name',
+            'description',
+        ]);
+        $this->taskRepository->create($attributes);
 
         return redirect()->route('admin.tasks.index')->with('alert', trans('setting.add_task_success'));
     }
@@ -64,8 +76,8 @@ class TaskController extends Controller
     public function show($id)
     {
         try {
-            $task = Task::findOrFail($id);
-            $userTask = Task::find($id)->users()->get();
+            $task = $this->taskRepository->find($id);
+            $userTask = $task->users;
             $listUsers = User::all();
             $statusUser = DB::table('user_task')
                 ->where('task_id', $id)

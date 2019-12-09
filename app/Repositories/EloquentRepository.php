@@ -27,6 +27,11 @@ abstract class EloquentRepository implements RepositoryInterface
         return $this->_model->all();
     }
 
+    public function getPaginate()
+    {
+        return $this->_model->latest()->paginate(config('custom.PagePaginate'));
+    }
+
     public function getWith(array $attributes)
     {
         $result = $this->_model->with($attributes)->get();

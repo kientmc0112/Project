@@ -6,6 +6,10 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Repositories\Task\TaskRepository;
+use App\Repositories\Task\TaskRepositoryInterface;
+use App\Repositories\Subject\SubjectRepository;
+use App\Repositories\Subject\SubjectRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +20,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(
+            TaskRepositoryInterface::class,
+            TaskRepository::class
+        );
+        $this->app->singleton(
+            SubjectRepositoryInterface::class,
+            SubjectRepository::class
+        );
     }
 
     /**
