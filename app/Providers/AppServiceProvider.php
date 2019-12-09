@@ -10,6 +10,8 @@ use App\Repositories\Task\TaskRepository;
 use App\Repositories\Task\TaskRepositoryInterface;
 use App\Repositories\Subject\SubjectRepository;
 use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\Course\CourseRepository;
+use App\Repositories\Course\CourseRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,7 +28,11 @@ class AppServiceProvider extends ServiceProvider
         );
         $this->app->singleton(
             SubjectRepositoryInterface::class,
-            SubjectRepository::class
+            SubjectRepository::class,
+        );
+        $this->app->singleton(
+            CourseRepositoryInterface::class,
+            CourseRepository::class
         );
     }
 

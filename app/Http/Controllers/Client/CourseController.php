@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Repositories\Course\CourseRepositoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Course;
@@ -12,6 +13,12 @@ use DB;
 
 class CourseController extends Controller
 {
+    protected $courseRepository;
+
+    public function __construct(CourseRepositoryInterface $courseRepository)
+    {
+        $this->courseRepository = $courseRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +26,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::latest('created_at')->paginate(config('course.PagePaginate'));
+        $courses = $this->courseRepository->getCourseByTime()->paginate(config('course.PagePaginate'));
 
         $categories = Category::where('parent_id', 0)->orderBy('name')->paginate(config('course.PagePaginate'));
 
@@ -55,7 +62,8 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        $course = Course::find($id);
+        // $course = Course::find($id);
+        $course = $this->courseRepository->find($id);
         // $course = Course::find($id)->with('subjects', 'users')->get();
         // dd($course);
 
@@ -96,8 +104,9 @@ class CourseController extends Controller
         //
     }
 
-    public function history($id) {
-        $subjects = Course::find($id)->subjects()->paginate(config('course.PagePaginate'));
+    public function history($id)
+    {
+        $subjects = $this->courseRepository->find($id)->subjects()->paginate(config('course.PagePaginate'));
         // $subjects->users()->get();
         // $tasks = $subjects->tasks()->get();
         // $task = $subject->tasks()->get();
