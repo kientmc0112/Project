@@ -49,33 +49,37 @@
                                                                 </option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group" id="add_main">
+                                                        <div class="form-group" >
                                                             <label for="">{{ trans('setting.subject') }}</label> | 
                                                             <td>
                                                                 <button type="button" id="btn_add" name="btn_add" class="btn btn-primary"><i class="fas fa-plus"></i></button>
                                                             </td>
-                                                            @foreach ($course as $item)
-                                                                <table class="table">
-                                                                    <tr>
-                                                                        <td>
-                                                                            <select name="course_id[]" id="course_id" class="form-control">
-                                                                                @foreach ($courses as $course)
-                                                                                    <option 
-                                                                                        @if ($item->id == $course->id)
-                                                                                            selected
-                                                                                        @endif
-                                                                                    value="{{ $course->id }}">
-                                                                                        {{ $course->name }}
-                                                                                    </option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </td>
-                                                                        <td>
-                                                                            <button type="button" id="btn_remove_edit" name="btn_remove_edit" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            @endforeach
+                                                            <div class="add_main">
+                                                                @foreach ($course as $item)
+                                                                    <div class="add_sub">
+                                                                        <table class="table">
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <select name="course_id[]" id="course_id" class="form-control">
+                                                                                        @foreach ($courses as $course)
+                                                                                            <option 
+                                                                                                @if ($item->id == $course->id)
+                                                                                                    selected
+                                                                                                @endif
+                                                                                            value="{{ $course->id }}">
+                                                                                                {{ $course->name }}
+                                                                                            </option>
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button type="button" id="btn_remove_edit" name="btn_remove_edit" class="btn btn-danger checkconfirm"><i class="far fa-trash-alt"></i></button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>
@@ -107,7 +111,7 @@
                             </select>
                         </td>
                         <td>
-                            <button type="button" id="btn_remove" name="btn_remove"class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                            <button type="button" id="btn_remove" name="btn_remove"class="btn btn-danger checkconfirm"><i class="far fa-trash-alt"></i></button>
                         </td>
                     </tr>
                 </table>
