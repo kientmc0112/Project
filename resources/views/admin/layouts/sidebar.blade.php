@@ -41,20 +41,4 @@
             <span>{{ trans('setting.reports') }}</span>
         </a>
     </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>{{ trans('setting.pages') }}</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>{{ trans('setting.charts') }}</span>
-        </a>
-    </li>
-
 </ul>

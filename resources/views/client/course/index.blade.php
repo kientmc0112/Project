@@ -35,9 +35,9 @@
                                 @foreach($course->users as $user)
                                     @if($user->id == Auth::User()->id)
                                         @if($user->pivot->status == 0)
-                                            <i class="fas fa-check-circle check"></i>
+                                            <i class="fa fa-check-circle check"></i>
                                         @elseif($user->pivot->status == 1)
-                                            <i class="fas fa-check-circle nocheck"></i>
+                                            <i class="fa fa-check-circle nocheck"></i>
                                         @endif
                                     @endif
                                 @endforeach
@@ -59,19 +59,6 @@
                 </div>
                 <div class="col-md-3">
                     <div class="sidebar sidebar-left mt-sm-30">
-                        <div class="widget">
-                            <h5 class="widget-title line-bottom">{{ __('Search') }}</span></h5>
-                            <div class="search-form">
-                                <form>
-                                    <div class="input-group">
-                                        <input type="text" placeholder="Click to Search" class="form-control search-input">
-                                        <span class="input-group-btn">
-                                            <button type="submit" class="btn search-button"><i class="fa fa-search"></i></button>
-                                        </span>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
                         <div class="widget">
                             <h5 class="widget-title line-bottom">{{ __('Categories') }}</h5>
                             <div class="categories">

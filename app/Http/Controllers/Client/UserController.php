@@ -66,8 +66,7 @@ class UserController extends Controller
         ->where('user_id', $id)
         ->get();
         $listTask = Task::all();
-        return view('client.user.profile', compact('user', 'courses', 'listCourse', 'subjects', 
-            'listSubject', 'tasks', 'listTask', 'count'));
+        return view('client.user.profile', compact('user', 'courses', 'listCourse', 'subjects', 'listSubject', 'tasks', 'listTask'));
     }
 
     /**

@@ -65,7 +65,6 @@ class SubjectController extends Controller
 
         // dd($subject);
         // return response()->json(array('success' => true, 'subject' => $subject));
-
         $course_id = $request->course_id;
         $user_id = Auth::User()->id;
         $permiss = DB::table('user_course')->where([
@@ -80,8 +79,7 @@ class SubjectController extends Controller
         // }
 
         $subject = Subject::find($id);
-        $tasks = $subject->tasks()->with('users')->get();
-        $subject->users()->get();
+        $tasks = $subject->tasks;
 
         return view('client.subject.subject', compact('subject', 'tasks', 'permiss'));
     }
@@ -120,7 +118,7 @@ class SubjectController extends Controller
         //
     }
 
-    public function history($id) {
+    public function history1($id) {
         // $subject = Subject::find($id);
         // $tasks = $subject->tasks()->pivot->orderBy('updated_at', 'DESC')->get();
 
@@ -150,8 +148,6 @@ class SubjectController extends Controller
                 $task2['date'] = $task->updated_at;
                 $task2['task_id'] = $task->task_id;
                 $task2['content'] = 'You completed ' . Task::find($task->task_id)->name;
-                // $tasksHistory->push($task2);
-                // $tasksHistory[] = $task2;
             } else {
                 $task2['time'] = strtotime($task->updated_at);
                 $task2['date'] = $task->updated_at;
@@ -164,5 +160,45 @@ class SubjectController extends Controller
         array_multisort($columns, SORT_ASC, $tasksHistory);
         $tasksHistory = array_reverse($tasksHistory);
         return view('client.history.tasks', compact('tasksHistory', 'tasksSubject'));
+    }
+
+    public function history($id) {
+        $tasks = Subject::find($id)->tasks()->get('id');
+        $tasksSubject = Task::with('users')->whereIn('id', $tasks)->get();
+        $tasksHistory = collect();
+        foreach ($tasksSubject as $task) {
+            foreach ($task->users as $user) {
+                if($user->id == Auth::User()->id) {
+                    $task1['time'] = strtotime($user->pivot->created_at);
+                    $task1['date'] = $user->pivot->created_at;
+                    $task1['task_id'] = $user->pivot->task_id;
+                    $task1['content'] = 'You started ' . Task::find($user->pivot->task_id)->name;
+                    $tasksHistory->push($task1);
+                }
+            }
+        }
+
+        foreach($tasksSubject as $task) {
+            foreach ($task->users as $user) {
+                if($user->id == Auth::User()->id) {
+                    if($user->pivot->status == 1) {
+                        $task2['time'] = strtotime($user->pivot->updated_at);
+                        $task2['date'] = $user->pivot->updated_at;
+                        $task2['task_id'] = $user->pivot->task_id;
+                        $task2['content'] = 'You completed ' . Task::find($user->pivot->task_id)->name;
+                    } else {
+                        if($user->pivot->created_at != $user->pivot->updated_at) {
+                            $task2['time'] = strtotime($user->pivot->updated_at);
+                            $task2['date'] = $user->pivot->updated_at;
+                            $task2['task_id'] = $user->pivot->task_id;
+                            $task2['content'] = 'You sent a report for ' . Task::find($user->pivot->task_id)->name;
+                        }
+                    }
+                    $tasksHistory->push($task2);
+                }
+            }
+        }
+        $tasksHistory = $tasksHistory->sortByDesc('time');
+        return view('client.history.tasks', compact('tasksHistory'));
     }
 }

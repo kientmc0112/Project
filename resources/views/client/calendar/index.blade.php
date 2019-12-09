@@ -48,20 +48,20 @@
         };
     }
 
-    // var calendarEvents2 = new Array();
-    // var courses = $("#course-calendar").val();
-    // courses = JSON.parse(courses);
-    // console.log(courses);
-    // for(var i=0; i<courses.length; i++) {
-    //     calendarEvents2[i] = {
-    //         'title': courses[i]['name'],
-    //         'start': courses[i]['created_at'].slice(0, 10),
-    //         'end': courses[i]['updated_at'].slice(0, 10),
-    //         'textColor': 'black',
-    //         'backgroundColor': '#ff8000'
-    //     };
-    // }
+    var calendarEvents2 = new Array();
+    var courses = $("#course-calendar").val();
+    courses = JSON.parse(courses);
+    console.log(courses);
+    for(var i=0; i<courses.length; i++) {
+        calendarEvents2[i] = {
+            'title': courses[i]['name'],
+            'start': courses[i]['created_at'].slice(0, 10),
+            'end': courses[i]['updated_at'].slice(0, 10),
+            'textColor': 'black',
+            'backgroundColor': '#ff8000',
+        };
+    }
 
-    calendarEvents = calendarEvents.concat(calendarEvents1);
+    calendarEvents = calendarEvents.concat(calendarEvents1, calendarEvents2);
 </script>
 @endsection
