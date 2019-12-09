@@ -79,7 +79,7 @@
                                                 <form method="POST">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <textarea name="report" id="comment{{ $task->id }}" class="form-control" rows="3"></textarea>
+                                                        <textarea name="report" id="comment{{ $task->id }}" class="form-control" disabled rows="3"></textarea>
                                                     </div>
                                                     <div class="form-group">
                                                         <a type="button" data-dismiss="modal" class="btn btn-dark btn-theme-colored btn-sm mt-0">{{ __('Close') }}</a>
@@ -112,6 +112,7 @@
             },
             success: function (response) {
                 $(report).val(response.result[0].report);
+                $(report).attr('disabled', '');
             },
             error: function(e) {
                 alert("Error! Please refresh");
@@ -131,7 +132,7 @@
                 task_id: task_id,
             },
             success: function (response) {
-                $(comment).val(response.result[0].cmt);
+                $(comment).val(response.result[0].comment);
             },
             error: function(e) {
                 alert("Error! Please refresh");
@@ -159,6 +160,7 @@
                 $(btn).addClass('btn-warning');
                 $(btn).text('Waiting');
                 $(report).val(reportContent);
+                $(report).attr('disabled', '');
                 $(btnSend).remove();
             },
             error: function(e) {

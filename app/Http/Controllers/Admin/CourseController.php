@@ -30,19 +30,19 @@ class CourseController extends Controller
 
     /**
      * Get the sub categories.
-     * 
+     *
      * @param int $parent_id
      * @return mix
      */
     private function getSubCategories($parent_id, $ignore_id=null)
     {
         $categories = Category::where('parent_id', $parent_id)
-                                ->where('id', '<>', $ignore_id)
-                                ->get()
-                                ->map(function($query) use($ignore_id){
-                                    $query->sub = $this->getSubCategories($query->id, $ignore_id);
-                                    return $query;
-                                });
+            ->where('id', '<>', $ignore_id)
+            ->get()
+            ->map(function($query) use($ignore_id){
+                $query->sub = $this->getSubCategories($query->id, $ignore_id);
+                return $query;
+            });
         return $categories;
     }
 
@@ -85,9 +85,9 @@ class CourseController extends Controller
         $subject = $request->subject_id;
         foreach ($subject as $value) {
             $subjectName = Subject::find($value)->name;
-            $course->subjects()->attach($value, ['subject_name' => $subjectName]);    
+            $course->subjects()->attach($value, ['subject_name' => $subjectName]);
         }
-        
+
         return redirect()->route('admin.courses.index')->with('alert', trans('setting.add_course_success'));
     }
 
@@ -116,7 +116,7 @@ class CourseController extends Controller
                 ->where('course_id', $id)
                 ->get();
 
-            return view('admin.courses.show', compact('course', 'listSubject', 'userCourse', 'listUser', 'statusUser'));    
+            return view('admin.courses.show', compact('course', 'listSubject', 'userCourse', 'listUser', 'statusUser'));
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
         }
@@ -144,7 +144,7 @@ class CourseController extends Controller
                     Subject::find($id)->users()->attach($request->user_id);
                     return redirect()->route('admin.courses.show', $course->id)->with('alert', trans('setting.assign_success'));
                 }
-            }    
+            }
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
         }
@@ -169,11 +169,11 @@ class CourseController extends Controller
                 ->where('course_id', $id)
                 ->where('user_id', $request->user_id)
                 ->update(['status' => 1, 'updated_at' => now()]);
-            return redirect()->route('admin.courses.show', $id)->with('alert', trans('setting.finish_course_success'));    
+            return redirect()->route('admin.courses.show', $id)->with('alert', trans('setting.finish_course_success'));
         } else {
             return redirect()->route('admin.courses.show', $id)->with('error', trans('setting.error_course_fail'));
         }
-        
+
     }
 
     /**
@@ -190,7 +190,7 @@ class CourseController extends Controller
             $subject = Course::find($id)->subjects()->orderBy('name')->get();
             $subjects = Subject::all();
 
-            return view('admin.courses.edit', compact('course','categories','subject','subjects'));    
+            return view('admin.courses.edit', compact('course','categories','subject','subjects'));
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
         }
@@ -213,7 +213,7 @@ class CourseController extends Controller
                 'description' => $request->get('description'),
                 'status' => $request->get('status'),
             ];
-            if ($request->hasFile('image')) {  
+            if ($request->hasFile('image')) {
                 $destinationDir = public_path('images/course');
                 $fileName = uniqid('course') . '.' . $request->image->extension();
                 $request->image->move($destinationDir, $fileName);
@@ -226,10 +226,10 @@ class CourseController extends Controller
             $subject = $request->subject_id;
             foreach ($subject as $value) {
                 $subjectName = Subject::find($value)->name;
-                $course->subjects()->attach($value, ['subject_name' => $subjectName]);    
+                $course->subjects()->attach($value, ['subject_name' => $subjectName]);
             }
 
-            return redirect()->route('admin.courses.index')->with('alert', trans('setting.edit_course_success'));    
+            return redirect()->route('admin.courses.index')->with('alert', trans('setting.edit_course_success'));
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
         }
@@ -246,8 +246,8 @@ class CourseController extends Controller
         try {
             $course = Course::findOrFail($id);
             $course->delete();
-            
-            return redirect()->route('admin.courses.index')->with('alert', trans('setting.delete_course_success'));    
+
+            return redirect()->route('admin.courses.index')->with('alert', trans('setting.delete_course_success'));
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
         }

@@ -20,7 +20,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/{course}/history', 'CourseController@history')->name('course.history');
     });
     Route::group(['prefix' => 'subjects'], function () {
-        Route::post('/{subject}/show', 'SubjectController@show')->name('subject.show');
+        Route::get('/{subject}/show', 'SubjectController@show')->name('subject.show');
         Route::post('/{subject}/history', 'SubjectController@history')->name('subject.history');
     });
 
@@ -38,4 +38,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('calendars', 'CalendarController@show')->name('calendar.show');
 
     Route::get('/', 'HomeController@index')->name('home');
+
+    Route::get('/test/{id}', 'CourseController@test')->name('course.test');
 });

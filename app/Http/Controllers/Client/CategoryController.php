@@ -69,10 +69,9 @@ class CategoryController extends Controller
         $category = Category::where('id', $id)
             ->orWhere('parent_id', $id)
             ->get('id');
-        $category = $category->toArray();
         $courses = Course::whereIn('category_id', $category)->paginate(config('course.PagePaginate'));
 
-        $categories = Category::where('parent_id', 0)->with('categories')->paginate(config('course.PagePaginate'));
+        $categories = Category::where('parent_id', 0)->orderBy('name')->paginate(config('course.PagePaginate'));
 
         return view('client.course.index', compact('courses', 'categories'));
     }

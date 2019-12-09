@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Subject;
+use DB;
 
 class CourseController extends Controller
 {
@@ -17,9 +19,9 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with('users')->paginate(config('course.PagePaginate'));
+        $courses = Course::latest('created_at')->paginate(config('course.PagePaginate'));
 
-        $categories = Category::where('parent_id', 0)->with('categories')->paginate(config('course.PagePaginate'));
+        $categories = Category::where('parent_id', 0)->orderBy('name')->paginate(config('course.PagePaginate'));
 
         return view('client.course.index', compact('courses', 'categories'));
     }
@@ -54,8 +56,8 @@ class CourseController extends Controller
     public function show($id)
     {
         $course = Course::find($id);
-        $course->subjects()->get();
-        $course->users()->get();
+        // $course = Course::find($id)->with('subjects', 'users')->get();
+        // dd($course);
 
         return view('client.course.course', compact('course'));
     }
@@ -95,11 +97,11 @@ class CourseController extends Controller
     }
 
     public function history($id) {
-        $course = Course::find($id);
-        $subjects = $course->subjects()->latest('created_at')->paginate(config('course.PagePaginate'));
+        $subjects = Course::find($id)->subjects()->paginate(config('course.PagePaginate'));
         // $subjects->users()->get();
         // $tasks = $subjects->tasks()->get();
         // $task = $subject->tasks()->get();
+        // dd($subjects);
         return view('client.history.subjects', compact('subjects'));
     }
 }

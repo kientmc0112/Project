@@ -72,12 +72,12 @@ class SubjectController extends Controller
             $tasks = Subject::find($id)->tasks()->get();
             $listUser = User::all();
             $statusUser = DB::table('user_subject')->where('subject_id', $id)->get();
-    
-            return view('admin.subjects.show', compact('subject', 'users', 'listUser', 'tasks', 'statusUser'));    
+
+            return view('admin.subjects.show', compact('subject', 'users', 'listUser', 'tasks', 'statusUser'));
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
         }
-        
+
     }
 
     public function assignTraineeSubject(Request $request, $id)
@@ -105,16 +105,16 @@ class SubjectController extends Controller
             }
             if ($count >= config('configsubject.count_check')) {
                 if (count($checkStatusUser) >= config('configsubject.count_check')) {
-                    return redirect()->route('admin.subjects.show', $subject->id)->with('error', trans('setting.error_join_subject'));    
+                    return redirect()->route('admin.subjects.show', $subject->id)->with('error', trans('setting.error_join_subject'));
                 }else {
                     if (count($check) >= config('configsubject.count_check')) {
-                        return redirect()->route('admin.subjects.show', $subject->id)->with('error', trans('setting.error_subject_exist'));    
+                        return redirect()->route('admin.subjects.show', $subject->id)->with('error', trans('setting.error_subject_exist'));
                     } else {
                         Subject::find($id)->users()->attach($request->user_id);
 
                         return redirect()->route('admin.subjects.show', $subject->id)->with('alert', trans('setting.assign_trainee_success'));
                     }
-                }    
+                }
             } else {
                 return redirect()->route('admin.subjects.show', $subject->id)->with('error', trans('setting.error_do_not_course'));
             }

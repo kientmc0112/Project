@@ -92,14 +92,9 @@
                     <div>
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#courses" aria-controls="courses" role="tab"
-                                    data-toggle="tab" class="font-15 text-uppercase">Courses <span
-                                        class="badge">{{ $courses->count() }}</span></a></li>
-                            <li role="presentation"><a href="#subjects" aria-controls="subjects" role="tab"
-                                    data-toggle="tab" class="font-15 text-uppercase">Subjects <span
-                                        class="badge">{{ $subjects->count() }}</span></a></li>
-                            <li role="presentation"><a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab"
-                                    class="font-15 text-uppercase">Tasks <span class="badge">{{ $tasks->count() }}</span></a></li>
+                            <li role="presentation" class="active"><a href="#courses" aria-controls="courses" role="tab" data-toggle="tab" class="font-15 text-uppercase">Courses <span class="badge">{{ $courses->count() }}</span></a></li>
+                            <li role="presentation"><a href="#subjects" aria-controls="subjects" role="tab" data-toggle="tab" class="font-15 text-uppercase">Subjects <span class="badge">{{ $subjects->count() }}</span></a></li>
+                            <li role="presentation"><a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab" class="font-15 text-uppercase">Tasks <span class="badge">{{ $tasks->count() }}</span></a></li>
                         </ul>
 
                         <!-- Tab panes -->
@@ -109,7 +104,7 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
+                                                <th>Number</th>
                                                 <th>Name</th>
                                                 <th>Process</th>
                                                 <th>Status</th>
@@ -117,29 +112,28 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        @php
+                                            $i = 1;
+                                        @endphp
+                                        @foreach ($listCourse as $value)
                                             @foreach ($courses as $course)
-                                            <tr>
-                                                <th scope="row"># {{ $course->id }}</th>
-                                                <td>
-                                                    @foreach ($listCourse as $value)
-                                                    @if ($value->id == $course->course_id)
-                                                    {{ $value->name }}
-                                                    @endif
-                                                    @endforeach
-                                                </td>
-                                                <td>
-                                                    {{ $course->process }}
-                                                </td>
-                                                <td>
-                                                    @if ($course->status == false)
-                                                    <button class="btn btn-warning btn-xs">Activity</button>
-                                                    @else
-                                                    <button class="btn btn-success btn-xs">Finished</button>
-                                                    @endif
-                                                </td>
-                                                <td><a class="btn btn-info btn-xs" href="{{ route('course.show', $course->id) }}">View</a></td>
-                                            </tr>
+                                                @if ($value->id == $course->course_id)
+                                                <tr>
+                                                    <th scope="row"># {{ $i++ }}</th>
+                                                    <td>{{ $value->name }}</td>
+                                                    <td>{{ $course->process }}</td>
+                                                    <td>
+                                                        @if ($course->status == false)
+                                                        <button class="btn btn-warning btn-xs">Activity</button>
+                                                        @else
+                                                        <button class="btn btn-success btn-xs">Finished</button>
+                                                        @endif
+                                                    </td>
+                                                    <td><a class="btn btn-info btn-xs" href="{{ route('course.show', $course->course_id) }}">View</a></td>
+                                                </tr>
+                                                @endif
                                             @endforeach
+                                        @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -148,7 +142,7 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Number</th>
                                             <th>Name</th>
                                             <th>Process</th>
                                             <th>Date Start</th>
@@ -157,36 +151,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @php $j = 1 @endphp
+                                    @foreach ($listSubject as $value)
                                         @foreach ($subjects as $subject)
-                                        <tr>
-                                            <th scope="row"># {{ $subject->id }}</th>
-                                            <td>
-                                                @foreach ($listSubject as $value)
-                                                @if ($subject->subject_id == $value->id)
-                                                {{ $value->name }}
-                                                @endif
-                                                @endforeach
-                                            </td>
-                                            <td>
-                                                {{ $subject->process }}
-                                            </td>
-                                            <td>
-                                                {{ $subject->created_at }}
-                                            </td>
-                                            <td>
-                                                @if ($subject->created_at != $subject->updated_at)
-                                                    {{ $subject->updated_at }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($subject->status == false)
-                                                <button class="btn btn-warning btn-xs">Activity</button>
-                                                @else
-                                                <button class="btn btn-success btn-xs">Success</button>
-                                                @endif
-                                            </td>
-                                        </tr>
+                                            @if ($subject->subject_id == $value->id)
+                                            <tr>
+                                                <th scope="row"># {{ $j++ }}</th>
+                                                <td>{{ $value->name }}</td>
+                                                <td>{{ $subject->process }}</td>
+                                                <td>{{ $subject->created_at }}</td>
+                                                <td>
+                                                    @if ($subject->created_at != $subject->updated_at)
+                                                        {{ $subject->updated_at }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($subject->status == false)
+                                                        <button class="btn btn-warning btn-xs">Activing</button>
+                                                    @else
+                                                        <button class="btn btn-success btn-xs">Success</button>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @endif
                                         @endforeach
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -194,7 +183,7 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>Number</th>
                                             <th>Name</th>
                                             <th>Date Start</th>
                                             <th>Date Finish</th>
@@ -202,33 +191,30 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                     @php $k = 1 @endphp
+                                    @foreach ($listTask as $value)
                                         @foreach ($tasks as $task)
-                                        <tr>
-                                            <th scope="row"># {{ $task->id }}</th>
-                                            <td>
-                                                @foreach ($listTask as $value)
-                                                @if ($value->id == $task->task_id)
-                                                {{ $value->name }}
-                                                @endif
-                                                @endforeach
-                                            </td>
-                                            <td>
-                                                {{ $task->created_at }}
-                                            </td>
-                                            <td>
-                                                @if ($subject->created_at != $subject->updated_at)
-                                                    {{ $subject->updated_at }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($task->status == false)
-                                                <button class="btn btn-warning btn-xs">Activity</button>
-                                                @else
-                                                <button class="btn btn-success btn-xs">Finished</button>
-                                                @endif
-                                            </td>
-                                        </tr>
+                                            @if ($value->id == $task->task_id)
+                                            <tr>
+                                                <th scope="row"># {{ $k++ }}</th>
+                                                <td>{{ $value->name }}</td>
+                                                <td>{{ $task->created_at }}</td>
+                                                <td>
+                                                    @if ($subject->created_at != $subject->updated_at)
+                                                        {{ $subject->updated_at }}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($task->status == false)
+                                                        <button class="btn btn-warning btn-xs">Activing</button>
+                                                    @else
+                                                        <button class="btn btn-success btn-xs">Finished</button>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @endif
                                         @endforeach
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>

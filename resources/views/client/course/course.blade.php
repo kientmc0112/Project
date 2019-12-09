@@ -42,14 +42,17 @@
                 <div class="col-sm-12 col-md-4">
                     <div class="sidebar sidebar-left mt-sm-30 ml-40">
                         <div class="widget">
-                            <h4 class="widget-title line-bottom">{{ __('Course') }}</h4>
+                            <h4 class="widget-title line-bottom">{{ __('Course') }}
+                            <strong>{{ $course->name }}</strong></h4>
                             <div class="services-list">
                                 <ul class="list list-border angle-double-right" id="list">
-                                    <li class="active"><a href="{{ route('course.show', $course->id) }}">{{ __('Introduction') }}</a></li>
+                                    <li class="active" id="introduction"><a href="{{ route('course.show', $course->id) }}">{{ __('Introduction') }}</a>
+                                    </li>
                                     @foreach($course->subjects as $subject)
-                                        <li id="subject{{ $subject->id }}" value="{{ $course->id }}"><a>{{ $subject->name }}</a></li>
+                                        <li class='ml-20' id="subject{{ $subject->id }}" value="{{ $course->id }}"><a>{{ $subject->name }}</a></li>
                                     @endforeach
-                                    <li id="history{{ $course->id }}" value="{{ $course->id }}"><a>History</a></li>
+                                    <li id="history{{ $course->id }}" value="{{ $course->id }}"><a>History</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
