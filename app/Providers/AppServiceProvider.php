@@ -6,6 +6,12 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Repositories\Task\TaskRepository;
+use App\Repositories\Task\TaskRepositoryInterface;
+use App\Repositories\Subject\SubjectRepository;
+use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\Course\CourseRepository;
+use App\Repositories\Course\CourseRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,8 +23,16 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            \App\Repositories\Course\CourseRepositoryInterface::class,
-            \App\Repositories\Course\CourseRepository::class
+            TaskRepositoryInterface::class,
+            TaskRepository::class
+        );
+        $this->app->singleton(
+            SubjectRepositoryInterface::class,
+            SubjectRepository::class,
+        );
+        $this->app->singleton(
+            CourseRepositoryInterface::class,
+            CourseRepository::class
         );
     }
 
