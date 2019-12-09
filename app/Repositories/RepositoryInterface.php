@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Repositories\Contracts;
+namespace App\Repositories;
 
 interface RepositoryInterface
 {
     public function getAll();
-    public function getWith();
+    public function getWith(array $attributes);
     public function find($id);
     public function create(array $attributes);
     public function update($id, array $attributes);
