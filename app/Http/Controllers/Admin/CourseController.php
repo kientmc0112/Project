@@ -274,6 +274,7 @@ class CourseController extends Controller
     public function destroy($id)
     {
         try {
+            $this->courseRepository->find($id)->subjects()->detach();
             $this->courseRepository->delete($id);
 
             return redirect()->route('admin.courses.index')->with('alert', trans('setting.delete_course_success'));
