@@ -40,9 +40,10 @@
                                                                 <option value="{{ config('configsubject.status_subject_waiting') }}">{{ trans('setting.waiting') }}</option>
                                                             </select>
                                                         </div>
-                                                        <div class="form-group"  id="add_main">
-                                                            <label for="">{{ trans('setting.subject') }}</label> |
+                                                        <div class="form-group"  class="add_main">
+                                                            <label for="">{{ trans('setting.courses') }}</label> |
                                                             <button type="button" id="btn_add" name="btn_add" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+                                                            <div class="add_main"></div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>
@@ -72,7 +73,7 @@
                         </select>
                     </td>
                     <td>
-                        <button type="button" id="btn_remove" name="btn_remove" class="btn btn-danger"><i class="far fa-trash-alt"></i></button>
+                        <button type="button" id="btn_remove" name="btn_remove" class="btn btn-danger checkconfirm"><i class="far fa-trash-alt"></i></button>
                     </td>
                 </tr>
             </table>

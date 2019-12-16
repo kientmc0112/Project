@@ -46,9 +46,9 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @forelse ($courses as $course)
+                                                        @forelse ($courses as $key => $course)
                                                         <tr>
-                                                            <td>{{ $course->id }}</td>
+                                                            <td>{{ $key+1 }}</td>
                                                             <td>
                                                                 <div class="row">
                                                                     <div class="col-md-12">

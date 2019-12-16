@@ -9,10 +9,36 @@ use App\Models\Course;
 use App\Models\Subject;
 use App\Models\Task;
 use App\Http\Requests\UserRequest;
+use App\Enums\StatusUserCourse;
+use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Course\CourseRepositoryInterface;
+use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\Task\TaskRepositoryInterface;
 use DB;
 
 class UserController extends Controller
 {
+    private $userRepository;
+    private $categoryRepository;
+    private $courseRepository;
+    private $subjectRepository;
+    private $taskRepository;
+
+    public function __construct (
+        UserRepositoryInterface  $userRepository,
+        CategoryRepositoryInterface  $categoryRepository,
+        CourseRepositoryInterface  $courseRepository,
+        SubjectRepositoryInterface  $subjectRepository,
+        TaskRepositoryInterface  $taskRepository
+    )
+    {
+        $this->userRepository = $userRepository;
+        $this->categoryRepository = $categoryRepository;
+        $this->courseRepository = $courseRepository;
+        $this->subjectRepository = $subjectRepository;
+        $this->taskRepository = $taskRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +46,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest('role_id')->paginate(config('configuser.page_paginate'));
+        $users = $this->userRepository->getPaginate();
         
         return view('admin.users.index', compact('users'));
     }
@@ -47,23 +73,20 @@ class UserController extends Controller
         $repassword = $request->repassword;
         if ($password == $repassword) {
             if ($request->hasFile('avatar')) {  
-                $destinationDir = public_path('images/avatar');
-                $fileName = uniqid('avatar').'.'.$request->avatar->extension();
-                $request->avatar->move($destinationDir, $fileName);
-                $avatar = '/images/avatar/'.$fileName;
+                $avatar = $this->uploadAvatar($request);
             } else {
-                $avatar = '/images/avatar.jpg';
+                $avatar = config('configuser.avatar_default');
             }
-            $attr = [
-                'name' => $request->get('name'),
-                'email' => $request->get('email'),
-                'password' => bcrypt($request->get('password')),
-                'phone' => $request->get('phone'),
-                'address' => $request->get('address'),
-                'role_id' => $request->get('role_id'),
-                'avatar' => $avatar,
-            ];
-            User::create($attr);
+            $attributes = $request->only([
+                'name',
+                'email',
+                'phone',
+                'address',
+                'role_id',
+            ]);
+            $attributes['avatar'] = $avatar;
+            $attributes['password'] = bcrypt($request->get('password'));
+            $this->userRepository->create($attributes);
 
             return redirect()->route('admin.users.index')->with('alert', trans('setting.add_user_success'));    
         } else {
@@ -73,10 +96,11 @@ class UserController extends Controller
 
     public function uploadAvatar(UserRequest $request)
     {
-        $destinationDir = public_path('images/avatar');
-        $fileName = uniqid('avatar').'.'.$request->avatar->extension();
+        $destinationDir = public_path(config('configuser.public_path'));
+        $fileName = uniqid('avatar') . '.' . $request->avatar->extension();
         $request->avatar->move($destinationDir, $fileName);
-        $avatar = '/images/avatar/'.$fileName;
+        $avatar = config('configuser.avatar') . $fileName;
+        return $avatar;
     }
 
     /**
@@ -87,26 +111,29 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $userDetail = User::findOrFail($id);
-        $courses = Course::all();
-        $subjects = Subject::all();
-        $tasks = Task::all();
-        $userCourse = User::find($id)->courses()->get();
-        $userCourseDetail = DB::table('user_course')
-            ->where('user_id', $id)
-            ->get();
-        $userSubject = User::find($id)->subjects()->get();
-        $userSubjectDetail = DB::table('user_subject')
-            ->where('user_id', $id)
-            ->get();
-        $userTask = User::find($id)->tasks()->get();
-        $userTaskDetail = DB::table('user_task')
-            ->where('user_id', $id)
-            ->get();
+        try {
+            $userDetail = $this->userRepository->find($id);
+            $courses = $this->courseRepository->getAll();
+            $subjects = $this->subjectRepository->getAll();
+            $tasks = $this->taskRepository->getAll();
+            $userCourse = $userDetail->courses;
+            $userCourseDetail = DB::table('user_course')
+                ->where('user_id', $id)
+                ->get();
+            $userSubject = $userDetail->subjects;
+            $userSubjectDetail = DB::table('user_subject')
+                ->where('user_id', $id)
+                ->get();
+            $userTask = $userDetail->tasks;
+            $userTaskDetail = DB::table('user_task')
+                ->where('user_id', $id)
+                ->get();
 
-        return view('admin.users.show', compact('userDetail', 'courses', 'userCourse', 'userCourseDetail', 
-            'userSubject', 'userSubjectDetail','userTask','userTaskDetail', 'subjects', 'tasks'));
-        
+            return view('admin.users.show', compact('userDetail', 'courses', 'userCourse', 'userCourseDetail', 
+                'userSubject', 'userSubjectDetail','userTask','userTaskDetail', 'subjects', 'tasks'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     public function exportSubject($id)
@@ -115,28 +142,28 @@ class UserController extends Controller
             ->where('course_id', '=', $id)
             ->get();
         
-        return response()->json(['listSubject' => $listSubject], 200);
+        return response()->json(['listSubject' => $listSubject], config('configuser.json'));
     }
 
     public function finishCourse(Request $request, $id)
-    {
-        $courseSubject = Course::find($request->course_id)->subjects()->get();
-        $count = 0;
+    {        
+        $courseSubject = $this->courseRepository->find($request->course_id)->subjects;
+        $count = config('configuser.count');
         foreach ($courseSubject as $value) {
             $check = DB::table('user_subject')
-            ->where('user_id', $id)
-            ->where('subject_id', $value->id)
-            ->where('status', 1)
-            ->get();
-            if (count($check) >= 1) {
-                $count = ++$count;
+                ->where('user_id', $id)
+                ->where('subject_id', $value->id)
+                ->where('status', StatusUserCourse::Finished)
+                ->get();
+            if (count($check) >= config('configuser.check')) {
+                $count++;
             }
         }
         if ($count == count($courseSubject)) {
             DB::table('user_course')
                 ->where('course_id', $request->course_id)
                 ->where('user_id', $id)
-                ->update(['status' => 1, 'updated_at' => now()]);
+                ->update(['status' => StatusUserCourse::Finished, 'updated_at' => now()]);
 
             return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.finish_course_success'));
         } else {
@@ -147,168 +174,204 @@ class UserController extends Controller
     public function finishSubject(Request $request, $id)
     {
         DB::table('user_subject')
-                ->where('subject_id', $request->subject_id)
-                ->where('user_id', $id)
-                ->update(['status' => 1, 'updated_at' => now()]);
+            ->where('subject_id', $request->subject_id)
+            ->where('user_id', $id)
+            ->update(['status' => StatusUserCourse::Finished, 'updated_at' => now()]);
         $check = DB::table('user_course')
-                ->where('user_id', $id)
-                ->where('status', 0)
-                ->get();
-        foreach ($check as $check) {
-            $process = $check->process;
-            $course_id = $check->course_id;
+            ->where('user_id', $id)
+            ->where('status', StatusUserCourse::Activity)
+            ->get();
+        foreach ($check as $value) {
+            $process = $value->process;
+            $course_id = $value->course_id;
         }
         DB::table('user_course')
-                ->where('user_id', $id)
-                ->where('course_id', $course_id)
-                ->update(['process' => ++$process]);
+            ->where('user_id', $id)
+            ->where('course_id', $course_id)
+            ->update(['process' => ++$process]);
 
         return redirect()->route('admin.users.show', $id);
     }
 
     public function finishTask(Request $request, $id)
     {
-        DB::table('user_task')
+        try {
+            DB::table('user_task')
                 ->where('task_id', $request->task_id)
                 ->where('user_id', $id)
-                ->update(['status' => 1, 'updated_at' => now()]);
-        $subject = Task::find($request->task_id)->subject_id;
-        $check = DB::table('user_subject')
+                ->update(['status' => StatusUserCourse::finished, 'updated_at' => now()]);
+            $subject = $this->taskRepository->find($request->task_id)->subject_id;
+            $check = DB::table('user_subject')
                 ->where('subject_id', $subject)
                 ->where('user_id', $id)
                 ->get();
-
-        foreach ($check as $check) {
-            $process = $check->process;
-        }
-        DB::table('user_subject')
+            foreach ($check as $check) {
+                $process = $check->process;
+            }
+            DB::table('user_subject')
                 ->where('subject_id', $subject)
                 ->where('user_id', $id)
                 ->update(['process' => ++$process]);
 
-        return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_user_task_success'));
+            return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_user_task_success'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     public function addUserCourse(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        $check = DB::table('user_course')
+        try {
+            $user = $this->userRepository->find($id);
+            $check = DB::table('user_course')
                 ->where('course_id', $request->course_id)
                 ->where('user_id', $id)
                 ->get();
-        $checkStatusUser = DB::table('user_course')
+            $checkStatusUser = DB::table('user_course')
                 ->where('user_id', $id)
-                ->where('status', 0)
+                ->where('status', StatusUserCourse::finished)
                 ->get();
-        if (count($checkStatusUser) >= 1) {
-            return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
-        }else {
-            if (count($check) >= 1) {
-                return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
+            if (count($checkStatusUser) >= config('configuser.checkStatusUser')) {
+                return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
             } else {
-                
-                User::find($id)->courses()->attach($request->course_id);
-                User::find($id)->subjects()->attach($request->subject_id);
-                return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
+                if (count($check) >= config('configuser.check')) {
+                    return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
+                } else {
+                    $user->courses()->attach($request->course_id);
+                    $userSubject = DB::table('user_subject')
+                        ->where('user_id', $id)
+                        ->where('subject_id', $request->subject_id)
+                        ->get();
+                    if (count($userSubject) < config('configuser.userSubject')) {
+                        $user->subjects()->attach($request->subject_id);
+
+                        return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.check_user_subject'));
+                    }
+                    return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
+                }
             }
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
         }
     }
 
     public function addUserSubject(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        $check = DB::table('user_subject')
+        try {
+            $user = $this->userRepository->find($id);
+            $check = DB::table('user_subject')
                 ->where('subject_id', $request->subject_id)
                 ->where('user_id', $id)
                 ->get();
-        $checkStatusUser = DB::table('user_subject')
+            $checkStatusUser = DB::table('user_subject')
                 ->where('user_id', $id)
-                ->where('status', 0)
+                ->where('status', StatusUserCourse::Activity)
                 ->get();
-        $course_id = Subject::find($request->subject_id)->courses()->get();
-        $count = 0;
-        foreach ($course_id as $course) {
-            $checkUserCourse = DB::table('user_course')
+            $course_id = $this->subjectRepository->find($request->subject_id)->courses;
+            $count = config('configuser.count');
+            foreach ($course_id as $course) {
+                $checkUserCourse = DB::table('user_course')
                     ->where('user_id', $id)
                     ->where('course_id', $course->id)
                     ->get();
-            if (count($checkUserCourse) >= 1) {
-                $count = ++$count;
-            }
-        }
-        if ($count >= 1) {
-            if (count($checkStatusUser) >= 1) {
-                return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
-            } else {
-                if (count($check) >= 1) {
-                    return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
-                } else {
-                    User::find($id)->subjects()->attach($request->subject_id);
-                    return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
+                if (count($checkUserCourse) >= config('configuser.checkUserCourse')) {
+                    $count++;
                 }
             }
-        } else {
-            return redirect()->route('admin.users.show', $id)->with('error', trans('setting.assign_user_task_fail'));
+            if ($count >= config('configuser.count_check')) {
+                if (count($checkStatusUser) >= config('configuser.checkStatusUser')) {
+                    return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
+                } else {
+                    if (count($check) >= config('configuser.count_check')) {
+                        return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
+                    } else {
+                        $user->subjects()->attach($request->subject_id);
+                        
+                        return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
+                    }
+                }
+            } else {
+                return redirect()->route('admin.users.show', $id)->with('error', trans('setting.assign_user_task_fail'));
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
         }
     }
 
     public function addUserTask(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        $check = DB::table('user_task')
-                ->where('task_id', $request->task_id)
-                ->where('user_id', $id)
-                ->get();
-        $checkStatusUser = DB::table('user_task')
-                ->where('user_id', $id)
-                ->where('status', 0)
-                ->get();
-        $subject_id = Task::find($request->task_id)->subject_id;
-        $checkUserSubject = DB::table('user_subject')
-                ->where('user_id', $id)
-                ->where('subject_id', $subject_id)
-                ->get();
-        if (count($checkUserSubject) >= 1) {
-            if (count($checkStatusUser) >= 1) {
-                return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
+        try {
+            $user = $this->userRepository->find($id);
+            $check = DB::table('user_task')
+                    ->where('task_id', $request->task_id)
+                    ->where('user_id', $id)
+                    ->get();
+            $checkStatusUser = DB::table('user_task')
+                    ->where('user_id', $id)
+                    ->where('status', StatusUserCourse::Activity)
+                    ->get();
+            $subject_id = $this->taskRepository->find($request->task_id)->subject_id;
+            $checkUserSubject = DB::table('user_subject')
+                    ->where('user_id', $id)
+                    ->where('subject_id', $subject_id)
+                    ->get();
+            if (count($checkUserSubject) >= config('configuser.checkUserSubject')) {
+                if (count($checkStatusUser) >= config('configuser.checkStatusUser')) {
+                    return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
+                }else {
+                    if (count($check) >= config('configuser.count_check')) {
+                        return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
+                    } else {
+                        $user->tasks()->attach($request->task_id);
+
+                        return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
+                    }
+                }    
             }else {
-                if (count($check) >= 1) {
-                    return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
-                } else {
-                    User::find($id)->tasks()->attach($request->task_id);
-                    return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
-                }
-            }    
-        }else {
-            return redirect()->route('admin.users.show', $id)->with('error', trans('setting.assign_user_task_fail'));
+                return redirect()->route('admin.users.show', $id)->with('error', trans('setting.assign_user_task_fail'));
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
         }
     }
 
     public function deleteUserCourse(Request $request, $id)
     {
-        $course = Course::findOrFail($id);
-        $course->users()->detach($request->user_id);
+        try {
+            $course = $this->courseRepository->find($id);
+            $course->users()->detach($request->user_id);
 
-        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_course_success'));
+            return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_course_success'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     public function deleteUserSubject(Request $request, $id)
     {
-        $subject = Subject::findOrFail($id);
-        $user = User::findOrFail($request->user_id);
-        $tasks = $subject->tasks()->get();
-        $user->tasks()->detach($tasks);
-        $subject->users()->detach($request->user_id);
+        try {
+            $subject = $this->subjectRepository->find($id);
+            $user = $this->userRepository->find($request->user_id);
+            $tasks = $subject->tasks;
+            $user->tasks()->detach($tasks);
+            $subject->users()->detach($request->user_id);
 
-        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_subject_success'));
+            return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_subject_success'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     public function deleteUserTask(Request $request, $id)
     {
-        $task = Task::findOrFail($id);
-        $task->users()->detach($request->user_id);
+        try {
+            $task = $this->taskRepository->find($id);
+            $task->users()->detach($request->user_id);
 
-        return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_task_success'));
+            return redirect()->route('admin.users.show', $request->user_id)->with('alert', trans('setting.delete_user_task_success'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     /**
@@ -319,8 +382,13 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findOrFail($id);
-        return view('admin.users.edit', compact('user'));
+        try{
+            $user = $this->userRepository->find($id);
+
+            return view('admin.users.edit', compact('user'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     /**
@@ -332,31 +400,33 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $password = $request->password;
-        $repassword = $request->repassword;
-        if ($password == $repassword) {
-            $user = User::findOrFail($id);
-            $attr = [
-                'name' => $request->get('name'),
-                'email' => $request->get('email'),
-                'password' => bcrypt($request->get('password')),
-                'phone' => $request->get('phone'),
-                'address' => $request->get('address'),
-                'role_id' => $request->get('role_id')
-            ];
-            if ($request->hasFile('avatar')) {  
-                $destinationDir = public_path('images/avatar');
-                $fileName = uniqid('avatar').'.'.$request->avatar->extension();
-                $request->avatar->move($destinationDir, $fileName);
-                $attr['avatar'] = '/images/avatar/'.$fileName;
-            } else {
-                $attr['avatar'] = $user->avatar;
-            }
-            $user->update($attr);
+        try {
+            $password = $request->password;
+            $repassword = $request->repassword;
+            if ($password == $repassword) {
+                $user = $this->userRepository->find($id);
+                if ($request->hasFile('avatar')) {  
+                    $avatar = $this->uploadAvatar($request);
+                } else {
+                    $avatar = $user->avatar;
+                }
+                $attributes = $request->only([
+                    'name',
+                    'email',
+                    'phone',
+                    'address',
+                    'role_id',
+                ]);
+                $attributes['avatar'] = $avatar;
+                $attributes['password'] = bcrypt($request->get('password'));
+                $this->userRepository->update($id, $attributes);
 
-            return redirect()->route('admin.users.index')->with('alert', trans('setting.edit_user_success'));    
-        } else {
-            return redirect()->route('admin.users.edit', $user->id)->with('alert', trans('setting.checkpassoword'));
+                return redirect()->route('admin.users.index')->with('alert', trans('setting.edit_user_success'));    
+            } else {
+                return redirect()->route('admin.users.edit', $user->id)->with('alert', trans('setting.checkpassoword'));
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
         }
     }
 
@@ -368,9 +438,12 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
+        try {
+            $this->userRepositoty->delete($id);
 
-        return redirect()->route('admin.users.index')->with('alert', trans('setting.delete_user_success'));
+            return redirect()->route('admin.users.index')->with('alert', trans('setting.delete_user_success'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 }
