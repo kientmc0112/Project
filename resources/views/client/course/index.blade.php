@@ -16,14 +16,14 @@
                             @if($course->users->pivot->status == 1 && $course->users->id == Auth::User()->id)
                             <p><span class="badge badge-info">Actived</span></p>
                             @endif
-                            <em>{{ $course->users->count() }} {{ __('Trainee') }}</em><br>
-                            <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="{{ route('course.show', $course->id) }}">{{ __('view details') }}</a>
+                            <em>{{ $course->users->count() }} {{ trans('layouts.Trainee') }}</em><br>
+                            <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="{{ route('course.show', $course->id) }}">{{ trans('layouts.view details') }}</a>
                         </div>
                         </div>
                         <hr>
                     @endforeach --}}
 
-                    @foreach($courses as $course)
+                    @foreach ($courses as $course)
                         <div class="row mb-15">
                             <div class="col-sm-6 col-md-4">
                                 <div class="thumb">
@@ -32,19 +32,19 @@
                             </div>
                             <div class="col-sm-6 col-md-8">
                                 <h4 class="line-bottom mt-0 mt-sm-20">{{ $course->name }}
-                                @foreach($course->users as $user)
-                                    @if($user->id == Auth::User()->id)
-                                        @if($user->pivot->status == 0)
+                                @foreach ($course->users as $user)
+                                    @if ($user->id == Auth::user()->id)
+                                        @if ($user->pivot->status == 0)
                                             <i class="fa fa-check-circle check"></i>
-                                        @elseif($user->pivot->status == 1)
+                                        @elseif ($user->pivot->status == 1)
                                             <i class="fa fa-check-circle nocheck"></i>
                                         @endif
                                     @endif
                                 @endforeach
                                 </h4>
                                 <p>{{ $course->description }}</p>
-                                <em>{{ $course->users->count() }} {{ __('Member') }}</em><br>
-                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="{{ route('course.show', $course->id) }}">{{ __('view details') }}</a>
+                                <em>{{ $course->users->count() }} {{ trans('layouts.member') }}</em><br>
+                                <a class="btn btn-dark btn-theme-colored btn-sm text-uppercase mt-10" href="{{ route('course.show', $course->id) }}">{{ trans('layouts.viewD') }}</a>
                             </div>
                         </div>
                         <hr>
@@ -60,23 +60,28 @@
                 <div class="col-md-3">
                     <div class="sidebar sidebar-left mt-sm-30">
                         <div class="widget">
-                            <h5 class="widget-title line-bottom">{{ __('Categories') }}</h5>
+                            <h5 class="widget-title line-bottom">{{ trans('layouts.categories') }}</h5>
                             <div class="categories">
                                 <ul class="list list-border angle-double-right">
-                                    <li><a href="{{ route('course.index') }}">{{ __('All') }}<span></span></a></li>
-                                    @foreach($categories as $category)
-                                        @if($category->categories->count() > 0)
+                                    <li><a href="{{ route('course.index') }}">{{ trans('layouts.all') }}<span></span></a></li>
+                                    @foreach ($categories as $category)
+                                        @if ($category->categories->count() > 0)
                                         <li><a href="{{ route('category.show', $category->id) }}">{{ $category->name }}<span></span></a></li>
                                         <ul>
-                                            @foreach($category->categories as $categoryChild)
-                                            <li><a href="{{ route('category.show', $categoryChild->id) }}">{{ $categoryChild->name }}<span>{{ '('.$categoryChild->courses->count().')' }}</span></a></li>
+                                            @foreach ($category->categories as $categoryChild)
+                                                <li>
+                                                    <a href="{{ route('category.show', $categoryChild->id) }}">{{ $categoryChild->name }}
+                                                        <span>{{ '('.$categoryChild->courses->count().')' }}
+                                                        </span>
+                                                    </a>
+                                                </li>
                                             @endforeach
                                         </ul>
                                         @endif
                                     @endforeach
-                                     <nav>
+                                    {{-- <nav>
                                         {{ $categories->links() }}
-                                    </nav>
+                                    </nav> --}}
                                 </ul>
                             </div>
                         </div>

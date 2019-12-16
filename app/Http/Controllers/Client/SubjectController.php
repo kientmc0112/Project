@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\Task\TaskRepositoryInterface;
 use App\Http\Controllers\Controller;
-use App\Models\Course;
-use App\Models\User;
-use App\Models\Subject;
-use App\Models\Task;
 use Illuminate\Http\Request;
 use Auth;
 use DB;
 
 class SubjectController extends Controller
 {
+    protected $subjectRepository;
+    protected $taskRepository;
+
+    public function __construct(SubjectRepositoryInterface $subjectRepository, TaskRepositoryInterface $taskRepository)
+    {
+        $this->subjectRepository = $subjectRepository;
+        $this->taskRepository = $taskRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -78,7 +84,7 @@ class SubjectController extends Controller
         //     if($user->id == $user_id) $permiss = $user->pivot->status;
         // }
 
-        $subject = Subject::find($id);
+        $subject = $this->subjectRepository->find($id);
         $tasks = $subject->tasks;
 
         return view('client.subject.subject', compact('subject', 'tasks', 'permiss'));
@@ -116,6 +122,47 @@ class SubjectController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function history($id) {
+        $tasksSubject = $this->subjectRepository->getTaskBySubject($id);
+        $tasksHistory = collect();
+        foreach ($tasksSubject as $task) {
+            foreach ($task->users as $user) {
+                if ($user->id == Auth::user()->id) {
+                    $task1['time'] = strtotime($user->pivot->created_at);
+                    $task1['date'] = $user->pivot->created_at;
+                    $task1['task_id'] = $user->pivot->task_id;
+                    $task1['content'] = 'You started ' . $this->taskRepository->find($user->pivot->task_id)->name;
+                    $tasksHistory->push($task1);
+                }
+            }
+        }
+
+        foreach ($tasksSubject as $task) {
+            foreach ($task->users as $user) {
+                if ($user->id == Auth::User()->id) {
+                    if ($user->pivot->status == 1) {
+                        $task2['time'] = strtotime($user->pivot->updated_at);
+                        $task2['date'] = $user->pivot->updated_at;
+                        $task2['task_id'] = $user->pivot->task_id;
+                        $task2['content'] = 'You completed ' . $this->taskRepository->find($user->pivot->task_id)->name;
+                    } else {
+                        if ($user->pivot->created_at != $user->pivot->updated_at) {
+                            $task2['time'] = strtotime($user->pivot->updated_at);
+                            $task2['date'] = $user->pivot->updated_at;
+                            $task2['task_id'] = $user->pivot->task_id;
+                            $task2['content'] = 'You sent a report for ' . $this->taskRepository->find($user->pivot->task_id)->name;
+                        }
+                    }
+                    $tasksHistory->push($task2);
+                }
+            }
+        }
+        $tasksHistory = $tasksHistory->sortByDesc('time');
+
+        return view('client.history.tasks', compact('tasksHistory'));
     }
 
     public function history1($id) {
@@ -160,45 +207,5 @@ class SubjectController extends Controller
         array_multisort($columns, SORT_ASC, $tasksHistory);
         $tasksHistory = array_reverse($tasksHistory);
         return view('client.history.tasks', compact('tasksHistory', 'tasksSubject'));
-    }
-
-    public function history($id) {
-        $tasks = Subject::find($id)->tasks()->get('id');
-        $tasksSubject = Task::with('users')->whereIn('id', $tasks)->get();
-        $tasksHistory = collect();
-        foreach ($tasksSubject as $task) {
-            foreach ($task->users as $user) {
-                if($user->id == Auth::User()->id) {
-                    $task1['time'] = strtotime($user->pivot->created_at);
-                    $task1['date'] = $user->pivot->created_at;
-                    $task1['task_id'] = $user->pivot->task_id;
-                    $task1['content'] = 'You started ' . Task::find($user->pivot->task_id)->name;
-                    $tasksHistory->push($task1);
-                }
-            }
-        }
-
-        foreach($tasksSubject as $task) {
-            foreach ($task->users as $user) {
-                if($user->id == Auth::User()->id) {
-                    if($user->pivot->status == 1) {
-                        $task2['time'] = strtotime($user->pivot->updated_at);
-                        $task2['date'] = $user->pivot->updated_at;
-                        $task2['task_id'] = $user->pivot->task_id;
-                        $task2['content'] = 'You completed ' . Task::find($user->pivot->task_id)->name;
-                    } else {
-                        if($user->pivot->created_at != $user->pivot->updated_at) {
-                            $task2['time'] = strtotime($user->pivot->updated_at);
-                            $task2['date'] = $user->pivot->updated_at;
-                            $task2['task_id'] = $user->pivot->task_id;
-                            $task2['content'] = 'You sent a report for ' . Task::find($user->pivot->task_id)->name;
-                        }
-                    }
-                    $tasksHistory->push($task2);
-                }
-            }
-        }
-        $tasksHistory = $tasksHistory->sortByDesc('time');
-        return view('client.history.tasks', compact('tasksHistory'));
     }
 }
