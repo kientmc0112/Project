@@ -12,6 +12,10 @@ use App\Repositories\Subject\SubjectRepository;
 use App\Repositories\Subject\SubjectRepositoryInterface;
 use App\Repositories\Course\CourseRepository;
 use App\Repositories\Course\CourseRepositoryInterface;
+use App\Repositories\Category\CategoryRepository;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\User\UserRepository;
+use App\Repositories\User\UserRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,11 +32,19 @@ class AppServiceProvider extends ServiceProvider
         );
         $this->app->singleton(
             SubjectRepositoryInterface::class,
-            SubjectRepository::class,
+            SubjectRepository::class
         );
         $this->app->singleton(
             CourseRepositoryInterface::class,
             CourseRepository::class
+        );
+        $this->app->singleton(
+            CategoryRepositoryInterface::class,
+            CategoryRepository::class
+        );
+        $this->app->singleton(
+            UserRepositoryInterface::class,
+            UserRepository::class
         );
     }
 

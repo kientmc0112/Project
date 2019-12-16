@@ -4,7 +4,7 @@
             <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
         </div>
     </div>
-    <div id="disable-preloader" class="btn btn-default btn-sm">{{ __('Disable Preloader') }}</div>
+    <div id="disable-preloader" class="btn btn-default btn-sm">{{ trans('layouts.disable') }}</div>
 </div>
 <header id="header" class="header">
     <div class="header-top bg-theme-color-2 sm-text-center p-0">
@@ -13,7 +13,7 @@
                 <div class="col-md-4">
                     <div class="widget no-border m-0">
                         <ul class="list-inline font-13 sm-text-center mt-5">
-                                <a class="text-white" id="logout" href="{{ route('logout') }}">{{ __('Logout') }}</a>
+                                <a class="text-white" id="logout" href="{{ route('logout') }}">{{ trans('layouts.logout') }}</a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                     @csrf
                                 </form>
@@ -72,7 +72,7 @@
                         <ul class="list-inline">
                             <li><i class="fa fa-phone-square text-theme-colored font-36 mt-5 sm-display-block"></i></li>
                             <li>
-                                <a href="#" class="font-12 text-gray text-uppercase">{{ __('Call us today!') }}</a>
+                                <a href="#" class="font-12 text-gray text-uppercase">{{ trans('layouts.call') }}</a>
                                 <h5 class="font-14 m-0">{{ _('+(012) 345 6789') }}</h5>
                             </li>
                         </ul>
@@ -83,8 +83,8 @@
                         <ul class="list-inline">
                             <li><i class="fa fa-clock-o text-theme-colored font-36 mt-5 sm-display-block"></i></li>
                             <li>
-                                <a href="#" class="font-12 text-gray text-uppercase">{{ __('We are open!') }}</a>
-                                <h5 class="font-13 text-black m-0"> {{ __('Mon-Fri 8:00-16:00') }}</h5>
+                                <a href="#" class="font-12 text-gray text-uppercase">{{ trans('layouts.open') }}</a>
+                                <h5 class="font-13 text-black m-0"> {{ trans('layouts.hour') }}</h5>
                             </li>
                         </ul>
                     </div>
@@ -98,21 +98,21 @@
                 <nav id="menuzord" class="menuzord bg-theme-colored pull-left flip menuzord-responsive">
                     <ul class="menuzord-menu">
                         <li class="active">
-                            <a href="{{ route('home') }}">{{ __('Home') }}</a>
+                            <a href="{{ route('home') }}">{{ trans('layouts.home') }}</a>
                         </li>
-                        <li><a href="{{ route('course.index') }}">{{ __('Courses') }}</a>
-                        </li>
-                        <li>
-                            <a href="">{{ __('Subject') }} <span class="label label-info">{{ __('New') }}</span></a>
+                        <li><a href="{{ route('course.index') }}">{{ trans('layouts.courses') }}</a>
                         </li>
                         <li>
-                            <a href="#home">{{ __('Task') }}</a>
+                            <a href="">{{ trans('layouts.subject') }} <span class="label label-info">{{ trans('layouts.new') }}</span></a>
                         </li>
                         <li>
-                            <a href="#">{{ __('Activities') }}</a>
+                            <a href="#home">{{ trans('layouts.task') }}</a>
                         </li>
                         <li>
-                            <a href="{{ route('calendar.show') }}">{{ __('Calender') }}</a>
+                            <a href="#">{{ trans('layouts.active') }}</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('calendar.show') }}">{{ trans('layouts.calendar') }}</a>
                         </li>
                     </ul>
                 </nav>

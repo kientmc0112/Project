@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Task;
 use DB;
 use Auth;
 
 class ReportController extends Controller
 {
+    protected $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -52,7 +57,7 @@ class ReportController extends Controller
 
         $user_id = Auth::User()->id;
         $task_id = $request->get('task_id');
-        $user = User::find($user_id);
+        $user = $this->userRepository->find($user_id);
         $user->tasks()->attach($task_id, [
             'status' => 0,
             'created_at' => now(),

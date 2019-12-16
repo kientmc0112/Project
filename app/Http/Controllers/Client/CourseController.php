@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Client;
 
 use App\Repositories\Course\CourseRepositoryInterface;
+use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Course;
-use App\Models\Category;
-use App\Models\User;
-use App\Models\Subject;
 use DB;
+use App\Models\Subject;
 
 class CourseController extends Controller
 {
     protected $courseRepository;
+    protected $categoryRepository;
 
-    public function __construct(CourseRepositoryInterface $courseRepository)
+    public function __construct(CourseRepositoryInterface $courseRepository, CategoryRepositoryInterface $categoryRepository)
     {
         $this->courseRepository = $courseRepository;
+        $this->categoryRepository = $categoryRepository;
     }
     /**
      * Display a listing of the resource.
@@ -26,9 +26,9 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = $this->courseRepository->getCourseByTime()->paginate(config('course.PagePaginate'));
+        $courses = $this->courseRepository->getCourseByTime();
 
-        $categories = Category::where('parent_id', 0)->orderBy('name')->paginate(config('course.PagePaginate'));
+        $categories = $this->categoryRepository->getCategoryChildByName();
 
         return view('client.course.index', compact('courses', 'categories'));
     }
@@ -106,7 +106,7 @@ class CourseController extends Controller
 
     public function history($id)
     {
-        $subjects = $this->courseRepository->find($id)->subjects()->paginate(config('course.PagePaginate'));
+        $subjects = $this->courseRepository->getSubjectByCourse($id);
         // $subjects->users()->get();
         // $tasks = $subjects->tasks()->get();
         // $task = $subject->tasks()->get();

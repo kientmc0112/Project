@@ -12,15 +12,15 @@
                         <h4 class="text-uppercase text-white">{{ $user->name }}</h4>
                         <ul class="list angle-double-right m-0">
                             <li class="mt-0 text-gray-silver">
-                                <strong class="text-gray-lighter">{{ __('Address') }}</strong>
+                                <strong class="text-gray-lighter">{{ trans('layouts.address') }}</strong>
                                 <br>{{ $user->address }}
                             </li>
                             <li class="mt-0 text-gray-silver">
-                                <strong class="text-gray-lighter">{{ __('Email') }}</strong>
+                                <strong class="text-gray-lighter">{{ trans('layouts.email') }}</strong>
                                 <br>{{ $user->email }}
                             </li>
                             <li class="text-gray-silver">
-                                <strong class="text-gray-lighter">{{ __('Phone') }}</strong>
+                                <strong class="text-gray-lighter">{{ trans('layouts.phone1') }}</strong>
                                 <br>{{ $user->phone }}
                             </li>
                         </ul>
@@ -30,9 +30,9 @@
                             <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                             <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
                         </ul>
-                        @if(Auth::User()->id == $user->id)
+                        @if (Auth::user()->id == $user->id)
                         <a class="btn btn-info btn-flat mt-10 mb-sm-30" data-toggle="modal"
-                            data-target="#myModal">{{ __('Edit Profile') }}</a>
+                            data-target="#myModal">{{ trans('layouts.editP') }}</a>
                         @endif
                         <div class="modal fade" id="myModal">
                             <div class="modal-dialog">
@@ -41,7 +41,7 @@
                                         action="{{ route('user.update', $user->id) }}" method="POST">
                                         @csrf
                                         <div class="modal-header">
-                                            <h4 class="modal-title">{{ __('Edit Profile') }}</h4>
+                                            <h4 class="modal-title">{{ trans('layouts.editP') }}</h4>
                                         </div>
                                         <div class="modal-body row">
                                             <div id="edit-error-bag">
@@ -50,25 +50,25 @@
                                             </div>
                                             <div class="col-xs-7">
                                                 <div class="form-group">
-                                                    <label>{{ __('Name') }}</label>
+                                                    <label>{{ trans('layouts.name') }}</label>
                                                     <input class="form-control" name="name" required="" id="name"
                                                         type="text" value="{{ $user->name }}">
 
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>{{ __('Phone') }}</label>
+                                                    <label>{{ trans('layouts.phone1') }}</label>
                                                     <input class="form-control" name="phone" id="phone" required=""
                                                         type="text" value="{{ $user->phone }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>{{ __('Address') }}</label>
+                                                    <label>{{ trans('layouts.address') }}</label>
                                                     <textarea class="form-control" name="address" id="address"
                                                         required="" type="text" col="2">{{ $user->address }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="col-xs-5">
                                                 <div class="form-group">
-                                                    <label>{{ __('Avatar') }}</label><br>
+                                                    <label>{{ trans('layouts.avatar') }}</label><br>
                                                     <input type="file" name="avatar" id="avatar"
                                                         value="{{ $user->avatar }}">
                                                     <img id="imageAvatar" class="thumbnail" src="{{ $user->avatar }}">
@@ -77,9 +77,9 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger"
-                                                data-dismiss="modal">{{ __('Close') }}</button>
+                                                data-dismiss="modal">{{ trans('layouts.close') }}</button>
                                             <button class="btn btn-info" id="btn-add" type="submit"
-                                                name="save">{{ __('Save') }}</button>
+                                                name="save">{{ trans('layouts.save') }}</button>
                                             </input>
                                         </div>
                                     </form>
@@ -92,9 +92,9 @@
                     <div>
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#courses" aria-controls="courses" role="tab" data-toggle="tab" class="font-15 text-uppercase">Courses <span class="badge">{{ $courses->count() }}</span></a></li>
-                            <li role="presentation"><a href="#subjects" aria-controls="subjects" role="tab" data-toggle="tab" class="font-15 text-uppercase">Subjects <span class="badge">{{ $subjects->count() }}</span></a></li>
-                            <li role="presentation"><a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab" class="font-15 text-uppercase">Tasks <span class="badge">{{ $tasks->count() }}</span></a></li>
+                            <li role="presentation" class="active"><a href="#courses" aria-controls="courses" role="tab" data-toggle="tab" class="font-15 text-uppercase">{{ trans('layouts.courses') }}<span class="badge">{{ $courses->count() }}</span></a></li>
+                            <li role="presentation"><a href="#subjects" aria-controls="subjects" role="tab" data-toggle="tab" class="font-15 text-uppercase">{{ trans('layouts.subjects')}}<span class="badge">{{ $subjects->count() }}</span></a></li>
+                            <li role="presentation"><a href="#tasks" aria-controls="tasks" role="tab" data-toggle="tab" class="font-15 text-uppercase">{{ trans('layouts.tasks')}}<span class="badge">{{ $tasks->count() }}</span></a></li>
                         </ul>
 
                         <!-- Tab panes -->
@@ -104,11 +104,11 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Number</th>
-                                                <th>Name</th>
-                                                <th>Process</th>
-                                                <th>Status</th>
-                                                <th>View</th>
+                                                <th>{{ trans('layouts.number') }}</th>
+                                                <th>{{ trans('layouts.name') }}</th>
+                                                <th>{{ trans('layouts.process') }}</th>
+                                                <th>{{ trans('layouts.status') }}</th>
+                                                <th>{{ trans('layouts.view') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -119,17 +119,17 @@
                                             @foreach ($courses as $course)
                                                 @if ($value->id == $course->course_id)
                                                 <tr>
-                                                    <th scope="row"># {{ $i++ }}</th>
+                                                    <th scope="row">{{ '#' . $i++ }}</th>
                                                     <td>{{ $value->name }}</td>
                                                     <td>{{ $course->process }}</td>
                                                     <td>
                                                         @if ($course->status == false)
-                                                        <button class="btn btn-warning btn-xs">Activity</button>
-                                                        @else
-                                                        <button class="btn btn-success btn-xs">Finished</button>
+                                                            <button class="btn btn-warning btn-xs">{{ {{ trans('layouts.activity') }}</button>
+                                                            @else
+                                                            <button class="btn btn-success btn-xs">{{ {{ trans('layouts.finished') }}</button>
                                                         @endif
                                                     </td>
-                                                    <td><a class="btn btn-info btn-xs" href="{{ route('course.show', $course->course_id) }}">View</a></td>
+                                                    <td><a class="btn btn-info btn-xs" href="{{ route('course.show', $course->course_id) }}">{{ trans('layouts.view') }}</a></td>
                                                 </tr>
                                                 @endif
                                             @endforeach
@@ -142,12 +142,12 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Number</th>
-                                            <th>Name</th>
-                                            <th>Process</th>
-                                            <th>Date Start</th>
-                                            <th>Date Finish</th>
-                                            <th>Status</th>
+                                            <th>{{ trans('layouts.number') }}</th>
+                                            <th>{{ trans('layouts.name') }}</th>
+                                            <th>{{ trans('layouts.process') }}</th>
+                                            <th>{{ trans('layouts.dateStart') }}</th>
+                                            <th>{{ trans('layouts.dateFinish') }}</th>
+                                            <th>{{ trans('layouts.status') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -167,9 +167,9 @@
                                                 </td>
                                                 <td>
                                                     @if ($subject->status == false)
-                                                        <button class="btn btn-warning btn-xs">Activing</button>
+                                                        <button class="btn btn-warning btn-xs">{{ trans('layouts.activing') }}</button>
                                                     @else
-                                                        <button class="btn btn-success btn-xs">Success</button>
+                                                        <button class="btn btn-success btn-xs">{{ trans('layouts.success') }}</button>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -183,11 +183,11 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Number</th>
-                                            <th>Name</th>
-                                            <th>Date Start</th>
-                                            <th>Date Finish</th>
-                                            <th>Status</th>
+                                            <th>{{ trans('layouts.number') }}</th>
+                                            <th>{{ trans('layouts.name') }}</th>
+                                            <th>{{ trans('layouts.dateStart') }}</th>
+                                            <th>{{ trans('layouts.dateFinish') }}</th>
+                                            <th>{{ trans('layouts.status') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -206,9 +206,9 @@
                                                 </td>
                                                 <td>
                                                     @if ($task->status == false)
-                                                        <button class="btn btn-warning btn-xs">Activing</button>
+                                                        <button class="btn btn-warning btn-xs">{{ trans('layouts.activing') }}</button>
                                                     @else
-                                                        <button class="btn btn-success btn-xs">Finished</button>
+                                                        <button class="btn btn-success btn-xs">{{ trans('layouts.finished') }}</button>
                                                     @endif
                                                 </td>
                                             </tr>

@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Repositories\Subject\SubjectRepositoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Task;
-use App\Models\User;
-use App\Models\Subject;
-use App\Models\Course;
 use Auth;
 use DB;
 
 class CalendarController extends Controller
 {
+    protected $subjectRepository;
+
+    public function __construct(SubjectRepositoryInterface $subjectRepository)
+    {
+        $this->subjectRepository = $subjectRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -52,34 +55,34 @@ class CalendarController extends Controller
      */
     public function show()
     {
-        $tasks = DB::table('user_task')->where('user_id', Auth::User()->id)->get();
-        $taskCalendar = collect();
-        foreach($tasks as $task) {
-            $task1['updated_at'] = $task->updated_at;
-            $task1['created_at'] = $task->created_at;
-            $task1['name'] = Task::find($task->task_id)->name;
-            $taskCalendar->push($task1);
-        }
+        // $tasks = DB::table('user_task')->where('user_id', Auth::User()->id)->get();
+        // $taskCalendar = collect();
+        // foreach($tasks as $task) {
+        //     $task1['updated_at'] = $task->updated_at;
+        //     $task1['created_at'] = $task->created_at;
+        //     $task1['name'] = Task::find($task->task_id)->name;
+        //     $taskCalendar->push($task1);
+        // }
 
         $subjects = DB::table('user_subject')->where('user_id', Auth::User()->id)->get();
         $subjectCalendar = collect();
         foreach($subjects as $subject) {
             $subject1['updated_at'] = $subject->updated_at;
             $subject1['created_at'] = $subject->created_at;
-            $subject1['name'] = Subject::find($subject->subject_id)->name;
+            $subject1['name'] = $this->subjectRepository->find($subject->subject_id)->name;
             $subjectCalendar->push($subject1);
         }
 
-        $courses = DB::table('user_course')->where('user_id', Auth::User()->id)->get();
-        $courseCalendar = collect();
-        foreach($courses as $course) {
-            $course1['updated_at'] = $course->updated_at;
-            $course1['created_at'] = $course->created_at;
-            $course1['name'] = Course::find($course->course_id)->name;
-            $courseCalendar->push($course1);
-        }
+        // $courses = DB::table('user_course')->where('user_id', Auth::User()->id)->get();
+        // $courseCalendar = collect();
+        // foreach($courses as $course) {
+        //     $course1['updated_at'] = $course->updated_at;
+        //     $course1['created_at'] = $course->created_at;
+        //     $course1['name'] = Course::find($course->course_id)->name;
+        //     $courseCalendar->push($course1);
+        // }
 
-        return view('client.calendar.index', compact('taskCalendar', 'subjectCalendar', 'courseCalendar'));
+        return view('client.calendar.index', compact('subjectCalendar'));
     }
 
     /**

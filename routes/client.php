@@ -20,7 +20,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/{course}/history', 'CourseController@history')->name('course.history');
     });
     Route::group(['prefix' => 'subjects'], function () {
-        Route::get('/{subject}/show', 'SubjectController@show')->name('subject.show');
+        Route::post('/{subject}/show', 'SubjectController@show')->name('subject.show');
         Route::post('/{subject}/history', 'SubjectController@history')->name('subject.history');
     });
 
