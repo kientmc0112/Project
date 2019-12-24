@@ -2,16 +2,12 @@
 @section('title', 'Dashboard')
 @section('content')
 <div class="container-fluid">
-
-    <!-- Breadcrumbs-->
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
             <a href="#">Dashboard</a>
         </li>
         <li class="breadcrumb-item active">Overview</li>
     </ol>
-
-    <!-- Icon Cards-->
     <div class="row">
         <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-primary o-hidden h-100">
@@ -78,19 +74,24 @@
             </div>
         </div>
     </div>
-
-    <!-- Area Chart Example-->
     <div class="card mb-3">
+        @php $now = getdate(); @endphp
         <div class="card-header">
             <i class="fas fa-chart-area"></i>
             Area Chart Example</div>
         <div class="card-body">
             <canvas id="myAreaChart" width="100%" height="30"></canvas>
         </div>
-        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        <div class="card-footer small text-muted">
+            
+            <div class="form-group text-center">
+                <button style="margin-right: 10px;" id="pre" class="btn btn-primary" name="pre"><<</button>
+                <input style="width: 35px;" type="number" id="month" name="month" value="{{ $now['mon'] }}">
+                <input style="width: 50px;" type="number" id="year" name="year" value="{{ $now['year'] }}">
+                <button style="margin-left: 10px;" id="next" class="btn btn-primary" name="next">>></button>
+            </div>
+        </div>
     </div>
-
-    <!-- DataTables Example -->
     <div class="card mb-3">
         <div class="card-header">
             <i class="fas fa-table"></i>
