@@ -33,6 +33,9 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
             'parameters' => ['users' => 'id']
         ]);
     });
+
+    Route::get('chart', 'DashboardController@chart')->name('admin.dashboard.chart');
+
     Route::put('users/{id}/finish_course', 'UserController@finishCourse')->name('finishCourse');
     Route::put('users/{id}/finish_subject', 'UserController@finishSubject')->name('finishSubject');
     Route::put('users/{id}/finish_task', 'UserController@finishTask')->name('finishTask');

@@ -90,8 +90,9 @@
         <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
     </div>
 
+    <button id="btn-reset" class="btn btn-primary">Reset</button>
     <!-- DataTables Example -->
-    <div class="card mb-3">
+    {{-- <div class="card mb-3">
         <div class="card-header">
             <i class="fas fa-table"></i>
             Data Table Example</div>
@@ -580,7 +581,7 @@
             </div>
         </div>
         <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-    </div>
+    </div> --}}
 
 </div>
 @endsection

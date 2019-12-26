@@ -23,3 +23,18 @@ $(document).ready(function () {
         });
     });
 });
+// $(document).ready(function (event) {
+//     event.preventDefault();
+//     $('#btn-reset').on('click', function(){
+//         $.ajax({
+//             url: 'dashboard/chart',
+//             method: 'GET',
+//             success: function () {
+//                 alert('oke');
+//             },
+//             error: function () {
+//                 alert('error');
+//             }
+//         });
+//     })
+// });
