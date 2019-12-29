@@ -38,4 +38,13 @@ class ReportController extends Controller
         $tasks = Task::all();
         return view('admin.reports.show_comment', compact('userTask', 'users', 'tasks'));
     }
+
+    public function finish($id)
+    {
+        $check = DB::table('user_task')
+        ->where('id', $id)
+        ->update(['status' => 1]);
+
+        return redirect()->route('admin.reports.show_comment')->with('alert', trans('commented'));
+    }
 }

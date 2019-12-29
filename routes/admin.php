@@ -54,6 +54,7 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
     Route::put('tasks/{id}/finish_trainee_task', 'TaskController@finishTraineeTask')->name('finishTraineeTask');
 
     Route::get('reports', 'ReportController@index')->name('admin.reports.index');
-    Route::post('reports/{id}', 'ReportController@store')->name('admin.reports.store');
+    Route::put('reports/{id}', 'ReportController@store')->name('admin.reports.store');
     Route::get('reports/comment', 'ReportController@showComment')->name('admin.reports.comment');
+    Route::put('reports/comment/{id}', 'ReportController@finish')->name('admin.reports.finish');
 });

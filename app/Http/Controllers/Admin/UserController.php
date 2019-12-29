@@ -47,10 +47,7 @@ class UserController extends Controller
         $repassword = $request->repassword;
         if ($password == $repassword) {
             if ($request->hasFile('avatar')) {  
-                $destinationDir = public_path('images/avatar');
-                $fileName = uniqid('avatar').'.'.$request->avatar->extension();
-                $request->avatar->move($destinationDir, $fileName);
-                $avatar = '/images/avatar/'.$fileName;
+                $avatar = $this->uploadAvatar($request);
             } else {
                 $avatar = '/images/avatar.jpg';
             }
@@ -77,6 +74,7 @@ class UserController extends Controller
         $fileName = uniqid('avatar').'.'.$request->avatar->extension();
         $request->avatar->move($destinationDir, $fileName);
         $avatar = '/images/avatar/'.$fileName;
+        return $avatar;
     }
 
     /**
@@ -147,21 +145,21 @@ class UserController extends Controller
     public function finishSubject(Request $request, $id)
     {
         DB::table('user_subject')
-                ->where('subject_id', $request->subject_id)
-                ->where('user_id', $id)
-                ->update(['status' => 1, 'updated_at' => now()]);
+            ->where('subject_id', $request->subject_id)
+            ->where('user_id', $id)
+            ->update(['status' => 1, 'updated_at' => now()]);
         $check = DB::table('user_course')
-                ->where('user_id', $id)
-                ->where('status', 0)
-                ->get();
+            ->where('user_id', $id)
+            ->where('status', 0)
+            ->get();
         foreach ($check as $check) {
             $process = $check->process;
             $course_id = $check->course_id;
         }
         DB::table('user_course')
-                ->where('user_id', $id)
-                ->where('course_id', $course_id)
-                ->update(['process' => ++$process]);
+            ->where('user_id', $id)
+            ->where('course_id', $course_id)
+            ->update(['process' => ++$process]);
 
         return redirect()->route('admin.users.show', $id);
     }
@@ -169,22 +167,22 @@ class UserController extends Controller
     public function finishTask(Request $request, $id)
     {
         DB::table('user_task')
-                ->where('task_id', $request->task_id)
-                ->where('user_id', $id)
-                ->update(['status' => 1, 'updated_at' => now()]);
+            ->where('task_id', $request->task_id)
+            ->where('user_id', $id)
+            ->update(['status' => 1, 'updated_at' => now()]);
         $subject = Task::find($request->task_id)->subject_id;
         $check = DB::table('user_subject')
-                ->where('subject_id', $subject)
-                ->where('user_id', $id)
-                ->get();
+            ->where('subject_id', $subject)
+            ->where('user_id', $id)
+            ->get();
 
         foreach ($check as $check) {
             $process = $check->process;
         }
         DB::table('user_subject')
-                ->where('subject_id', $subject)
-                ->where('user_id', $id)
-                ->update(['process' => ++$process]);
+            ->where('subject_id', $subject)
+            ->where('user_id', $id)
+            ->update(['process' => ++$process]);
 
         return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_user_task_success'));
     }
@@ -193,22 +191,22 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $check = DB::table('user_course')
-                ->where('course_id', $request->course_id)
-                ->where('user_id', $id)
-                ->get();
+            ->where('course_id', $request->course_id)
+            ->where('user_id', $id)
+            ->get();
         $checkStatusUser = DB::table('user_course')
-                ->where('user_id', $id)
-                ->where('status', 0)
-                ->get();
+            ->where('user_id', $id)
+            ->where('status', 0)
+            ->get();
         if (count($checkStatusUser) >= 1) {
             return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
         }else {
             if (count($check) >= 1) {
                 return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
             } else {
-                
                 User::find($id)->courses()->attach($request->course_id);
                 User::find($id)->subjects()->attach($request->subject_id);
+
                 return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
             }
         }
@@ -218,22 +216,22 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $check = DB::table('user_subject')
-                ->where('subject_id', $request->subject_id)
-                ->where('user_id', $id)
-                ->get();
+            ->where('subject_id', $request->subject_id)
+            ->where('user_id', $id)
+            ->get();
         $checkStatusUser = DB::table('user_subject')
-                ->where('user_id', $id)
-                ->where('status', 0)
-                ->get();
+            ->where('user_id', $id)
+            ->where('status', 0)
+            ->get();
         $course_id = Subject::find($request->subject_id)->courses()->get();
         $count = 0;
         foreach ($course_id as $course) {
             $checkUserCourse = DB::table('user_course')
-                    ->where('user_id', $id)
-                    ->where('course_id', $course->id)
-                    ->get();
+                ->where('user_id', $id)
+                ->where('course_id', $course->id)
+                ->get();
             if (count($checkUserCourse) >= 1) {
-                $count = ++$count;
+                $count++;
             }
         }
         if ($count >= 1) {
@@ -256,18 +254,18 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $check = DB::table('user_task')
-                ->where('task_id', $request->task_id)
-                ->where('user_id', $id)
-                ->get();
+            ->where('task_id', $request->task_id)
+            ->where('user_id', $id)
+            ->get();
         $checkStatusUser = DB::table('user_task')
-                ->where('user_id', $id)
-                ->where('status', 0)
-                ->get();
+            ->where('user_id', $id)
+            ->where('status', 0)
+            ->get();
         $subject_id = Task::find($request->task_id)->subject_id;
         $checkUserSubject = DB::table('user_subject')
-                ->where('user_id', $id)
-                ->where('subject_id', $subject_id)
-                ->get();
+            ->where('user_id', $id)
+            ->where('subject_id', $subject_id)
+            ->get();
         if (count($checkUserSubject) >= 1) {
             if (count($checkStatusUser) >= 1) {
                 return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
@@ -336,22 +334,20 @@ class UserController extends Controller
         $repassword = $request->repassword;
         if ($password == $repassword) {
             $user = User::findOrFail($id);
+            if ($request->hasFile('avatar')) {  
+                $avatar = $this->uploadAvatar($request);
+            } else {
+                $avatar = $user->avatar;
+            }
             $attr = [
                 'name' => $request->get('name'),
                 'email' => $request->get('email'),
                 'password' => bcrypt($request->get('password')),
                 'phone' => $request->get('phone'),
                 'address' => $request->get('address'),
-                'role_id' => $request->get('role_id')
+                'role_id' => $request->get('role_id'),
+                'avatar' => $avatar,
             ];
-            if ($request->hasFile('avatar')) {  
-                $destinationDir = public_path('images/avatar');
-                $fileName = uniqid('avatar').'.'.$request->avatar->extension();
-                $request->avatar->move($destinationDir, $fileName);
-                $attr['avatar'] = '/images/avatar/'.$fileName;
-            } else {
-                $attr['avatar'] = $user->avatar;
-            }
             $user->update($attr);
 
             return redirect()->route('admin.users.index')->with('alert', trans('setting.edit_user_success'));    
@@ -369,8 +365,12 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->delete();
+        if (Auth::User()->role_id > $user->role_id) {
+            $user->delete();
 
-        return redirect()->route('admin.users.index')->with('alert', trans('setting.delete_user_success'));
+            return redirect()->route('admin.users.index')->with('alert', trans('setting.delete_user_success'));
+        } else {
+            return redirect()->route('admin.users.index')->with('error', trans('setting.delete_user_fail'));
+        }
     }
 }
