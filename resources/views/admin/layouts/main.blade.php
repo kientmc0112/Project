@@ -157,6 +157,7 @@
                 if (month == 0) {
                     $('#year').val(--year);
                     $('#month').val(12);
+                    month = 12;
                 } else {
                     $('#month').val(month);
                 }
@@ -232,6 +233,7 @@
                 if (month == 13) {
                     $('#year').val(++year);
                     $('#month').val(1);
+                    month = 1;
                 } else {
                     $('#month').val(month);
                 }
@@ -243,11 +245,9 @@
                         year: year,
                     },
                     success: function (value) {
-                        
                         Chart.defaults.global.defaultFontFamily =
                             '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
                         Chart.defaults.global.defaultFontColor = '#292b2c';
-
                         var ctx = document.getElementById("myAreaChart");
                         var myLineChart = new Chart(ctx, {
                             type: 'line',
