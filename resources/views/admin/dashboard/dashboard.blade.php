@@ -86,8 +86,8 @@
             
             <div class="form-group text-center">
                 <button style="margin-right: 10px;" id="pre" class="btn btn-primary" name="pre"><<</button>
-                <input style="width: 35px;" type="number" id="month" name="month" value="{{ $now['mon'] }}">
-                <input style="width: 50px;" type="number" id="year" name="year" value="{{ $now['year'] }}">
+                <input style="width: 35px;" type="number" id="month" name="month" disabled value="{{ $now['mon'] }}">
+                <input style="width: 50px;" type="number" id="year" name="year" disabled value="{{ $now['year'] }}">
                 <button style="margin-left: 10px;" id="next" class="btn btn-primary" name="next">>></button>
             </div>
         </div>
