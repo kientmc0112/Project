@@ -81,16 +81,21 @@
             Area Chart Example</div>
         <div class="card-body">
             <canvas id="myAreaChart" width="100%" height="30"></canvas>
+            <canvas id="myAreaChart1" width="100%" height="30"></canvas>
         </div>
         <div class="card-footer small text-muted">
-            
             <div class="form-group text-center">
-                <button style="margin-right: 10px;" id="pre" class="btn btn-primary" name="pre"><<</button>
-                <input style="width: 35px;" type="number" id="month" name="month" disabled value="{{ $now['mon'] }}">
-                <input style="width: 50px;" type="number" id="year" name="year" disabled value="{{ $now['year'] }}">
-                <button style="margin-left: 10px;" id="next" class="btn btn-primary" name="next">>></button>
+                <form action="{{ route('admin.chart.pre') }}" method="POST">
+                    @csrf
+                    <button style="margin-right: 10px;" id="pre" class="btn btn-primary" name="pre" value="{{ $now['year'] }}"><<</button>
+                </form>
+                <form action="admin.chart.next" method="POST">
+                    @csrf
+                    <button style="margin-left: 10px;" id="next" class="btn btn-primary" name="next" value="{{ $now['year'] }}">>></button>
+                </form>
             </div>
         </div>
+        <input type="hidden" id="count_chart" value="{{ json_encode($count) }}">
     </div>
     <div class="card mb-3">
         <div class="card-header">
@@ -584,4 +589,5 @@
     </div>
 
 </div>
+
 @endsection

@@ -25,6 +25,8 @@
     {{-- Datatable --}}
     <link rel="stylesheet" type="text/css"
         href="{{ asset('bower_components/datatable/DataTables/datatables.min.css') }}" />
+        <script src="{{ asset('bower_components/assets/admin/vendor/chart.js/Chart.min.js') }}"></script>
+    
 </head>
 
 <body id="page-top">
@@ -61,244 +63,62 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-    <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('bower_components/assets/admin/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('bower_components/assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-
-    <!-- Core plugin JavaScript-->
     <script src="{{ asset('bower_components/assets/admin/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-
-    <!-- Page level plugin JavaScript-->
-    <script src="{{ asset('bower_components/assets/admin/vendor/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('bower_components/assets/admin/vendor/datatables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('bower_components/assets/admin/vendor/datatables/dataTables.bootstrap4.js') }}"></script>
-
-    <!-- Custom scripts for all pages-->
+            
     <script src="{{ asset('bower_components/assets/admin/js/sb-admin.min.js') }}"></script>
-
-    <!-- Demo scripts for this page-->
     <script src="{{ asset('bower_components/assets/admin/js/demo/datatables-demo.js') }}"></script>
     <script src="{{ asset('bower_components/assets/admin/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bower_components/datatable/DataTables/datatables.min.js') }}">
     </script>
     <script src="{{ asset('bower_components/assets-client/js/custom.js') }}"></script>
-    <script>
+    <script text="text/javascript">
         $(document).ready(function () {
-            $.ajax({
-                url: 'admin/chart',
-                method: 'get',
-                success: function (value) {
-                    Chart.defaults.global.defaultFontFamily =
-                        '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-                    Chart.defaults.global.defaultFontColor = '#292b2c';
-
-                    var ctx = document.getElementById("myAreaChart");
-                    var myLineChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: $.each(value.courseName, function (key, value) {value.courseName}),
-                            datasets: [{
-                                label: "Sessions",
-                                lineTension: 0.3,
-                                backgroundColor: "rgba(2,117,216,0.2)",
-                                borderColor: "rgba(2,117,216,1)",
-                                pointRadius: 5,
-                                pointBackgroundColor: "rgba(2,117,216,1)",
-                                pointBorderColor: "rgba(255,255,255,0.8)",
-                                pointHoverRadius: 5,
-                                pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                                pointHitRadius: 50,
-                                pointBorderWidth: 2,
-                                data: $.each(value.count, function (key, value) {value.count}),
-                            }],
-                        },
-                        options: {
-                            scales: {
-                                xAxes: [{
-                                    time: {
-                                        unit: 'date'
-                                    },
-                                    gridLines: {
-                                        display: false
-                                    },
-                                    ticks: {
-                                        maxTicksLimit: 7
-                                    }
-                                }],
-                                yAxes: [{
-                                    ticks: {
-                                        min: 0,
-                                        max: (value.count.max),
-                                        maxTicksLimit: 5
-                                    },
-                                    gridLines: {
-                                        color: "rgba(0, 0, 0, .125)",
-                                    }
-                                }],
-                            },
-                            legend: {
-                                display: false
-                            }
-                        }
-                    });
+            var count = $("#count_chart").val();
+            count = JSON.parse(count);
+            Chart.defaults.global.defaultFontFamily =
+                '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+            Chart.defaults.global.defaultFontColor = '#292b2c';
+            var ctx = document.getElementById("myAreaChart");
+            var myLineChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [" Month 1", " Month 2", " Month 3", " Month 4", " Month 5", " Month 6", " Month 7", " Month 8", " Month 9", " Month 10", " Month 11", " Month 12"],
+                    datasets: [{
+                        label: "Sessions",
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(2,117,216,0.2)",
+                        borderColor: "rgba(2,117,216,1)",
+                        pointRadius: 5,
+                        pointBackgroundColor: "rgba(2,117,216,1)",
+                        pointBorderColor: "rgba(255,255,255,0.8)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                        pointHitRadius: 50,
+                        pointBorderWidth: 2,
+                        data: count,
+                    }],
                 },
-            })
-        });
-    </script>
-    <script>
-        $(document).ready(function(){
-            $('#pre').click(function(e){
-                e.preventDefault();
-                let month = $('#month').val()
-                let year = $('#year').val()
-                --month;
-                if (month == 0) {
-                    $('#year').val(--year);
-                    $('#month').val(12);
-                    month = 12;
-                } else {
-                    $('#month').val(month);
-                }
-                $.ajax({
-                    url: 'admin/chart/update',
-                    method: 'post',
-                    data: {
-                        month: month,
-                        year: year,
-                    },
-                    success: function (value) {
-                        
-                        Chart.defaults.global.defaultFontFamily =
-                            '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-                        Chart.defaults.global.defaultFontColor = '#292b2c';
-
-                        var ctx = document.getElementById("myAreaChart");
-                        var myLineChart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: $.each(value.courseName, function (key, value) {value.courseName}),
-                                datasets: [{
-                                    label: "Sessions",
-                                    lineTension: 0.3,
-                                    backgroundColor: "rgba(2,117,216,0.2)",
-                                    borderColor: "rgba(2,117,216,1)",
-                                    pointRadius: 5,
-                                    pointBackgroundColor: "rgba(2,117,216,1)",
-                                    pointBorderColor: "rgba(255,255,255,0.8)",
-                                    pointHoverRadius: 5,
-                                    pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                                    pointHitRadius: 50,
-                                    pointBorderWidth: 2,
-                                    data: $.each(value.count, function (key, value) {value.count}),
-                                }],
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                maxTicksLimit: 5
                             },
-                            options: {
-                                scales: {
-                                    xAxes: [{
-                                        time: {
-                                            unit: 'date'
-                                        },
-                                        gridLines: {
-                                            display: false
-                                        },
-                                        ticks: {
-                                            maxTicksLimit: 7
-                                        }
-                                    }],
-                                    yAxes: [{
-                                        ticks: {
-                                            min: 0,
-                                            max: (value.count.max),
-                                            maxTicksLimit: 5
-                                        },
-                                        gridLines: {
-                                            color: "rgba(0, 0, 0, .125)",
-                                        }
-                                    }],
-                                },
-                                legend: {
-                                    display: false
-                                }
+                            gridLines: {
+                                color: "rgba(0, 0, 0, .125)",
                             }
-                        });
+                        }],
                     },
-                })
-            });
-            $('#next').click(function(){
-                var month = $('#month').val()
-                var year = $('#year').val()
-                ++month;
-                if (month == 13) {
-                    $('#year').val(++year);
-                    $('#month').val(1);
-                    month = 1;
-                } else {
-                    $('#month').val(month);
+                    hover: {mode: null},
+                    tooltips: {enabled: false},
                 }
-                $.ajax({
-                    url: 'admin/chart/update',
-                    method: 'post',
-                    data: {
-                        month: month,
-                        year: year,
-                    },
-                    success: function (value) {
-                        Chart.defaults.global.defaultFontFamily =
-                            '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-                        Chart.defaults.global.defaultFontColor = '#292b2c';
-                        var ctx = document.getElementById("myAreaChart");
-                        var myLineChart = new Chart(ctx, {
-                            type: 'line',
-                            data: {
-                                labels: $.each(value.courseName, function (key, value) {value.courseName}),
-                                datasets: [{
-                                    label: "Sessions",
-                                    lineTension: 0.3,
-                                    backgroundColor: "rgba(2,117,216,0.2)",
-                                    borderColor: "rgba(2,117,216,1)",
-                                    pointRadius: 5,
-                                    pointBackgroundColor: "rgba(2,117,216,1)",
-                                    pointBorderColor: "rgba(255,255,255,0.8)",
-                                    pointHoverRadius: 5,
-                                    pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                                    pointHitRadius: 50,
-                                    pointBorderWidth: 2,
-                                    data: $.each(value.count, function (key, value) {value.count}),
-                                }],
-                            },
-                            options: {
-                                scales: {
-                                    xAxes: [{
-                                        time: {
-                                            unit: 'date'
-                                        },
-                                        gridLines: {
-                                            display: false
-                                        },
-                                        ticks: {
-                                            maxTicksLimit: 7
-                                        }
-                                    }],
-                                    yAxes: [{
-                                        ticks: {
-                                            min: 0,
-                                            max: (value.count.max),
-                                            maxTicksLimit: 5
-                                        },
-                                        gridLines: {
-                                            color: "rgba(0, 0, 0, .125)",
-                                        }
-                                    }],
-                                },
-                                legend: {
-                                    display: false
-                                }
-                            }
-                        });
-                    },
-                })
             });
         });
     </script>
