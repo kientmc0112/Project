@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Course;
+use App\Models\User;
 use Carbon\Carbon;
 use Auth;
 use DB;
@@ -13,35 +14,41 @@ class ChartController extends Controller
 {
     public function chart()
     {
-        $month = Carbon::now()->month;
-        $listCourse = Course::all();
-        foreach ($listCourse as $value) {
-            $userCourse = DB::table('user_course')
-                ->whereMonth('created_at', $month)
-                ->where('course_id', $value->id)
-                ->get();
-            $count[] = count($userCourse);
-            $courseName[] = $value->name;
+        $year = Carbon::now()->year;
+        for ($i=1; $i <= 12 ; $i++) { 
+            $users = DB::table('users')
+                ->where('role_id', 0)
+                ->whereMonth('created_at', '<=', $i)
+                ->whereYear('created_at', $year)
+                ->count();
+            $userDelete = DB::table('users')
+                ->where('role_id', 0)
+                ->whereMonth('deleted_at', '<' ,  $i)
+                ->whereYear('created_at', $year)
+                ->count();
+            $count[] = $users + $userDelete;
         }
         
-        return response()->json(['count' => $count , 'courseName' => $courseName], 200);
+        return response()->json(['count' => $count], 200);
     }
 
     public function update(Request $request)
     {
-        $month = $request->month;
-        $year = $request->year;
-        $listCourse = Course::all();
-        foreach ($listCourse as $value) {
-            $userCourse = DB::table('user_course')
-                ->whereMonth('created_at', $month)
+        dd($request);
+        for ($i=1; $i <= 12 ; $i++) { 
+            $users = DB::table('users')
+                ->where('role_id', 0)
+                ->whereMonth('created_at', '<=', $i)
                 ->whereYear('created_at', $year)
-                ->where('course_id', $value->id)
-                ->get();
-            $count[] = count($userCourse);
-            $courseName[] = $value->name;
+                ->count();
+            $userDelete = DB::table('users')
+                ->where('role_id', 0)
+                ->whereMonth('deleted_at', '<' ,  $i)
+                ->whereYear('created_at', $year)
+                ->count();
+            $count[] = $users + $userDelete;
         }
         
-        return response()->json(['count' => $count , 'courseName' => $courseName], 200);
+        return response()->json(['count' => $count], 200);
     }
 }

@@ -77,20 +77,25 @@
     <div class="card mb-3">
         @php $now = getdate(); @endphp
         <div class="card-header">
-            <i class="fas fa-chart-area"></i>
-            Area Chart Example</div>
+            <i class="fas fa-chart-area"></i> Chart
+            <form action="{{ route('admin.chart.update') }}" method="POST" style="margin-top: -29px;margin-left: 70px;" id="form_chart">
+                    @csrf
+                    <select id="year_chart" name="year">
+                        <option>Year</option>
+                        <option value="{{ $now['year'] }}">{{ $now['year'] }}</option>
+                        <option value="{{ $now['year']-1 }}">{{ $now['year']-1 }}</option>
+                        <option value="{{ $now['year']-2 }}">{{ $now['year']-2 }}</option>
+                        <option value="{{ $now['year']-3 }}">{{ $now['year']-3 }}</option>
+                    </select>
+                </form>
+            </div>
         <div class="card-body">
             <canvas id="myAreaChart" width="100%" height="30"></canvas>
+            <canvas id="myAreaChart1" width="100%" height="30"></canvas>
         </div>
         <div class="card-footer small text-muted">
-            
-            <div class="form-group text-center">
-                <button style="margin-right: 10px;" id="pre" class="btn btn-primary" name="pre"><<</button>
-                <input style="width: 35px;" type="number" id="month" name="month" disabled value="{{ $now['mon'] }}">
-                <input style="width: 50px;" type="number" id="year" name="year" disabled value="{{ $now['year'] }}">
-                <button style="margin-left: 10px;" id="next" class="btn btn-primary" name="next">>></button>
-            </div>
         </div>
+        <input type="hidden" id="count_chart" value="{{ json_encode($count) }}">
     </div>
     <div class="card mb-3">
         <div class="card-header">
@@ -584,4 +589,5 @@
     </div>
 
 </div>
+
 @endsection
