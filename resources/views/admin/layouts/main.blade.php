@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,7 +15,6 @@
     <link href="{{ asset('bower_components/assets/admin/css/sb-admin.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/datatable/DataTables/datatables.min.css') }}" />
     <script src="{{ asset('bower_components/assets/admin/vendor/chart.js/Chart.min.js') }}"></script>
-    
 </head>
 
 <body id="page-top">
@@ -37,7 +35,6 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('bower_components/assets/admin/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('bower_components/assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

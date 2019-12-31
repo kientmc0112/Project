@@ -47,4 +47,10 @@ class DashboardController extends Controller
 
         return view('admin.dashboard.dashboard', compact('count'));
     }
+    public function chart()
+    {
+        $user = User::all();
+
+        return response()->json(['user' => $user], 200);
+    }
 }
