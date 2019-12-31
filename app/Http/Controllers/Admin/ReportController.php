@@ -18,6 +18,7 @@ class ReportController extends Controller
     {
         $userTask= DB::table('user_task')
         ->whereNull('comment')
+        ->whereNotNull('report')
         ->paginate(5);
         $users = User::all();
         $tasks = Task::all();

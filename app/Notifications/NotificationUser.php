@@ -7,18 +7,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NotificationToUser extends Notification
+class NotificationUser extends Notification
 {
     use Queueable;
+
+    protected $data;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -29,7 +31,7 @@ class NotificationToUser extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -38,13 +40,12 @@ class NotificationToUser extends Notification
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    // public function toMail($notifiable)
-    // {
-    //     return (new MailMessage)
-    //                 ->line('The introduction to the notification.')
-    //                 ->action('Notification Action', url('/'))
-    //                 ->line('Thank you for using our application!');
-    // }
+    public function toMail($notifiable)
+    {
+        $data = $this->data;
+        return (new MailMessage)
+                    ->line('bạn đã được thêm vào '. $data);
+    }
 
     /**
      * Get the array representation of the notification.
@@ -54,8 +55,6 @@ class NotificationToUser extends Notification
      */
     public function toArray($notifiable)
     {
-        return [
-            //
-        ];
+        return $this->data;
     }
 }
