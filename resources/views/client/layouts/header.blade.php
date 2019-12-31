@@ -4,33 +4,35 @@
             <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
         </div>
     </div>
-    <div id="disable-preloader" class="btn btn-default btn-sm">{{ __('Disable Preloader') }}</div>
+    <div id="disable-preloader" class="btn btn-default btn-sm">{{ trans('layouts.disable') }}</div>
 </div>
 <header id="header" class="header">
     <div class="header-top bg-theme-color-2 sm-text-center p-0">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="widget no-border m-0">
                         <ul class="list-inline font-13 sm-text-center mt-5">
                             <li>
-                                <a class="text-white" href="#">{{ __('FAQ') }}</a>
-                            </li>
-                            <li class="text-white">|</li>
-                            <li>
-                                <a class="text-white" href="#">{{ __('Help Desk') }}</a>
-                            </li>
-                            <li class="text-white">|</li>
-                            <li>
-                                <a class="text-white" id="logout" href="{{ route('logout') }}">{{ __('Logout') }}</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                <a class="text-white" id="logout" href="{{ route('logout') }}">{{ trans('layouts.logout') }}</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                     @csrf
                                 </form>
                             </li>
+                            <li class="text-white">|</li>
+                            <li class="text-white">
+                                <a class="text-white" href="{{ route('user.show', Auth::user()->id) }}">My Profile</a>
+                            </li>
+                            @if(Auth::User()->role_id == 1)
+                                <li class="text-white">|</li>
+                                <li class="text-white">
+                                    <a class="text-white"  href="{{ route('admin.dashboard.index') }}">MyAdmin</a>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="widget m-0 pull-right sm-pull-none sm-text-center">
                         <ul class="list-inline pull-right">
                             <li class="mb-0 pb-0">
@@ -71,7 +73,7 @@
                         <ul class="list-inline">
                             <li><i class="fa fa-phone-square text-theme-colored font-36 mt-5 sm-display-block"></i></li>
                             <li>
-                                <a href="#" class="font-12 text-gray text-uppercase">{{ __('Call us today!') }}</a>
+                                <a href="#" class="font-12 text-gray text-uppercase">{{ trans('layouts.call') }}</a>
                                 <h5 class="font-14 m-0">{{ _('+(012) 345 6789') }}</h5>
                             </li>
                         </ul>
@@ -82,8 +84,8 @@
                         <ul class="list-inline">
                             <li><i class="fa fa-clock-o text-theme-colored font-36 mt-5 sm-display-block"></i></li>
                             <li>
-                                <a href="#" class="font-12 text-gray text-uppercase">{{ __('We are open!') }}</a>
-                                <h5 class="font-13 text-black m-0"> {{ __('Mon-Fri 8:00-16:00') }}</h5>
+                                <a href="#" class="font-12 text-gray text-uppercase">{{ trans('layouts.open') }}</a>
+                                <h5 class="font-13 text-black m-0"> {{ trans('layouts.hour') }}</h5>
                             </li>
                         </ul>
                     </div>
@@ -97,27 +99,21 @@
                 <nav id="menuzord" class="menuzord bg-theme-colored pull-left flip menuzord-responsive">
                     <ul class="menuzord-menu">
                         <li class="active">
-                            <a href="#home">{{ __('Home') }}</a>
+                            <a href="{{ route('home') }}">{{ trans('layouts.home') }}</a>
+                        </li>
+                        <li><a href="{{ route('course.index') }}">{{ trans('layouts.courses') }}</a>
                         </li>
                         <li>
-                            <a href="#">{{ __('Categories') }} <span class="label label-info">{{ __('New') }}</span></a>
-                        </li>
-                        <li><a href="#">{{ __('Courses') }}</a>
+                            <a href="">{{ trans('layouts.subject') }} <span class="label label-info">{{ trans('layouts.new') }}</span></a>
                         </li>
                         <li>
-                            <a href="#">{{ __('Subject') }} <span class="label label-info">{{ __('New') }}</span></a>
+                            <a href="#home">{{ trans('layouts.task') }}</a>
                         </li>
                         <li>
-                            <a href="#home">{{ __('Supervisor') }}</a>
+                            <a href="#">{{ trans('layouts.active') }}</a>
                         </li>
                         <li>
-                            <a href="#home">{{ __('Task') }}</a>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Activities') }}</a>
-                        </li>
-                        <li>
-                            <a href="#">{{ __('Calender') }}</a>
+                            <a href="{{ route('calendar.show') }}">{{ trans('layouts.calendar') }}</a>
                         </li>
                     </ul>
                 </nav>

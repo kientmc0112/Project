@@ -1,0 +1,62 @@
+[
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/127.0.0.1:8000\/ajax-load\/bootstrap-parent-modal.html - Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "source": "network",
+        "timestamp": 1577175118305
+    },
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/127.0.0.1:8000\/color-switcher\/style-switcher.html - Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "source": "network",
+        "timestamp": 1577175118318
+    },
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/127.0.0.1:8000\/bower_components\/datatable\/DataTables\/datatables.min.css - Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "source": "network",
+        "timestamp": 1577175119432
+    },
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/127.0.0.1:8000\/js\/app.js 285:0 Uncaught ReferenceError: $ is not defined",
+        "source": "javascript",
+        "timestamp": 1577175119477
+    },
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/127.0.0.1:8000\/bower_components\/datatable\/DataTables\/datatables.min.js - Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "source": "network",
+        "timestamp": 1577175119736
+    },
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/127.0.0.1:8000\/js\/app.js 196:10 Uncaught ReferenceError: calendarEvents is not defined",
+        "source": "javascript",
+        "timestamp": 1577175119796
+    },
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/127.0.0.1:8000\/bower_components\/datatable\/DataTables\/datatables.min.js - Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "source": "network",
+        "timestamp": 1577175119877
+    },
+    {
+        "level": "WARNING",
+        "message": "http:\/\/127.0.0.1:8000\/bower_components\/assets\/admin\/vendor\/jquery\/jquery.min.js 1:31007 \"jQuery.Deferred exception: $(...).datepicker is not a function\" \"TypeError: $(...).datepicker is not a function\\n    at Object.TM_datePicker (http:\/\/127.0.0.1:8000\/bower_components\/assets-client\/js\/custom.js:181:33)\\n    at Object.init (http:\/\/127.0.0.1:8000\/bower_components\/assets-client\/js\/custom.js:160:36)\\n    at HTMLDocument.init (http:\/\/127.0.0.1:8000\/bower_components\/assets-client\/js\/custom.js:1991:36)\\n    at e (http:\/\/127.0.0.1:8000\/bower_components\/assets\/admin\/vendor\/jquery\/jquery.min.js:2:29453)\\n    at t (http:\/\/127.0.0.1:8000\/bower_components\/assets\/admin\/vendor\/jquery\/jquery.min.js:2:29755)\" undefined",
+        "source": "console-api",
+        "timestamp": 1577175120064
+    },
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/127.0.0.1:8000\/bower_components\/assets-client\/js\/custom.js 759:22 Uncaught ReferenceError: WOW is not defined",
+        "source": "javascript",
+        "timestamp": 1577175120064
+    },
+    {
+        "level": "SEVERE",
+        "message": "http:\/\/127.0.0.1:8000\/bower_components\/assets\/admin\/vendor\/jquery\/jquery.min.js 1:31117 Uncaught TypeError: $(...).datepicker is not a function",
+        "source": "javascript",
+        "timestamp": 1577175120106
+    }
+]

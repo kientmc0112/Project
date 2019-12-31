@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Task;
 use DB;
 use Auth;
 
 class ReportController extends Controller
 {
+    protected $userRepository;
+
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -39,18 +44,28 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        $result = DB::table('user_task');
-        $attr = [
-            'user_id' => Auth::User()->id,
-            'report' => $request->get('report'),
-            'task_id' => $request->get('task_id'),
+        // $result = DB::table('user_task');
+        // $attr = [
+        //     'user_id' => Auth::User()->id,
+        //     'report' => $request->get('report'),
+        //     'task_id' => $request->get('task_id'),
+        //     'status' => 0,
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
+        // ];
+        // $result->insert($attr);
+
+        $user_id = Auth::User()->id;
+        $task_id = $request->get('task_id');
+        $user = $this->userRepository->find($user_id);
+        $user->tasks()->attach($task_id, [
             'status' => 0,
             'created_at' => now(),
             'updated_at' => now(),
-        ];
-        $result->insert($attr);
+            'report' => $request->get('report'),
+        ]);
 
-        return response()->json(['result' => $result], config('user.200-OK'));
+        return response()->json('OK', config('user.200-OK'));
     }
 
     /**

@@ -2,14 +2,30 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\Course\CourseRepositoryInterface;
+use App\Repositories\Task\TaskRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Http\Requests\ClientRequest;
 use Illuminate\Support\Facades\Validator;
+use DB;
 
 class UserController extends Controller
 {
+    protected $courseRepository;
+    protected $subjectRepository;
+    protected $taskRepository;
+    protected $userRepository;
+
+    public function __construct(SubjectRepositoryInterface $subjectRepository, TaskRepositoryInterface $taskRepository, CourseRepositoryInterface $courseRepository, UserRepositoryInterface $userRepository)
+    {
+        $this->courseRepository = $courseRepository;
+        $this->subjectRepository = $subjectRepository;
+        $this->taskRepository = $taskRepository;
+        $this->userRepository = $userRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -49,9 +65,20 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        $user->courses()->get();
-        return view('client.user.profile', compact('user'));
+        $user = $this->userRepository->find($id);
+        $courses = DB::table('user_course')
+            ->where('user_id', $id)
+            ->get();
+        $listCourse = $this->courseRepository->getAll();
+        $subjects = DB::table('user_subject')
+            ->where('user_id', $id)
+            ->get();
+        $listSubject = $this->subjectRepository->getAll();
+        $tasks = DB::table('user_task')
+        ->where('user_id', $id)
+        ->get();
+        $listTask = $this->taskRepository->getAll();
+        return view('client.user.profile', compact('user', 'courses', 'listCourse', 'subjects', 'listSubject', 'tasks', 'listTask'));
     }
 
     /**
@@ -98,14 +125,13 @@ class UserController extends Controller
             ], config('user.422-UE'));
         }
         try {
-            $user = User::findOrFail($id);
             $attr = [
                 'name' => $request->get('name'),
                 'phone' => $request->get('phone'),
                 'address' => $request->get('address'),
                 'avatar' => $request->get('avatar'),
             ];
-            $user->update($attr);
+            $user = $this->userRepository->update($id, $attr);
 
             return response()->json(['user' => $user], config('user.200-OK'));
         } catch (Exception $e) {

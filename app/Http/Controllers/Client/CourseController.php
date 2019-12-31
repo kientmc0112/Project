@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Repositories\Course\CourseRepositoryInterface;
+use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Course;
-use App\Models\Category;
-use App\Models\User;
+use DB;
+use App\Models\Subject;
 
 class CourseController extends Controller
 {
+    protected $courseRepository;
+    protected $categoryRepository;
+
+    public function __construct(CourseRepositoryInterface $courseRepository, CategoryRepositoryInterface $categoryRepository)
+    {
+        $this->courseRepository = $courseRepository;
+        $this->categoryRepository = $categoryRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,9 +26,9 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with('users')->paginate(config('course.PagePaginate'));
+        $courses = $this->courseRepository->getCourseByTime();
 
-        $categories = Category::where('parent_id', 0)->with('categories')->paginate(config('course.PagePaginate'));
+        $categories = $this->categoryRepository->getCategoryChildByName();
 
         return view('client.course.index', compact('courses', 'categories'));
     }
@@ -53,9 +62,10 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        $course = Course::find($id);
-        $course->subjects()->get();
-        $course->users()->get();
+        // $course = Course::find($id);
+        $course = $this->courseRepository->find($id);
+        // $course = Course::find($id)->with('subjects', 'users')->get();
+        // dd($course);
 
         return view('client.course.course', compact('course'));
     }
@@ -94,12 +104,13 @@ class CourseController extends Controller
         //
     }
 
-    public function history($id) {
-        $course = Course::find($id);
-        $subjects = $course->subjects()->latest('created_at')->paginate(config('course.PagePaginate'));
+    public function history($id)
+    {
+        $subjects = $this->courseRepository->getSubjectByCourse($id);
         // $subjects->users()->get();
         // $tasks = $subjects->tasks()->get();
         // $task = $subject->tasks()->get();
+        // dd($subjects);
         return view('client.history.subjects', compact('subjects'));
     }
 }

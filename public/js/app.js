@@ -95,13 +95,13 @@
 
 $(document).ready(function () {
   $('#btn_add').click(function () {
-    $('#input').clone().appendTo('#add_main');
+    $('#input').clone().appendTo('.add_main');
   });
   $(document).on('click', '#btn_remove', function () {
     $(this).parents('#input').remove();
   });
   $(document).on('click', '#btn_remove_edit', function () {
-    $(this).parents('#add_main').remove();
+    $(this).parents('.add_sub').remove();
   });
 });
 
@@ -138,7 +138,21 @@ $(document).ready(function () {
       }
     });
   });
-});
+}); // $(document).ready(function (event) {
+//     event.preventDefault();
+//     $('#btn-reset').on('click', function(){
+//         $.ajax({
+//             url: 'dashboard/chart',
+//             method: 'GET',
+//             success: function () {
+//                 alert('oke');
+//             },
+//             error: function () {
+//                 alert('error');
+//             }
+//         });
+//     })
+// });
 
 /***/ }),
 
@@ -184,20 +198,18 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-if (typeof calendarEvents !== "undefined") {
-  $('#full-event-calendar').fullCalendar({
-    header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'month,agendaWeek,agendaDay'
-    },
-    selectable: true,
-    selectHelper: true,
-    editable: true,
-    eventLimit: true,
-    events: calendarEvents
-  });
-}
+$('#full-event-calendar').fullCalendar({
+  header: {
+    left: 'prev,next today',
+    center: 'title',
+    right: 'month,agendaWeek,agendaDay'
+  },
+  selectable: true,
+  selectHelper: true,
+  editable: true,
+  eventLimit: true,
+  events: calendarEvents
+});
 
 /***/ }),
 
@@ -228,6 +240,17 @@ $(document).ready(function () {
 
 /***/ }),
 
+/***/ "./resources/js/chart-area-demo.js":
+/*!*****************************************!*\
+  !*** ./resources/js/chart-area-demo.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
 /***/ "./resources/js/checkconfirm.js":
 /*!**************************************!*\
   !*** ./resources/js/checkconfirm.js ***!
@@ -235,10 +258,6 @@ $(document).ready(function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-// function checkConfirm() {
-//     var conf = confirm("Bạn có chắc chắn muốn xóa ?");
-//     return conf;
-// }
 $(document).ready(function () {
   $('.checkconfirm').on('click', function () {
     var conf = confirm("Bạn có chắc chắn muốn xóa ?");
@@ -325,9 +344,9 @@ $(document).ready(function () {
 /***/ }),
 
 /***/ 0:
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/js/logout.js ./resources/js/courses.js ./resources/js/changeimg.js ./resources/js/option.js ./resources/js/datatable.js ./resources/js/addsubject.js ./resources/js/checkconfirm.js ./resources/js/ajax.js ./resources/js/calendarevent.js ./resources/sass/app.scss ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/js/logout.js ./resources/js/courses.js ./resources/js/changeimg.js ./resources/js/option.js ./resources/js/datatable.js ./resources/js/addsubject.js ./resources/js/checkconfirm.js ./resources/js/ajax.js ./resources/js/calendarevent.js ./resources/js/chart-area-demo.js ./resources/sass/app.scss ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -341,6 +360,7 @@ __webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/addsubject.js *
 __webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/checkconfirm.js */"./resources/js/checkconfirm.js");
 __webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/ajax.js */"./resources/js/ajax.js");
 __webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/calendarevent.js */"./resources/js/calendarevent.js");
+__webpack_require__(/*! /home/chitt/Desktop/Project/resources/js/chart-area-demo.js */"./resources/js/chart-area-demo.js");
 module.exports = __webpack_require__(/*! /home/chitt/Desktop/Project/resources/sass/app.scss */"./resources/sass/app.scss");
 
 

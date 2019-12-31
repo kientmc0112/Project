@@ -112,6 +112,7 @@ return [
     'subject_id_required' => 'Subject Trống!!! Vui Lòng Nhập Đầy Đủ Thông Tin',
     'subject_id_min' => 'Subject < 0',
     'subject_id_numeric' => 'Vui Lòng Chọn Lại Subject',
+    'check_user_subject' => 'User Đã Tham Gia Subject! Vui Lòng Chọn Subject Khác',
 
     'assign_user_task_success' => 'Chỉ Định User Vào Task Thành Công!!!',
     'assign_user_task_fail' => 'User Chưa Tham Gia Subject Cha!!!',

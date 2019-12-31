@@ -35,5 +35,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/show', 'ReportController@show')->name('report.show');
     });
 
-    Route::get('/calender', 'CalendarController@index');
+    Route::get('calendars', 'CalendarController@show')->name('calendar.show');
+
+    Route::get('/', 'HomeController@index')->name('home');
+
+    Route::get('/test/{id}', 'CourseController@test')->name('course.test');
 });

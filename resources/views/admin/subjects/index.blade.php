@@ -37,13 +37,13 @@
                                                                 <th id="courses">{{ trans('setting.courses') }}</th>
                                                                 <th id="status">{{ trans('setting.status') }}</th>
                                                                 <th>{{ trans('setting.description') }}</th>
-                                                                <th id="option">{{ trans('setting.options') }}</th>
+                                                                <th id="th-option">{{ trans('setting.options') }}</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($subjects as $subject)
+                                                            @foreach ($subjects as $key => $subject)
                                                             <tr>
-                                                                <td>{{ $subject->id }}</td>
+                                                                <td>{{ $key+1 }}</td>
                                                                 <td>
                                                                     <div class="row">
                                                                         <div class="col-md-12">

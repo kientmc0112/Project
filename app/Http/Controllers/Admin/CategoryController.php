@@ -6,9 +6,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Requests\CategoryRequest;
+use App\Repositories\Category\CategoryRepositoryInterface;
 
 class CategoryController extends Controller
 {
+    private $categoryRepository;
+
+    public function __construct (
+        CategoryRepositoryInterface  $categoryRepository
+    )
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,8 +26,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = $this->getSubCategories(0);
-        // print_r($categories);die;
+        $categories = $this->getSubCategories(config('configcategory.getSubCategoriesDefault'));
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -34,8 +43,10 @@ class CategoryController extends Controller
             ->get()
             ->map(function($query) use($ignore_id){
                 $query->sub = $this->getSubCategories($query->id, $ignore_id);
+
                 return $query;
             });
+
         return $categories;
     }
 
@@ -46,7 +57,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = $this->getSubCategories(0);
+        $categories = $this->getSubCategories(config('configcategory.getSubCategoriesDefault'));
+
         return view('admin.categories.create', compact('categories'));
     }
 
@@ -58,12 +70,12 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $category = new Category;
-        $category->create([
-            'parent_id' => $request->get('parent_id'),
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
+        $attributes = $request->only([
+            'parent_id',
+            'name',
+            'description',
         ]);
+        $this->categoryRepository->create($attributes);
         
         return redirect()->route('admin.categories.index')->with('alert', trans('setting.add_category_success'));
     }
@@ -87,9 +99,14 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::findOrFail($id);
-        $categories = $this->getSubCategories(0, $id);
-        return view('admin.categories.edit',compact('categories','category'));
+        try {
+            $category = $this->categoryRepository->find($id);
+            $categories = $this->getSubCategories(config('configcategory.getSubCategoriesDefault'), $id);
+
+            return view('admin.categories.edit',compact('categories','category'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     /**
@@ -101,14 +118,18 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, $id)
     {
-        $category = Category::findOrFail($id);
-        $category->update([
-            'parent_id' => $request->get('parent_id'),
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-        ]);
-        
-        return redirect()->route('admin.categories.index')->with('alert', trans('setting.edit_category_success'));
+        try {
+            $attributes = $request->only([
+                'parent_id',
+                'name',
+                'description',
+            ]);
+            $category = $this->categoryRepository->update($id, $attributes);
+
+            return redirect()->route('admin.categories.index')->with('alert', trans('setting.edit_category_success'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 
     /**
@@ -119,9 +140,12 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
+        try {
+            $this->categoryRepository->delete($id);
 
-        return redirect()->route('admin.categories.index')->with('alert', trans('setting.delete_category_success'));
+            return redirect()->route('admin.categories.index')->with('alert', trans('setting.delete_category_success'));
+        } catch (Exception $e) {
+            return redirect()->back()->with($e->getMessage());
+        }
     }
 }

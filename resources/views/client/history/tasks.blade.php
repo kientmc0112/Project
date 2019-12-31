@@ -1,39 +1,19 @@
-{{-- <table class="table table-striped table-schedule">
+<table class="table table-striped table-schedule">
     <thead>
         <tr class="bg-theme-colored">
-            <th>Name</th>
-            <th>Begin</th>
-            <th>End</th>
+            <th>{{ trans('layouts.date') }}</th>
+            <th>{{ trans('layouts.time') }}</th>
+            <th>{{ trans('layouts.event') }}</th>
         </tr>
     </thead>
     <tbody>
-    @foreach($tasks as $task)
-        @foreach($task->users as $user)
-            @if($user->id == Auth::User()->id)
-            <tr>
-                <td>{{ $task->name }}</td>
-                <td><strong>{{ $user->pivot->created_at }}</strong></td>
-                <td>{{ $user->pivot->updated_at }}</td>
-            </tr>
-            @endif
-        @endforeach
+    @foreach ($tasksHistory as $task)
+        <tr>
+            <td><strong>{{ substr($task['date'], 0, 10) }}</strong></td>
+            <td><em>{{ substr($task['date'], 11, 8) }}</em></td>
+            <td>{{ $task['content'] }}</td>
+        </tr>
     @endforeach
     </tbody>
 </table>
- --}}
-<table>
-    <pre>
-    @php
-        print_r($tasks)
-    @endphp
-    </pre>
-    @foreach($tasks as $task)
-        @foreach($task->users as $user)
-            @if($user->id == Auth::User()->id)
-                <p>{{ $task->name }} start at <strong>{{ $user->pivot->created_at }}</strong></p>
-                <p>{{ $task->name }} complete at <strong>{{ $user->pivot->updated_at }}</strong></p>
-            </tr>
-            @endif
-        @endforeach
-    @endforeach
-</div>
+

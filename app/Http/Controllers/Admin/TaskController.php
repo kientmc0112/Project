@@ -8,10 +8,28 @@ use App\Models\Task;
 use App\Models\Subject;
 use App\Models\User;
 use App\Http\Requests\TaskRequest;
+use App\Repositories\Task\TaskRepositoryInterface;
+use App\Repositories\Subject\SubjectRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use DB;
 
 class TaskController extends Controller
 {
+    private $taskRepository;
+    private $subjectRepository;
+    private $userRepository;
+
+    public function __construct(
+        TaskRepositoryInterface  $taskRepository,
+        SubjectRepositoryInterface  $subjectRepository,
+        UserRepositoryInterface  $userRepository
+    )
+    {
+        $this->taskRepository = $taskRepository;
+        $this->subjectRepository = $subjectRepository;
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +37,7 @@ class TaskController extends Controller
      */
     public function index()
     {   
-        $tasks = Task::latest('id')->with('subject')->paginate(config('page_paginate'));
+        $tasks = $this->taskRepository->getPaginate();
 
         return view('admin.tasks.index', compact('tasks'));
     }
@@ -31,7 +49,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $subjects = Subject::all();
+        $subjects = $this->subjectRepository->getAll();
         
         return view('admin.tasks.create', compact('subjects'));
     }
@@ -44,13 +62,12 @@ class TaskController extends Controller
      */
     public function store(TaskRequest $request)
     {
-        $task = new Task;
-        $attr = [
-            'subject_id' => $request->get('subject_id'),
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-        ];
-        $task->create($attr);
+        $attributes = $request->only([
+            'subject_id',
+            'name',
+            'description',
+        ]);
+        $this->taskRepository->create($attributes);
 
         return redirect()->route('admin.tasks.index')->with('alert', trans('setting.add_task_success'));
     }
@@ -64,9 +81,9 @@ class TaskController extends Controller
     public function show($id)
     {
         try {
-            $task = Task::findOrFail($id);
-            $userTask = Task::find($id)->users()->get();
-            $listUsers = User::all();
+            $task = $this->taskRepository->find($id);
+            $userTask = $task->users;
+            $listUsers = $this->userRepository->getAll();
             $statusUser = DB::table('user_task')
                 ->where('task_id', $id)
                 ->get();
@@ -80,7 +97,7 @@ class TaskController extends Controller
     public function assignTraineeTask(Request $request, $id)
     {
         try {
-            $task = Task::findOrFail($id);
+            $task = $this->taskRepository->find($id);
             $check = DB::table('user_task')
                 ->where('task_id', $id)
                 ->where('user_id', $request->user_id)
@@ -89,7 +106,7 @@ class TaskController extends Controller
                 ->where('user_id', $request->user_id)
                 ->where('status', config('configtask.status_user_activity'))
                 ->get();
-            $subject_id = Task::find($id)->subject_id;
+            $subject_id = $this->taskRepository->find($id)->subject_id;
             $checkUserSubject = DB::table('user_subject')
                 ->where('user_id', $request->user_id)
                 ->where('subject_id', $subject_id)
@@ -101,7 +118,7 @@ class TaskController extends Controller
                     if (count($check) >= config('configtask.check_user_task')) {
                         return redirect()->route('admin.tasks.show', $task->id)->with('error', trans('setting.error_task_exist'));
                     } else {
-                        Task::find($id)->users()->attach($request->user_id);
+                        $this->taskRepository->find($id)->users()->attach($request->user_id);
 
                         return redirect()->route('admin.tasks.show', $task->id)->with('alert', trans('setting.alert_assign_task'));
                     }
@@ -120,7 +137,7 @@ class TaskController extends Controller
             ->where('task_id', $id)
             ->where('user_id', $request->user_id)
             ->update(['status' => config('configtask.status_user_finished')]);
-        $subject = Task::find($id)->subject_id;
+        $subject = $this->taskRepository->find($id)->subject_id;
         $check = DB::table('user_subject')
             ->where('subject_id', $subject)
             ->where('user_id', $request->user_id)
@@ -145,8 +162,8 @@ class TaskController extends Controller
     public function edit($id)
     {
         try {
-            $task = Task::findOrFail($id);
-            $subjects = Subject::all();
+            $task = $this->taskRepository->find($id);
+            $subjects = $this->subjectRepository->getAll();
             
             return view('admin.tasks.edit', compact('subjects', 'task'))->with('alert', trans('setting.edit_task_success'));
         } catch (Exception $e) {
@@ -163,15 +180,15 @@ class TaskController extends Controller
      */
     public function update(TaskRequest $request, $id)
     {
-        try {
-            $task = Task::findOrFail($id);
-            $attr = [
-                'subject_id' => $request->get('subject_id'),
-                'name' => $request->get('name'),
-                'description' => $request->get('description'),
-            ];
-            $task->update($attr);
 
+        try {
+            $attributes = $request->only([
+                'subject_id',
+                'name',
+                'description',
+            ]);
+            $this->taskRepository->update($id, $attributes);
+            
             return redirect()->route('admin.tasks.index')->with('alert', trans('setting.edit_task_success'));
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
@@ -187,8 +204,7 @@ class TaskController extends Controller
     public function destroy($id)
     {
         try {
-            $task = Task::findOrFail($id);
-            $task->delete();
+            $this->taskRepository->delete($id);
 
             return redirect()->route('admin.tasks.index')->with('alert', trans('setting.delete_task_success'));
         } catch (Exception $e) {
