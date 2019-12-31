@@ -56,4 +56,6 @@ Route::group(['middleware' => ['checkAdminLogin','auth']], function () {
     Route::get('reports', 'ReportController@index')->name('admin.reports.index');
     Route::post('reports/{id}', 'ReportController@store')->name('admin.reports.store');
     Route::get('reports/comment', 'ReportController@showComment')->name('admin.reports.comment');
+
+    Route::post('/update', 'DashboardController@update')->name('admin.chart.update');
 });
