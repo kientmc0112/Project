@@ -13,17 +13,23 @@ class DashboardController extends Controller
     public function index()
     {
         $year = Carbon::now()->year;
+        $month = Carbon::now()->month;
+        $userLastYear = User::where('role_id', 0)
+            ->whereYear('created_at', '<', date($year))
+            ->count();
         for ($i=1; $i <= 12 ; $i++) { 
-            $users = User::whereMonth('created_at', '<=', date($i))
-                ->where('role_id', 0)
-                ->whereYear('created_at', '=', date($year))
-                ->count();
-            $userDelete = User::onlyTrashed()
-                ->whereMonth('created_at', '=', date($i))
-                ->where('role_id', 0)
-                ->whereYear('created_at', '=', date($year))
-                ->count();
-            $count[] = $users + $userDelete;
+            if ($month >= $i) {
+                 $users = User::whereMonth('created_at', '<=', date($i))
+                    ->where('role_id', 0)
+                    ->whereYear('created_at', '=', date($year))
+                    ->count();
+                $userDelete = User::onlyTrashed()
+                    ->whereMonth('created_at', '=', date($i))
+                    ->where('role_id', 0)
+                    ->whereYear('created_at', '=', date($year))
+                    ->count();
+                $count[] = $users + $userDelete + $userLastYear;   
+            }
         }
 
         return view('admin.dashboard.dashboard', compact('count'));
@@ -32,6 +38,9 @@ class DashboardController extends Controller
     public function update(Request $request)
     {
         $year = $request->year;
+        $userLastYear = User::where('role_id', 0)
+            ->whereYear('created_at', '<', date($year))
+            ->count();
         for ($i=1; $i <= 12 ; $i++) { 
             $users = User::whereMonth('created_at', '<=', date($i))
                 ->where('role_id', 0)
@@ -42,7 +51,7 @@ class DashboardController extends Controller
                 ->where('role_id', 0)
                 ->whereYear('created_at', '=', date($year))
                 ->count();
-            $count[] = $users + $userDelete;
+            $count[] = $users + $userDelete + $userLastYear;
         }
 
         return view('admin.dashboard.dashboard', compact('count'));

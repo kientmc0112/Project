@@ -44,7 +44,7 @@ class NotificationUser extends Notification
     {
         $data = $this->data;
         return (new MailMessage)
-                    ->line('bạn đã được thêm vào '. $data);
+                    ->line('bạn đã được thêm vào '. $data['name']);
     }
 
     /**

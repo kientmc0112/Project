@@ -228,11 +228,19 @@ class UserController extends Controller
                         ->where('subject_id', $request->subject_id)
                         ->get();
                     if (count($userSubject) < config('configuser.userSubject')) {
+                        $courseName = $this->courseRepository->find($request->course_id)->name;
+                        $data = [
+                            'name' => $courseName,
+                            'course_id' => $request->course_id,
+                        ];
+                        $user->notify(new NotificationUser($data));
+                        $subjectName = $this->subjectRepository->find($request->subject_id)->name;
+                        $data = [
+                            'name' => $subjectName,
+                            'course_id' => $request->course_id,
+                        ];
+                        $user->notify(new NotificationUser($data));
                         $user->subjects()->attach($request->subject_id);
-                        $data = $this->courseRepository->find($request->course_id)->name;
-                        $user->notify(new NotificationUser($data));
-                        $data = $this->subjectRepository->find($request->subject_id)->name;
-                        $user->notify(new NotificationUser($data));
 
                         return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.check_user_subject'));
                     }
