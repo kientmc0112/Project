@@ -124,9 +124,9 @@
                                                     <td>{{ $course->process }}</td>
                                                     <td>
                                                         @if ($course->status == false)
-                                                            <button class="btn btn-warning btn-xs">{{ {{ trans('layouts.activity') }}</button>
+                                                            <button class="btn btn-warning btn-xs">{{ trans('layouts.activity') }}</button>
                                                             @else
-                                                            <button class="btn btn-success btn-xs">{{ {{ trans('layouts.finished') }}</button>
+                                                            <button class="btn btn-success btn-xs">{{ trans('layouts.finished') }}</button>
                                                         @endif
                                                     </td>
                                                     <td><a class="btn btn-info btn-xs" href="{{ route('course.show', $course->course_id) }}">{{ trans('layouts.view') }}</a></td>

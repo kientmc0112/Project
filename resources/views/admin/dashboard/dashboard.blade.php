@@ -77,12 +77,11 @@
     <div class="card mb-3">
         @php $now = getdate(); @endphp
         <div class="card-header">
-            <i class="fas fa-chart-area"></i> Chart
+            <a href="{{ route('admin.dashboard.index') }}"><i class="fas fa-chart-area"></i> Chart </a>
             <form action="{{ route('admin.chart.update') }}" method="POST" style="margin-top: -29px;margin-left: 70px;" id="form_chart">
                     @csrf
                     <select id="year_chart" name="year">
                         <option>Year</option>
-                        <option value="{{ $now['year'] }}">{{ $now['year'] }}</option>
                         <option value="{{ $now['year']-1 }}">{{ $now['year']-1 }}</option>
                         <option value="{{ $now['year']-2 }}">{{ $now['year']-2 }}</option>
                         <option value="{{ $now['year']-3 }}">{{ $now['year']-3 }}</option>

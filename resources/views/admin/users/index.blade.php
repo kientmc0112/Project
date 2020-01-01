@@ -1,27 +1,20 @@
 @extends('admin.layouts.main')
 @section('title', 'List User')
 @section('content')
-<!-- content -->
 <div id="content-wrapper">
-
     <div class="container-fluid">
-
-        <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="#">Dashboard</a>
             </li>
             <li class="breadcrumb-item active">Tables</li>
         </ol>
-
-        <!-- DataTables Example -->
         <div class="card mb-3">
             <div class="card-header">
                 <i class="fas fa-user"></i>
                 <span>List User</span>
                 <div class="card-body">
                     <div>
-                        <!--/.row-->
                         <div class="bootstrap-table">
                             <div class="table-responsive">
                                 <a href="{{ route('admin.users.create') }}" class="btn btn-primary">Thêm Thành viên</a>
@@ -47,7 +40,7 @@
                                         <tr>
                                             <td>{{ $user->id }}</td>
                                             <td><b>{{ $user->name }} <b></td>
-                                            <td><img style="width: 100px; height: 100px" id="avatar-user" src="{{ $user->avatar }}"></td>
+                                            <td><img style="width: 100px; height: 100px; border-radius: 8px;" id="avatar-user" src="{{ $user->avatar }}"></td>
                                             <td>{{ $user->email }}</td>
                                             <td>{{ $user->address }}</td>
                                             <td>{{ $user->phone }}</td>
@@ -60,9 +53,9 @@
                                                 @endif
                                                 ">
                                                     @if ($user->role_id == false)
-                                                    Trainee
+                                                       Trainee
                                                     @else
-                                                    Suppervisor
+                                                        Suppervisor
                                                     @endif
                                                 </button>
                                             </td>
@@ -71,11 +64,13 @@
                                                     method="post">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <a href="{{ route('admin.users.show', $user->id) }}"
-                                                        class="btn btn-primary"><i class="far fa-eye"></i></a>
-                                                    <a href="{{ route('admin.users.edit', $user->id) }}"
-                                                        class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                                    <button type="submit" class="btn btn-danger checkconfirm"><i class="far fa-trash-alt"></i></button>
+                                                    @if (Auth::User()->role_id >= $user->role_id)
+                                                        <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-primary"><i class="far fa-eye"></i></a>
+                                                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning"><i class="fas fa-edit"></i></a>        
+                                                    @endif
+                                                    @if (Auth::User()->role_id > $user->role_id)
+                                                        <button type="submit" class="btn btn-danger checkconfirm"><i class="far fa-trash-alt"></i></button>
+                                                    @endif
                                                 </form>
                                             </td>
                                         </tr>
@@ -90,14 +85,10 @@
                             </div>
                             <div class="clearfix"></div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.container-fluid -->
-
-        <!-- Sticky Footer -->
         <footer class="sticky-footer">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
@@ -105,11 +96,6 @@
                 </div>
             </div>
         </footer>
-
     </div>
-    <!-- end content -->
-    <!-- /.content-wrapper -->
-
 </div>
-<!-- /#wrapper -->
 @endsection

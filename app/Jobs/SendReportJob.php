@@ -37,6 +37,6 @@ class SendReportJob implements ShouldQueue
     {
         $comment = $this->comment;
         $user = $this->user;
-        Mail::to('swiftmailerlaravel@gmail.com')->send(new MailReport($comment, $user));
+        Mail::to('chittchannels@gmail.com')->send(new MailReport($comment, $user));
     }
 }

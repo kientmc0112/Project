@@ -1,13 +1,7 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Course;
-use App\Models\Subject;
-use App\Models\Task;
 use App\Http\Requests\UserRequest;
 use App\Enums\StatusUserCourse;
 use App\Repositories\User\UserRepositoryInterface;
@@ -15,8 +9,8 @@ use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Course\CourseRepositoryInterface;
 use App\Repositories\Subject\SubjectRepositoryInterface;
 use App\Repositories\Task\TaskRepositoryInterface;
+use App\Notifications\NotificationUser;
 use DB;
-
 class UserController extends Controller
 {
     private $userRepository;
@@ -50,7 +44,6 @@ class UserController extends Controller
         
         return view('admin.users.index', compact('users'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -60,7 +53,6 @@ class UserController extends Controller
     {
         return view('admin.users.create');
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -93,7 +85,6 @@ class UserController extends Controller
             return redirect()->route('admin.users.create')->with('alert', trans('setting.checkpassoword'));
         }
     }
-
     public function uploadAvatar(UserRequest $request)
     {
         $destinationDir = public_path(config('configuser.public_path'));
@@ -102,7 +93,6 @@ class UserController extends Controller
         $avatar = config('configuser.avatar') . $fileName;
         return $avatar;
     }
-
     /**
      * Display the specified resource.
      *
@@ -135,7 +125,6 @@ class UserController extends Controller
             return redirect()->back()->with($e->getMessage());
         }
     }
-
     public function exportSubject($id)
     {
         $listSubject = DB::table('course_subject')
@@ -144,7 +133,6 @@ class UserController extends Controller
         
         return response()->json(['listSubject' => $listSubject], config('configuser.json'));
     }
-
     public function finishCourse(Request $request, $id)
     {        
         $courseSubject = $this->courseRepository->find($request->course_id)->subjects;
@@ -170,7 +158,6 @@ class UserController extends Controller
             return redirect()->route('admin.users.show', $id)->with('error', trans('setting.error_course_fail'));
         }
     }
-
     public function finishSubject(Request $request, $id)
     {
         DB::table('user_subject')
@@ -192,14 +179,13 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.show', $id);
     }
-
     public function finishTask(Request $request, $id)
     {
         try {
             DB::table('user_task')
                 ->where('task_id', $request->task_id)
                 ->where('user_id', $id)
-                ->update(['status' => StatusUserCourse::finished, 'updated_at' => now()]);
+                ->update(['status' => StatusUserCourse::Finished, 'updated_at' => now()]);
             $subject = $this->taskRepository->find($request->task_id)->subject_id;
             $check = DB::table('user_subject')
                 ->where('subject_id', $subject)
@@ -218,7 +204,6 @@ class UserController extends Controller
             return redirect()->back()->with($e->getMessage());
         }
     }
-
     public function addUserCourse(Request $request, $id)
     {
         try {
@@ -229,7 +214,7 @@ class UserController extends Controller
                 ->get();
             $checkStatusUser = DB::table('user_course')
                 ->where('user_id', $id)
-                ->where('status', StatusUserCourse::finished)
+                ->where('status', StatusUserCourse::Finished)
                 ->get();
             if (count($checkStatusUser) >= config('configuser.checkStatusUser')) {
                 return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_status_user'));
@@ -243,6 +228,18 @@ class UserController extends Controller
                         ->where('subject_id', $request->subject_id)
                         ->get();
                     if (count($userSubject) < config('configuser.userSubject')) {
+                        $courseName = $this->courseRepository->find($request->course_id)->name;
+                        $data = [
+                            'name' => $courseName,
+                            'course_id' => $request->course_id,
+                        ];
+                        $user->notify(new NotificationUser($data));
+                        $subjectName = $this->subjectRepository->find($request->subject_id)->name;
+                        $data = [
+                            'name' => $subjectName,
+                            'course_id' => $request->course_id,
+                        ];
+                        $user->notify(new NotificationUser($data));
                         $user->subjects()->attach($request->subject_id);
 
                         return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.check_user_subject'));
@@ -254,7 +251,6 @@ class UserController extends Controller
             return redirect()->back()->with($e->getMessage());
         }
     }
-
     public function addUserSubject(Request $request, $id)
     {
         try {
@@ -297,7 +293,6 @@ class UserController extends Controller
             return redirect()->back()->with($e->getMessage());
         }
     }
-
     public function addUserTask(Request $request, $id)
     {
         try {
@@ -334,7 +329,6 @@ class UserController extends Controller
             return redirect()->back()->with($e->getMessage());
         }
     }
-
     public function deleteUserCourse(Request $request, $id)
     {
         try {
@@ -346,7 +340,6 @@ class UserController extends Controller
             return redirect()->back()->with($e->getMessage());
         }
     }
-
     public function deleteUserSubject(Request $request, $id)
     {
         try {
@@ -361,7 +354,6 @@ class UserController extends Controller
             return redirect()->back()->with($e->getMessage());
         }
     }
-
     public function deleteUserTask(Request $request, $id)
     {
         try {
@@ -373,7 +365,6 @@ class UserController extends Controller
             return redirect()->back()->with($e->getMessage());
         }
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -390,7 +381,6 @@ class UserController extends Controller
             return redirect()->back()->with($e->getMessage());
         }
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -429,7 +419,6 @@ class UserController extends Controller
             return redirect()->back()->with($e->getMessage());
         }
     }
-
     /**
      * Remove the specified resource from storage.
      *
