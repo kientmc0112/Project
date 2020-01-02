@@ -39,7 +39,7 @@
     var subjects = $("#subject-calendar").val();
     subjects = JSON.parse(subjects);
     console.log(subjects);
-    for(var i=0; i<subjects.length; i++) {
+    for(var i = 0; i < subjects.length; i++) {
         calendarEvents[i] = {
             'title': subjects[i]['name'],
             'start': subjects[i]['created_at'].slice(0, 10),

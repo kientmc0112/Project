@@ -38,8 +38,17 @@
     <link href="{{ asset('bower_components/assets-client/fontawesome/css/brands.css') }}" rel="stylesheet">
     <link href="{{ asset('bower_components/assets-client/fontawesome/css/fontawesome.css') }}" rel="stylesheet">
     <link href="{{ asset('bower_components/assets-client/fontawesome/css/solid.css') }}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ asset('bower_components/jstree/dist/themes/default/style.min.css') }}" />
+    <script src="{{ asset('bower_components/jstree/dist/jstree.js') }}"></script>
+    <script src="{{ asset('bower_components/jstree/dist/jstree.min.js') }}"></script>
+
+    <script src="{{ asset('bower_components/chart.js/dist/Chart.min.js') }}"></script>
+    {{-- <link href="{{ asset('bower_components/bootstrap-treeview.js/bootstrap.css') }}" rel="stylesheet">
+    <script src="{{ asset('bower_components/bootstrap-treeview.js/jquery.js') }}"></script>
+    <script src="{{ asset('bower_components/bootstrap-treeview.js/bootstrap-treeview.js') }}"></script> --}}
 </head>
-<body class="">
+<body>
     <div id="wrapper" class="clearfix">
         @include('client.layouts.header')
         <div class="main-content">
@@ -47,6 +56,27 @@
         </div>
         @include('client.layouts.footer')
     </div>
+    <script src="https://js.pusher.com/5.0/pusher.min.js"></script>
+    <script type="text/javascript">
+        // Pusher.logToConsole = true;
+        // var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+        //     encrypted: true,
+        //     cluster: "ap1"
+        // });
+
+        // var channel = pusher.subscribe('NotificationEvent');
+        // channel.bind('send-message', function(data) {
+        //     var newNotificationHtml = '<a class="dropdown-item" href="#"><span>${data.title}</span><br><small>${data.content}</small></a>';
+
+        //     $('.menu-notification').prepend(newNotificationHtml);
+        //     alert(JSON.stringify(data));
+        // });
+
+        // var channel = pusher.subscribe('NotificationEvent');
+        // channel.bind('send-message', function(data) {
+        //     alert(JSON.stringify(data));
+        // });
+    </script>
 
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('bower_components/assets-client/js/custom.js') }}"></script>

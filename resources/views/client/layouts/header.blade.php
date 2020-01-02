@@ -1,11 +1,11 @@
-<div id="preloader">
+{{-- <div id="preloader">
     <div id="spinner">
         <div class="preloader-dot-loading">
             <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
         </div>
     </div>
     <div id="disable-preloader" class="btn btn-default btn-sm">{{ trans('layouts.disable') }}</div>
-</div>
+</div> --}}
 <header id="header" class="header">
     <div class="header-top bg-theme-color-2 sm-text-center p-0">
         <div class="container">
@@ -25,9 +25,23 @@
                             @if(Auth::User()->role_id == 1)
                                 <li class="text-white">|</li>
                                 <li class="text-white">
-                                    <a class="text-white"  href="{{ route('admin.dashboard.index') }}">MyAdmin</a>
+                                    <a class="text-white" href="{{ route('admin.dashboard.index') }}">MyAdmin</a>
                                 </li>
                             @endif
+                            <li class="text-white">|</li>
+                            <li class="nav-item dropdown dropdown-notifications">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    Notification<span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right menu-notification" aria-labelledby="navbarDropdown">
+                                    @foreach (Auth::user()->notifications as $notification)
+                                        <a class="dropdown-item" href="#">
+                                            <span>{{ $notification->data['title'] }}</span><br>
+                                            <small>{{ $notification->data['title'] }}</small>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>

@@ -78,7 +78,7 @@ class CategoryController extends Controller
         $courses = $this->courseRepository->getCourseByCategory($category);
         // $courses = Course::whereIn('category_id', $category)->paginate(config('course.PagePaginate'));
 
-        $categories = $this->categoryRepository->getCategoryChildByName();
+        $categories = $this->categoryRepository->getParentCategory();
 
         return view('client.course.index', compact('courses', 'categories'));
     }
@@ -115,5 +115,19 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function tree() {
+        $i = 0;
+        $data = array();
+        $categories = $this->categoryRepository->getParentCategory();
+        foreach ($categories as $parentCategory) {
+            $data['text'][$i++] = $parentCategory->name;
+            $j = 0;
+            foreach ($parentCategory->categories as $childCategory) {
+                $data['nodes']['text'][$j++] = $childCategory->name;
+            }
+        }
+        dd($data);
     }
 }

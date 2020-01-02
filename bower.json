@@ -20,6 +20,7 @@
     "bootstrap": "^4.3.1",
     "fontawesome": "^5.11.2",
     "jquery": "^3.4.1",
-    "bower_FTMS": "*"
+    "bower_FTMS": "*",
+    "chart.js": "chartjs#^2.9.3"
   }
 }

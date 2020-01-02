@@ -56,16 +56,16 @@ class User extends Authenticatable
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class, 'user_subject')->withTimestamps();;
+        return $this->belongsToMany(Subject::class, 'user_subject')->withPivot('created_at', 'updated_at', 'status', 'process')->withTimestamps();
     }
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'user_course')->withTimestamps();;
+        return $this->belongsToMany(Course::class, 'user_course')->withPivot('status', 'created_at', 'updated_at', 'process')->withTimestamps();
     }
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class, 'user_task')->withTimestamps();;
+        return $this->belongsToMany(Task::class, 'user_task')->withPivot('report', 'status', 'created_at', 'updated_at')->withTimestamps();
     }
 }

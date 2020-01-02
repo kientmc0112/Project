@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use DB;
 use App\Models\Subject;
 
+
 class CourseController extends Controller
 {
     protected $courseRepository;
@@ -28,7 +29,7 @@ class CourseController extends Controller
     {
         $courses = $this->courseRepository->getCourseByTime();
 
-        $categories = $this->categoryRepository->getCategoryChildByName();
+        $categories = $this->categoryRepository->getParentCategory();
 
         return view('client.course.index', compact('courses', 'categories'));
     }

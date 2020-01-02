@@ -39,5 +39,22 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/', 'HomeController@index')->name('home');
 
-    Route::get('/test/{id}', 'CourseController@test')->name('course.test');
+    Route::get('/tree', 'CategoryController@tree')->name('category.tree');
+
+    Route::group(['prefix' => '/mail'], function () {
+        Route::get('/basic', 'MailController@basic')->name('report.basic');
+        Route::get('/html', 'MailController@html')->name('mail.html');
+        Route::get('/attach', 'MailController@attach')->name('mail.attach');
+        Route::get('/more', 'MailController@more')->name('mail.more');
+        Route::get('/queue', 'MailController@queue')->name('mail.queue');
+    });
+
+    Route::get('/courseByYear', 'ChartController@year')->name('chart.year');
+    Route::post('/courseByMonth', 'ChartController@month')->name('chart.month');
+
+    Route::get('notification', 'SendNotification@create')->name('notification.create');
+    Route::post('notification', 'SendNotification@store')->name('notification.store');
+    Route::get('/test', function () {
+        return view('client.notification.test');
+    });
 });
