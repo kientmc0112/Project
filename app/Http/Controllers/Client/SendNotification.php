@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Notifications\TestNotification;
 use App\Models\User;
 use Pusher\Pusher;
+use Auth;
 
 class SendNotification extends Controller
 {
@@ -17,6 +18,7 @@ class SendNotification extends Controller
 
     public function store(Request $request)
     {
+        $user_id = Auth::user()->id;
         $user = User::find(1);
         $data = $request->only([
             'title',
@@ -35,9 +37,9 @@ class SendNotification extends Controller
             env('PUSHER_APP_ID'),
             $options
         );
-        // $auth = $pusher->socket_auth($_GET['channel_name'], $_GET['socket_id']);
-        $pusher->trigger('NotificationEvent', 'send-message', $data);
-        // dd($auth);
+        $event = 'message' . $user_id;
+        $pusher->trigger('NotificationEvent', $event, $data);
+
         return view('client.notification.send');
     }
 }

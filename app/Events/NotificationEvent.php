@@ -32,6 +32,6 @@ class NotificationEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('send-message');
+        return new PrivateChannel('NotificationEvent');
     }
 }

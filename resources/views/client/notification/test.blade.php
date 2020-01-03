@@ -104,9 +104,7 @@
     var channel = pusher.subscribe('NotificationEvent');
     // $auth = $pusher->socket_auth($_GET['channel_name'], $_GET['socket_id']);
     // Bind a function to a Event (the full Laravel class)
-    channel.bind('send-message', function (data, metadata) {
-        console.log(metadata);
-        console.log(metadata.user_id);
+    channel.bind('message1', function (data) {
         var existingNotifications = notifications.html();
         var avatar = Math.floor(Math.random() * (71 - 20 + 1)) + 20;
         var newNotificationHtml =
