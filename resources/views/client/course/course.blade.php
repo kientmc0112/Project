@@ -46,7 +46,7 @@
                             <strong>{{ $course->name }}</strong></h4>
                             <div class="services-list">
                                 <ul class="list list-border angle-double-right" id="list">
-                                    <li class="active" id="introduction"><a href="{{ route('course.show', $course->id) }}">{{ trans('layouts.intro') }}</a>
+                                    <li class="active" style="display: block" id="introduction"><a id="intro" href="{{ route('course.show', $course->id) }}">{{ trans('layouts.intro') }}</a>
                                     </li>
                                     @foreach ($course->subjects as $subject)
                                         <li class='ml-20' id="subject{{ $subject->id }}" value="{{ $course->id }}"><a>{{ $subject->name }}</a></li>

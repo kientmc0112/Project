@@ -12,7 +12,7 @@ class CategoryRepository extends EloquentRepository implements CategoryRepositor
         return Category::class;
     }
 
-    public function getCategoryChildByName()
+    public function getParentCategory()
     {
         return Category::where('parent_id', 0)->orderBy('name')->get();
     }

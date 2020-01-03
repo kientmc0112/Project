@@ -9,8 +9,8 @@
     <tbody>
     @foreach ($tasksHistory as $task)
         <tr>
-            <td><strong>{{ substr($task['date'], 0, 10) }}</strong></td>
-            <td><em>{{ substr($task['date'], 11, 8) }}</em></td>
+            <td><strong>{{ substr($task['date'], config('client.user.false'), config('client.date.dateL')) }}</strong></td>
+            <td><em>{{ substr($task['date'], config('client.date.time'), config('client.date.timeL')) }}</em></td>
             <td>{{ $task['content'] }}</td>
         </tr>
     @endforeach

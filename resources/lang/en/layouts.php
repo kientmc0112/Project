@@ -3,6 +3,7 @@
 return [
     'disable' => 'Disable Preloader',
     'logout' => 'Logout',
+    'search' => 'Search',
     'call' => 'Call us today!',
     'phone' => '+(012) 345 6789',
     'open' => 'We are open!',
@@ -57,5 +58,8 @@ return [
     'dateFinish' => 'Date Finish',
     'process' => 'Process',
     'number' => 'Number',
-    'activity' => 'Activity'
+    'activity' => 'Activity',
+    'Ucomplete' => 'You completed ',
+    'Usend' => 'You sent a new report for ',
+    'Ustart' => 'You started a task ',
 ];

@@ -66,19 +66,25 @@ class UserController extends Controller
     public function show($id)
     {
         $user = $this->userRepository->find($id);
-        $courses = DB::table('user_course')
-            ->where('user_id', $id)
-            ->get();
-        $listCourse = $this->courseRepository->getAll();
-        $subjects = DB::table('user_subject')
-            ->where('user_id', $id)
-            ->get();
-        $listSubject = $this->subjectRepository->getAll();
-        $tasks = DB::table('user_task')
-        ->where('user_id', $id)
-        ->get();
-        $listTask = $this->taskRepository->getAll();
-        return view('client.user.profile', compact('user', 'courses', 'listCourse', 'subjects', 'listSubject', 'tasks', 'listTask'));
+        $courses = $user->courses;
+        $subjects = $user->subjects;
+        $tasks = $user->tasks;
+        // $courses = DB::table('user_course')
+        //     ->where('user_id', $id)
+        //     ->get();
+        // $listCourse = $this->courseRepository->getAll();
+        // $subjects = DB::table('user_subject')
+        //     ->where('user_id', $id)
+        //     ->get();
+        // $listSubject = $this->subjectRepository->getAll();
+        // $tasks = DB::table('user_task')
+        // ->where('user_id', $id)
+        // ->get();
+        // $listTask = $this->taskRepository->getAll();
+
+        // return view('client.user.profile', compact('user', 'courses', 'listCourse', 'subjects', 'listSubject', 'tasks', 'listTask'));
+
+        return view('client.user.profile', compact('user', 'courses', 'subjects', 'tasks'));
     }
 
     /**
@@ -122,7 +128,7 @@ class UserController extends Controller
             return response()->json([
                 'error'    => true,
                 'messages' => $validator->errors(),
-            ], config('user.422-UE'));
+            ], config('client.user.fail'));
         }
         try {
             $attr = [
@@ -133,7 +139,7 @@ class UserController extends Controller
             ];
             $user = $this->userRepository->update($id, $attr);
 
-            return response()->json(['user' => $user], config('user.200-OK'));
+            return response()->json(['user' => $user], config('client.user.network'));
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
         }

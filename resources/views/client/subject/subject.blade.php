@@ -4,7 +4,7 @@
     <p>{{ $subject->description }}</p>
     <br>
     {{-- @if($permiss == 1) --}}
-    @if ($permiss->first()->status == config('user.false'))
+    @if ($permiss == config('client.user.false'))
         @foreach ($subject->users as $user)
             @if (Auth::user()->id == $user->id)
                 <p>{{ trans('layouts.complete')}} {{ ': ' . $user->pivot->process . '/' . $subject->tasks->count() }}</p>
@@ -27,15 +27,15 @@
                                     <td>{{ $task->name }}</td>
                                     <td>{{ $task->description }}</td>
                                     <td>
-                                    @php $status = config('user.false') @endphp
+                                    @php $status = config('client.user.false') @endphp
                                     @foreach ($task->users as $user)
                                         @if (Auth::user()->id == $user->pivot->user_id)
-                                            @if ($user->pivot->status == config('user.true'))
+                                            @if ($user->pivot->status == config('client.user.true'))
                                                 <button id="task{{ $task->id }}" data-toggle="modal" data-target="#modal{{ $task->id }}" class="btn btn-success text-center btn-report">{{ trans('layouts.completed') }}</button>
-                                                @php $status = config('user.true') @endphp
-                                            @elseif ($user->pivot->status == config('user.false'))
+                                                @php $status = config('client.user.true') @endphp
+                                            @elseif ($user->pivot->status == config('client.user.false'))
                                                 <button id="task{{ $task->id }}" data-toggle="modal" data-target="#modal{{ $task->id }}" class="btn btn-warning text-center btn-report">{{ trans('layouts.wait') }}</button>
-                                                @php $status = config('user.true') @endphp
+                                                @php $status = config('client.user.true') @endphp
                                             @endif
                                             <div class="modal fade" id="modal{{ $task->id }}">
                                                 <div class="modal-dialog bg-white widget border-1px p-30">
@@ -43,17 +43,17 @@
                                                     <form method="POST">
                                                         @csrf
                                                         <div class="form-group">
-                                                            <textarea name="report" id="report{{ $task->id }}" class="form-control" rows="3"></textarea>
+                                                            <textarea name="report" id="report{{ $task->id }}" class="form-control" rows="config('client.client.row')"></textarea>
                                                         </div>
                                                         <div class="form-group">
-                                                            <a type="button" data-dismiss="modal" class="btn btn-dark btn-theme-colored btn-sm mt-0">{{ trans('layouts.close') }}</a>
+                                                            <span data-dismiss="modal" class="btn btn-dark btn-theme-colored btn-sm mt-0">{{ trans('layouts.close') }}</span>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
                                         @endif
                                     @endforeach
-                                    @if ($status == config('user.false'))
+                                    @if ($status == config('client.user.false'))
                                         <a id="btn{{ $task->id }}" data-toggle="modal" data-target="#modal{{ $task->id }}" class="btn btn-info text-center btn-report">{{ trans('layouts.report') }}</a>
                                         <div class="modal fade" id="modal{{ $task->id }}">
                                             <div class="modal-dialog bg-white widget border-1px p-30">
@@ -61,11 +61,11 @@
                                                 <form class="formReport">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <textarea name="report" class="form-control" id="report{{ $task->id }}" required placeholder="Enter report ..." rows="3"></textarea>
+                                                        <textarea name="report" class="form-control" id="report{{ $task->id }}" required placeholder="Enter report ..." rows="config('client.client.row')"></textarea>
                                                     </div>
                                                     <div class="form-group">
-                                                        <button type="button" id="task{{ $task->id }}" class="btn btn-dark btn-theme-colored btn-sm mt-0">{{ trans('layouts.send') }}</button>
-                                                        <a data-dismiss="modal" class="btn btn-dark btn-theme-colored btn-sm mt-0">{{ trans('layouts.close') }}</a>
+                                                        <button class="a" type="button" id="task{{ $task->id }}" class="btn btn-dark btn-theme-colored btn-sm mt-0">{{ trans('layouts.send') }}</button>
+                                                        <span data-dismiss="modal" class="btn btn-dark btn-theme-colored btn-sm mt-0">{{ trans('layouts.close') }}</span>
                                                     </div>
                                                 </form>
                                             </div>
@@ -79,10 +79,10 @@
                                                 <form method="POST">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <textarea name="report" id="comment{{ $task->id }}" class="form-control" disabled rows="3"></textarea>
+                                                        <textarea name="report" id="comment{{ $task->id }}" class="form-control" disabled rows="config('client.client.row')"></textarea>
                                                     </div>
                                                     <div class="form-group">
-                                                        <a type="button" data-dismiss="modal" class="btn btn-dark btn-theme-colored btn-sm mt-0">{{ trans('layouts.close') }}</a>
+                                                        <span data-dismiss="modal" class="btn btn-dark btn-theme-colored btn-sm mt-0">{{ trans('layouts.close') }}</span>
                                                     </div>
                                                 </form>
                                             </div>
@@ -111,7 +111,7 @@
                 task_id: task_id,
             },
             success: function (response) {
-                $(report).val(response.result[0].report);
+                $(report).val(response.result);
                 $(report).attr('disabled', '');
             },
             error: function(e) {

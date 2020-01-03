@@ -68,14 +68,14 @@
 <body class="">
     <div id="wrapper" class="clearfix">
         <!-- preloader -->
-        <div id="preloader">
+        {{-- <div id="preloader">
             <div id="spinner">
                 <div class="preloader-dot-loading">
                     <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
                 </div>
             </div>
             <div id="disable-preloader" class="btn btn-default btn-sm">Disable Preloader</div>
-        </div>
+        </div> --}}
 
         <!-- start main-content -->
         <div class="main-content">
@@ -121,7 +121,7 @@
                                                 Remember me </label>
                                         </div>
                                         <div class="form-group pull-right mt-10">
-                                            <button type="submit" class="btn btn-dark btn-sm">Login</button>
+                                            <button style="display: block, overflow: auto" type="submit" name="Login" id="login" class="btn btn-dark btn-sm">Login</button>
                                         </div>
                                         <div class="clear text-center pt-10">
                                             <a class="text-theme-colored font-weight-600 font-12" href="#">Forgot Your

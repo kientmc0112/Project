@@ -21,7 +21,7 @@
                                 <li class="p-10 mr-10 bg-lightest">{{ $user->pivot->created_at->year }}</li>
                                 <li class="mb-10 mr-5 font-14 text-theme-colored"><i class="fa fa-clock-o mr-5"></i>at {{ $user->pivot->created_at->toTimeString() }}</li>
                             </ul>
-                            @if ($user->pivot->status == 1)
+                            @if ($user->pivot->status == config('client.user.true'))
                                 <ul class="event-date list-inline font-16 text-uppercase mt-10 mb-20">
                                     <li class="p-10 mr-5 bg-lightest">{{ $user->pivot->updated_at->format('M') }}</li>
                                     <li class="p-10 pl-20 pr-20 mr-5 bg-lightest"> {{ $user->pivot->updated_at->day }}</li>
