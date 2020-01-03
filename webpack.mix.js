@@ -22,5 +22,6 @@ mix.js([
         'resources/js/checkconfirm.js',
         'resources/js/ajax.js',
         'resources/js/calendarevent.js',
+        'resources/js/chart-area-demo.js',
    ], 'public/js')
     .sass('resources/sass/app.scss', 'public/css');

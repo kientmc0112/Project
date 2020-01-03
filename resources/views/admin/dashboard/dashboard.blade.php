@@ -2,16 +2,12 @@
 @section('title', 'Dashboard')
 @section('content')
 <div class="container-fluid">
-
-    <!-- Breadcrumbs-->
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
             <a href="#">Dashboard</a>
         </li>
         <li class="breadcrumb-item active">Overview</li>
     </ol>
-
-    <!-- Icon Cards-->
     <div class="row">
         <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-primary o-hidden h-100">
@@ -78,19 +74,28 @@
             </div>
         </div>
     </div>
-
-    <!-- Area Chart Example-->
     <div class="card mb-3">
+        @php $now = getdate(); @endphp
         <div class="card-header">
-            <i class="fas fa-chart-area"></i>
-            Area Chart Example</div>
+            <a href="{{ route('admin.dashboard.index') }}"><i class="fas fa-chart-area"></i> Chart </a>
+            <form action="{{ route('admin.chart.update') }}" method="POST" style="margin-top: -29px;margin-left: 70px;" id="form_chart">
+                    @csrf
+                    <select id="year_chart" name="year">
+                        <option>Year</option>
+                        <option value="{{ $now['year']-1 }}">{{ $now['year']-1 }}</option>
+                        <option value="{{ $now['year']-2 }}">{{ $now['year']-2 }}</option>
+                        <option value="{{ $now['year']-3 }}">{{ $now['year']-3 }}</option>
+                    </select>
+                </form>
+            </div>
         <div class="card-body">
             <canvas id="myAreaChart" width="100%" height="30"></canvas>
+            <canvas id="myAreaChart1" width="100%" height="30"></canvas>
         </div>
-        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        <div class="card-footer small text-muted">
+        </div>
+        <input type="hidden" id="count_chart" value="{{ json_encode($count) }}">
     </div>
-
-    <!-- DataTables Example -->
     <div class="card mb-3">
         <div class="card-header">
             <i class="fas fa-table"></i>
@@ -580,7 +585,8 @@
             </div>
         </div>
         <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-    </div>
+    </div> --}}
 
 </div>
+
 @endsection

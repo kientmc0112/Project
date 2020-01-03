@@ -10,7 +10,7 @@
     <div class="header-top bg-theme-color-2 sm-text-center p-0">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="widget no-border m-0">
                         <ul class="list-inline font-13 sm-text-center mt-5">
                             <li class="nav-item dropdown dropdown-notifications">
@@ -76,18 +76,39 @@
                             </li>
                             <li class="text-white">|</li>
                             <li class="text-white">
-                                <a class="text-white"  href="{{ route('user.show', Auth::user()->id) }}">My Profile</a>
+                                <a class="text-white" href="{{ route('user.show', Auth::user()->id) }}">My Profile</a>
                             </li>
+                            @if (Auth::User())
+                                <li class="nav-item dropdown dropdown-notifications">
+                                    <a style="color: white;" id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                         <i class="fa fa-bell"></i><span class="caret"></span>
+                                    </a>
+                                    <div style="width: 400px;" class="dropdown-menu dropdown-menu-right menu-notification" aria-labelledby="navbarDropdown">
+                                        @foreach (Auth::user()->notifications as $notification)
+                                            <a class="dropdown-item" href="{{ route('course.show', $notification->data['course_id']) }}">
+                                                <span>Bạn Đã Được Thêm Vào {{ $notification->data['name'] }}| {{ $notification->create_at }} </span><br>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </li>
+                            @endif
                             @if(Auth::User()->role_id == 1)
                                 <li class="text-white">|</li>
                                 <li class="text-white">
                                     <a class="text-white" href="{{ route('admin.dashboard.index') }}">MyAdmin</a>
                                 </li>
                             @endif
+                            <li class="text-white">|</li>
+                            <li>
+                                <a class="text-white" id="logout" href="{{ route('logout') }}">{{ trans('layouts.logout') }}</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="widget m-0 pull-right sm-pull-none sm-text-center">
                         <ul class="list-inline pull-right">
                             <li class="mb-0 pb-0">

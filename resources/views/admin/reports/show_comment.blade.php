@@ -25,9 +25,9 @@
                                             <th>User Name</th>
                                             <th>User Mail</th>
                                             <th>Task Name</th>
-                                            <th>Status</th>
+                                            <th width='10%'>Status</th>
                                             <th width='30%'>Report</th>
-                                            <th width='18%'>Tùy chọn</th>
+                                            <th width='12%'>Options</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -57,30 +57,62 @@
                                                 </td>
                                                 <td>
                                                     @if ($value->status == false)
-                                                        <button class="btn btn-warning">Activity</button>
+                                                        <div class="alert alert-warning">Activity</div>
                                                     @else
-                                                        <button class="btn btn-success">Finish</button>
+                                                        <div class="alert alert-success">Finished</div>
                                                     @endif
                                                 </td>
                                                 <td>{{ $value->report }}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"><i class="fas fa-comment-dots"></i></button>
+                                                    
+                                                    @if ($value->status == false)
+                                                        <form action="{{ route('admin.reports.finish', $value->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button type="submit" class="btn btn-primary">Finish</button>
+                                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal{{ $value->id }}"><i class="fas fa-comment-dots"></i></button>
+                                                        </form>
+                                                    @else
+                                                        <button type="submit" class="btn btn-success">Finished</button>
+                                                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal{{ $value->id }}"><i class="fas fa-comment-dots"></i></button>
+                                                    @endif
+                                                    
                                                 </td>
                                             </tr>
-                                                <div class="modal fade" id="myModal" role="dialog">
+                                            <form action="{{ route('admin.reports.store', $value->id) }}" method="post">
+                                                @method('PUT')
+                                                @csrf
+                                                <div class="modal fade" id="myModal{{ $value->id }}" role="dialog">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <p>{{ $value->report }}</p>
+                                                                <h5>Report Trainee</h5>
+                                                                <p> 
+                                                                    {{ $value->report }}
+                                                                </p>
                                                                 <hr>
-                                                                <textarea class="form-control" name="comment" id="" cols="10" rows="5">{{ $value->comment }}</textarea>
+                                                                <h5>Comment Trainer</h5>
+                                                                <p>{{ $value->comment }}</p>
+                                                                @if ($value->status == false)
+                                                                    <textarea class="form-control" name="comment" id="" cols="10" rows="5"></textarea>
+                                                                @endif
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                @if ($value->status == false)
+                                                                    <button type="submit" class="btn btn-success">Confirm</button>
+                                                                @else
+                                                                    <div class="alert alert-success">
+                                                                        Success
+                                                                    </div>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div> 
+                                            </form>   
                                         @endforeach
                                     </tbody>
                                 </table>

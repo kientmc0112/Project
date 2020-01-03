@@ -29,7 +29,7 @@
                                                 @if (session('error'))
                                                     <div class="alert alert-error">{{ session('error') }}</div>
                                                 @endif
-                                                    <table class="table table-bordered text-center" id="table-show">
+                                                    <table class="table table-bordered" id="table-show">
                                                         <thead>
                                                             <tr class="bg-primary">
                                                                 <th id="id">{{ trans('setting.id') }}</th>
