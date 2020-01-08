@@ -42,7 +42,53 @@
                 }],
             },
             options: {
-
+                'onClick' : function (evt, item) {
+                    var year = item[0]['_model'].label;
+                    var labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    if (year > 12) {
+                        $.ajax({
+                            type: 'POST',
+                            url: 'chart/courseByMonth',
+                            data: {
+                                year: year,
+                                status: 0,
+                            },
+                            success: function (response) {
+                                chart.data.datasets[0].data = response.data;
+                                chart.data.labels = labels;
+                                chart.options.title.text = 'Thống kê khóa học trong năm ' + year;
+                                chart.update();
+                                $("#year").on('click', function () {
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: '/chart/courseByMonth',
+                                        data: {
+                                            status: 1,
+                                        },
+                                        success: function (response) {
+                                            var key = [];
+                                            var data = [];
+                                            for (x in response.data) {
+                                                key.push(x);
+                                                data.push(response.data[x]);
+                                            }
+                                            chart.data.datasets[0].data = data;
+                                            chart.data.labels = key;
+                                            chart.options.title.text = 'Thống kê khóa học theo năm';
+                                            chart.update();
+                                        },
+                                        error: function(e) {
+                                           alert("Error! Please refresh");
+                                        },
+                                    });
+                                });
+                            },
+                            error: function(e) {
+                               alert("Error! Please refresh");
+                            },
+                        });
+                    }
+                },
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -60,7 +106,5 @@
                 }
             }
         });
-
-
     </script>
 @endsection

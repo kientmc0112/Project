@@ -104,41 +104,89 @@
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
 
-    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+    var pusher = new Pusher('380b9393267e17a9b728', {
         cluster: 'ap1',
         encrypted: true,
     });
 
     // Subscribe to the channel we specified in our Laravel Event
     var channel = pusher.subscribe('NotificationEvent');
+    var event = $("#user_id").val();
+    event = 'user' + JSON.parse(event);
 
     // Bind a function to a Event (the full Laravel class)
-    channel.bind('message1', function (data) {
+    channel.bind(event, function (data) {
         var existingNotifications = notifications.html();
-        var avatar = Math.floor(Math.random() * (71 - 20 + 1)) + 20;
         var newNotificationHtml =
         `<li class="notification active">
-            <div class="media">
-                <div class="media-left">
-                    <div class="media-object">
-                        <img src="https://api.adorable.io/avatars/71/` + avatar + `.png" class="img-circle" alt="50x50" style="width: 50px; height: 50px;">
+            <a href="http://127.0.0.1:8000/courses/` + data.course_id + `/show">
+                <div class="media">
+                    <div class="media-left">
+                        <div class="media-object" style="width: 65px">
+                            <img src="/images/avatar/avatar5de7857e37aa8.jpeg" class="img-circle" alt="50x50" style="width: 70px; height: 70px;">
+                        </div>
+                    </div>
+                    <div class="media-body">
+                        <strong class="notification-title">` + data.title + `</strong>
+                        <p class="notification-desc">` + data.content + `</p>
+                        <div class="notification-meta">
+                            <small class="timestamp">about a minute ago</small>
+                        </div>
                     </div>
                 </div>
-                <div class="media-body">
-                    <strong class="notification-title">` + data.title + `</strong>
-                    <p class="notification-desc">` + data.content + `</p>
-                    <div class="notification-meta">
-                        <small class="timestamp">about a minute ago</small>
-                    </div>
-                </div>
-            </div>
+            </a>
         </li>`;
         notifications.html(newNotificationHtml + existingNotifications);
 
         notificationsCount += 1;
+        var notifyOld = parseInt($('.notif-count').text(), 10);
         notificationsCountElem.attr('data-count', notificationsCount);
-        notificationsWrapper.find('.notif-count').text(notificationsCount);
+        notificationsWrapper.find('.notif-count').text(notificationsCount + notifyOld);
         notificationsWrapper.show();
+    });
+
+    $(".unread").on('click', function () {
+        var url = $(".unread a").val();
+        var x = this.id;
+        var id = "#" + x;
+        $.ajax({
+            type: 'POST',
+            url: '/notify/markAsRead',
+            data: {
+                id: x,
+            },
+            success: function (response) {
+                $(id).removeClass('active');
+                var countUnread = notificationsCount;
+                if(countUnread > 0) {
+                    countUnread--;
+                } else {
+                    countUnread = 0;
+                }
+                countUnread = countUnread + $('.notif-count').text();
+                console.log(countUnread);
+                notificationsWrapper.find('.notif-count').text(countUnread);
+                window.location.replace(url);
+            },
+            error: function (e) {
+                alert("Error! Please refresh");
+            },
+        });
+    });
+
+    $("#markAll").on('click', function() {
+        $.ajax({
+            type: 'POST',
+            url: '/notify/markAll',
+            success: function (response) {
+                $(".notification").removeClass('active');
+                notificationsWrapper.find('.notif-count').text('0');
+                notificationsCountElem.attr('data-count', 0);
+            },
+            error: function (e) {
+                alert("Error! Please refresh");
+            },
+        });
     });
 </script>
 </body>

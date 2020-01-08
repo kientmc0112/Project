@@ -95,6 +95,15 @@
         <div class="card-footer small text-muted">
         </div>
         <input type="hidden" id="count_chart" value="{{ json_encode($count) }}">
+        <div class="container-fluid">
+            <div class="card-body">
+                <h4><i id="year" class="fas fa-sync-alt text-success btn-default" style="font-size: 25px; padding-right: 10px"></i>Thống kê theo năm</h4>
+                <canvas id="bar-chart-grouped" width="100%" height="40"></canvas>
+            </div>
+        </div>
+        <input type="hidden" id="chartData" value="{{ json_encode($data) }}">
+        <div class="card-footer small text-muted">
+        </div>
     </div>
     <div class="card mb-3">
         <div class="card-header">

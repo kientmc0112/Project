@@ -10,6 +10,7 @@ class Subject extends Model
         'name',
         'description',
         'status',
+        'duration',
     ];
 
     public function courses()

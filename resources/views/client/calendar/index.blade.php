@@ -45,7 +45,7 @@
             'start': subjects[i]['created_at'].slice(0, 10),
             'end': subjects[i]['updated_at'].slice(0, 10),
             'textColor': 'black',
-            'backgroundColor': '#00e600',
+            'backgroundColor': subjects[i]['color'],
         };
     }
 

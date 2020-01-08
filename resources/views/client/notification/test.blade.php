@@ -61,12 +61,27 @@
                             <h3 class="dropdown-toolbar-title">Notifications (<span class="notif-count">0</span>)</h3>
                         </div>
                         <ul class="dropdown-menu">
+                        @if(Auth::user()->notifications->count() > 0)
                             @foreach (Auth::user()->notifications as $notification)
-                                <a class="dropdown-item" href="#">
-                                    <span>{{ $notification->data['title'] }}</span><br>
-                                    <small>{{ $notification->data['title'] }}</small>
-                                </a>
+                                <li class="notification">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <div class="media-object" style="width: 65px">
+                                                <img src="https://api.adorable.io/avatars/71/53.png" class="img-circle" alt="50x50" style="width: 50px; height: 50px;">
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <strong class="notification-title">{{ $notification->data['title'] }}</strong>
+                                            <p class="notification-desc">{{ $notification->data['content'] }}</p>
+                                            <div class="notification-meta">
+                                                <small class="timestamp">{{ $notification->created_at }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
                             @endforeach
+                        @endif
+                        <input type="hidden" id="user_id" value="{{ json_encode(Auth::user()->id) }}">
                         </ul>
                         <div class="dropdown-footer text-center">
                             <a href="#">View All</a>

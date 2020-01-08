@@ -75,7 +75,7 @@ class SubjectController extends Controller
         // return response()->json(array('success' => true, 'subject' => $subject));
         $course_id = $request->course_id;
         $user_id = Auth::user()->id;
-        $user = $this->userRepository->find($user_id);
+        $user = $this->userRepository->findWithCourse($user_id);
         foreach ($user->courses as $course) {
             if($course->id == $course_id) {
                 $permiss = $course->pivot->status;

@@ -36,6 +36,7 @@
                                                                 <th>{{ trans('setting.name') }}</th>
                                                                 <th id="courses">{{ trans('setting.courses') }}</th>
                                                                 <th id="status">{{ trans('setting.status') }}</th>
+                                                                <th id="status">{{ trans('setting.duration') }}</th>
                                                                 <th>{{ trans('setting.description') }}</th>
                                                                 <th id="th-option">{{ trans('setting.options') }}</th>
                                                             </tr>
@@ -64,6 +65,9 @@
                                                                     @else
                                                                         <button class="btn btn-warning">{{ trans('setting.waiting') }}</button>
                                                                     @endif
+                                                                </td>
+                                                                <td>
+                                                                    <p>{{ $subject->duration }}</p>
                                                                 </td>
                                                                 <td>
                                                                     <p>{{ $subject->description }}</p>

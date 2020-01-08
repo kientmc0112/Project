@@ -7,6 +7,7 @@
     <div id="disable-preloader" class="btn btn-default btn-sm">{{ trans('layouts.disable') }}</div>
 </div> --}}
 <header id="header" class="header">
+    <input type="hidden" id="user_id" value="{{ json_encode(Auth::user()->id) }}">
     <div class="header-top bg-theme-color-2 sm-text-center p-0">
         <div class="container">
             <div class="row">
@@ -15,52 +16,57 @@
                         <ul class="list-inline font-13 sm-text-center mt-5">
                             <li class="nav-item dropdown dropdown-notifications">
                                 <a href="#notifications-panel" class="dropdown-toggle" data-toggle="dropdown"><i data-count="0" class="fa fa-bell text-white notification-icon"></i></a>
-                                {{-- <ul class="dropdown-menu" style="max-height: 300px">
-                                    @foreach (Auth::user()->notifications as $notification)
-                                    <li class="dropdown-item">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <div class="media-object">
-                                                    <img src="{{ asset('images/avatar/avatar5de7857e37aa8.jpeg') }}" class="img-circle" alt="50x50" style="width: 50px; height: 50px;">
-                                                </div>
-                                            </div>
-                                            <div class="media-body">
-                                                <strong class="notification-title">{{ $notification->data['title'] }}</strong>
-                                                <p class="notification-desc">{{ $notification->data['title'] }}</p>
-                                                <div class="notification-meta">
-                                                    <small class="timestamp">about a minute ago</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    @endforeach
-                                </ul> --}}
                                 <div class="dropdown-container">
                                     <div class="dropdown-toolbar">
                                         <div class="dropdown-toolbar-actions">
-                                            <a href="#">Mark all as read</a>
+                                            <a href="#" id="markAll">Mark all as read</a>
                                         </div>
-                                        <h3 class="dropdown-toolbar-title">Notifications (<span class="notif-count">0</span>)</h3>
+                                        <h3 class="dropdown-toolbar-title">Unread (<span class="notif-count">{{ Auth::user()->notifications->where('read_at', NULL)->count() }}</span>)</h3>
                                     </div>
                                     <ul class="dropdown-menu">
-                                        @foreach (Auth::user()->notifications as $notification)
-                                            <li class="notification">
-                                                <div class="media">
-                                                    <div class="media-left">
-                                                        <div class="media-object" style="width: 65px">
-                                                            <img src="{{ asset('images/avatar/avatar5de7857e37aa8.jpeg') }}" class="img-circle" alt="50x50" style="width: 50px; height: 50px;">
+                                    @foreach (Auth::user()->notifications as $notification)
+                                        @if ($notification->notifiable_id == Auth::user()->id)
+                                            @if ($notification->read_at == NULL)
+                                                <li id="{{ $notification->id }}" class="notification active unread" value="{{ 'http://127.0.0.1:8000/courses/' . $notification->data['course_id'] . '/show' }}">
+                                                    <a>
+                                                        <div class="media">
+                                                            <div class="media-left">
+                                                                <div class="media-object" style="width: 65px">
+                                                                    <img src="/images/avatar/avatar5de7857e37aa8.jpeg" class="img-circle" alt="50x50" style="width: 70px; height: 70px;">
+                                                                </div>
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <strong class="notification-title">{{ $notification->data['title'] }}</strong>
+                                                                <p class="notification-desc">{{ $notification->data['content'] }}</p>
+                                                                <div class="notification-meta">
+                                                                    <small class="timestamp">{{ $notification->created_at }}</small>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <strong class="notification-title">{{ $notification->data['title'] }}</strong>
-                                                        <p class="notification-desc">{{ $notification->data['content'] }}</p>
-                                                        <div class="notification-meta">
-                                                            <small class="timestamp">{{ $notification->created_at }}</small>
+                                                    </a>
+                                                </li>
+                                            @elseif ($notification->read_at != NULL)
+                                                <li class="notification">
+                                                    <a href="{{ 'http://127.0.0.1:8000/courses/' . $notification->data['course_id'] . '/show' }}">
+                                                        <div class="media">
+                                                            <div class="media-left">
+                                                                <div class="media-object" style="width: 65px">
+                                                                    <img src="/images/avatar/avatar5de7857e37aa8.jpeg" class="img-circle" alt="50x50" style="width: 70px; height: 70px;">
+                                                                </div>
+                                                            </div>
+                                                            <div class="media-body">
+                                                                <strong class="notification-title">{{ $notification->data['title'] }}</strong>
+                                                                <p class="notification-desc">{{ $notification->data['content'] }}</p>
+                                                                <div class="notification-meta">
+                                                                    <small class="timestamp">{{ $notification->created_at }}</small>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        @endforeach
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        @endif
+                                    @endforeach
                                     </ul>
                                     <div class="dropdown-footer text-center">
                                         <a href="#">View All</a>
@@ -78,33 +84,12 @@
                             <li class="text-white">
                                 <a class="text-white" href="{{ route('user.show', Auth::user()->id) }}">My Profile</a>
                             </li>
-                            @if (Auth::User())
-                                <li class="nav-item dropdown dropdown-notifications">
-                                    <a style="color: white;" id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                         <i class="fa fa-bell"></i><span class="caret"></span>
-                                    </a>
-                                    <div style="width: 400px;" class="dropdown-menu dropdown-menu-right menu-notification" aria-labelledby="navbarDropdown">
-                                        @foreach (Auth::user()->notifications as $notification)
-                                            <a class="dropdown-item" href="{{ route('course.show', $notification->data['course_id']) }}">
-                                                <span>Bạn Đã Được Thêm Vào {{ $notification->data['name'] }}| {{ $notification->create_at }} </span><br>
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                </li>
-                            @endif
                             @if(Auth::User()->role_id == 1)
                                 <li class="text-white">|</li>
                                 <li class="text-white">
                                     <a class="text-white" href="{{ route('admin.dashboard.index') }}">MyAdmin</a>
                                 </li>
                             @endif
-                            <li class="text-white">|</li>
-                            <li>
-                                <a class="text-white" id="logout" href="{{ route('logout') }}">{{ trans('layouts.logout') }}</a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                </form>
-                            </li>
                         </ul>
                     </div>
                 </div>

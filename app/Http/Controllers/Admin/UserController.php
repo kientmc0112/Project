@@ -9,8 +9,12 @@ use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Course\CourseRepositoryInterface;
 use App\Repositories\Subject\SubjectRepositoryInterface;
 use App\Repositories\Task\TaskRepositoryInterface;
+use App\Notifications\TestNotification;
 use App\Notifications\NotificationUser;
 use DB;
+use Pusher\Pusher;
+use Auth;
+
 class UserController extends Controller
 {
     private $userRepository;
@@ -41,7 +45,7 @@ class UserController extends Controller
     public function index()
     {
         $users = $this->userRepository->getPaginate();
-        
+
         return view('admin.users.index', compact('users'));
     }
     /**
@@ -64,7 +68,7 @@ class UserController extends Controller
         $password = $request->password;
         $repassword = $request->repassword;
         if ($password == $repassword) {
-            if ($request->hasFile('avatar')) {  
+            if ($request->hasFile('avatar')) {
                 $avatar = $this->uploadAvatar($request);
             } else {
                 $avatar = config('configuser.avatar_default');
@@ -80,7 +84,7 @@ class UserController extends Controller
             $attributes['password'] = bcrypt($request->get('password'));
             $this->userRepository->create($attributes);
 
-            return redirect()->route('admin.users.index')->with('alert', trans('setting.add_user_success'));    
+            return redirect()->route('admin.users.index')->with('alert', trans('setting.add_user_success'));
         } else {
             return redirect()->route('admin.users.create')->with('alert', trans('setting.checkpassoword'));
         }
@@ -119,7 +123,7 @@ class UserController extends Controller
                 ->where('user_id', $id)
                 ->get();
 
-            return view('admin.users.show', compact('userDetail', 'courses', 'userCourse', 'userCourseDetail', 
+            return view('admin.users.show', compact('userDetail', 'courses', 'userCourse', 'userCourseDetail',
                 'userSubject', 'userSubjectDetail','userTask','userTaskDetail', 'subjects', 'tasks'));
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
@@ -130,11 +134,11 @@ class UserController extends Controller
         $listSubject = DB::table('course_subject')
             ->where('course_id', '=', $id)
             ->get();
-        
+
         return response()->json(['listSubject' => $listSubject], config('configuser.json'));
     }
     public function finishCourse(Request $request, $id)
-    {        
+    {
         $courseSubject = $this->courseRepository->find($request->course_id)->subjects;
         $count = config('configuser.count');
         foreach ($courseSubject as $value) {
@@ -176,9 +180,44 @@ class UserController extends Controller
             ->where('user_id', $id)
             ->where('course_id', $course_id)
             ->update(['process' => ++$process]);
+        $notify = "You has completed subject " . $this->subjectRepository->find($request->subject_id)->name;
+        $courses = $this->subjectRepository->find($request->subject_id)->courses;
+        foreach($courses as $course) {
+            foreach ($course->users as $user) {
+                if($user->id == $id && $user->pivot->status == 0) {
+                    $course_id = $course->id;
+                }
+            }
+        }
+        $data = [
+            'title' => 'FTMS',
+            'content' => $notify,
+            'course_id' => $course_id,
+        ];
+        $user = $this->userRepository->find($id);
+        $user->notify(new NotificationUser($data));
+        $options = array(
+            'cluster' => 'ap1',
+            'encrypted' => true,
+        );
+        // $pusher = new Pusher(
+        //     env('PUSHER_APP_KEY'),
+        //     env('PUSHER_APP_SECRET'),
+        //     env('PUSHER_APP_ID'),
+        //     $options
+        // );
+        $pusher = new Pusher(
+            '380b9393267e17a9b728',
+            '9a7797050822c79bfc62',
+            '924873',
+            $options
+        );
+        $event = 'user' . $id;
+        $pusher->trigger('NotificationEvent', $event, $data);
 
         return redirect()->route('admin.users.show', $id);
     }
+
     public function finishTask(Request $request, $id)
     {
         try {
@@ -198,6 +237,37 @@ class UserController extends Controller
                 ->where('subject_id', $subject)
                 ->where('user_id', $id)
                 ->update(['process' => ++$process]);
+
+
+            $notify = "You has completed task " . $this->taskRepository->find($request->task_id)->name;
+            $subject_id = $this->taskRepository->find($request->task_id)->subject_id;
+            $courses = $this->subjectRepository->find($subject_id)->courses;
+            foreach($courses as $course) {
+                foreach ($course->users as $user) {
+                    if($user->id == $id && $user->pivot->status == 0) {
+                        $course_id = $course->id;
+                    }
+                }
+            }
+            $data = [
+                'title' => 'FTMS',
+                'content' => $notify,
+                'course_id' => $course_id,
+            ];
+            $user = $this->userRepository->find($id);
+            $user->notify(new NotificationUser($data));
+            $options = array(
+                'cluster' => 'ap1',
+                'encrypted' => true,
+            );
+            $pusher = new Pusher(
+                '380b9393267e17a9b728',
+                '9a7797050822c79bfc62',
+                '924873',
+                $options
+            );
+            $event = 'user' . $id;
+            $pusher->trigger('NotificationEvent', $event, $data);
 
             return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_user_task_success'));
         } catch (Exception $e) {
@@ -229,21 +299,39 @@ class UserController extends Controller
                         ->get();
                     if (count($userSubject) < config('configuser.userSubject')) {
                         $courseName = $this->courseRepository->find($request->course_id)->name;
+                        $content = 'You has added to course ' . $courseName;
+                        $courses = $this->subjectRepository->find($request->subject_id)->courses;
+                        foreach($courses as $course) {
+                            foreach ($course->users as $userC) {
+                                if($userC->id == $id && $userC->pivot->status == 0) {
+                                    $course_id = $course->id;
+                                }
+                            }
+                        }
                         $data = [
-                            'name' => $courseName,
-                            'course_id' => $request->course_id,
+                            'title' => "FTMS",
+                            'content' => $content,
+                            'course_id' => $course_id,
                         ];
                         $user->notify(new NotificationUser($data));
-                        $subjectName = $this->subjectRepository->find($request->subject_id)->name;
-                        $data = [
-                            'name' => $subjectName,
-                            'course_id' => $request->course_id,
-                        ];
-                        $user->notify(new NotificationUser($data));
+                        $options = array(
+                            'cluster' => 'ap1',
+                            'encrypted' => true,
+                        );
+
+                        $pusher = new Pusher(
+                            '380b9393267e17a9b728',
+                            '9a7797050822c79bfc62',
+                            '924873',
+                            $options
+                        );
+                        $notify = 'user' . $id;
+                        $pusher->trigger('NotificationEvent', $notify, $data);
                         $user->subjects()->attach($request->subject_id);
 
                         return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.check_user_subject'));
                     }
+
                     return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
                 }
             }
@@ -281,8 +369,37 @@ class UserController extends Controller
                     if (count($check) >= config('configuser.count_check')) {
                         return redirect()->route('admin.users.show', $id)->with('error', trans('setting.check_user_course'));
                     } else {
+                        $subjectName = $this->subjectRepository->find($request->subject_id)->name;
+                        $content = 'You has added to subject ' . $subjectName;
+                        $courses = $this->subjectRepository->find($request->subject_id)->courses;
+                        foreach ($courses as $course) {
+                            foreach ($course->users as $userC) {
+                                if($userC->id == $id && $userC->pivot->status == 0) {
+                                    $course_id = $course->id;
+                                }
+                            }
+                        }
+                        $data = [
+                            'title' => "FTMS",
+                            'content' => $content,
+                            'course_id' => $course_id,
+                        ];
+                        $user->notify(new NotificationUser($data));
+                        $options = array(
+                            'cluster' => 'ap1',
+                            'encrypted' => true,
+                        );
+
+                        $pusher = new Pusher(
+                            '380b9393267e17a9b728',
+                            '9a7797050822c79bfc62',
+                            '924873',
+                            $options
+                        );
+                        $notify = 'user' . $id;
+                        $pusher->trigger('NotificationEvent', $notify, $data);
                         $user->subjects()->attach($request->subject_id);
-                        
+
                         return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
                     }
                 }
@@ -321,7 +438,7 @@ class UserController extends Controller
 
                         return redirect()->route('admin.users.show', $id)->with('alert', trans('setting.assign_success'));
                     }
-                }    
+                }
             }else {
                 return redirect()->route('admin.users.show', $id)->with('error', trans('setting.assign_user_task_fail'));
             }
@@ -395,7 +512,7 @@ class UserController extends Controller
             $repassword = $request->repassword;
             if ($password == $repassword) {
                 $user = $this->userRepository->find($id);
-                if ($request->hasFile('avatar')) {  
+                if ($request->hasFile('avatar')) {
                     $avatar = $this->uploadAvatar($request);
                 } else {
                     $avatar = $user->avatar;
@@ -411,7 +528,7 @@ class UserController extends Controller
                 $attributes['password'] = bcrypt($request->get('password'));
                 $this->userRepository->update($id, $attributes);
 
-                return redirect()->route('admin.users.index')->with('alert', trans('setting.edit_user_success'));    
+                return redirect()->route('admin.users.index')->with('alert', trans('setting.edit_user_success'));
             } else {
                 return redirect()->route('admin.users.edit', $user->id)->with('alert', trans('setting.checkpassoword'));
             }
@@ -428,7 +545,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         try {
-            $this->userRepositoty->delete($id);
+            $this->userRepository->delete($id);
 
             return redirect()->route('admin.users.index')->with('alert', trans('setting.delete_user_success'));
         } catch (Exception $e) {

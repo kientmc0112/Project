@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        'App\Console\Commands\MemberOfTheWeek'
     ];
 
     /**
@@ -26,6 +26,11 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+    //     $schedule->command('email:weekend')
+    //              ->weeklyOn(5, '0:00');
+    //               ->withoutOverlapping()
+        $schedule->command('email:weekend')
+            ->everyMinute();
     }
 
     /**

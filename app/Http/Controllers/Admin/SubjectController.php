@@ -67,6 +67,7 @@ class SubjectController extends Controller
             'name',
             'status',
             'description',
+            'duration',
         ]);
         $subject = $this->subjectRepository->create($attributes);
         $subject_id = $subject->id;
@@ -79,7 +80,7 @@ class SubjectController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with($e->getMessage());
         }
-        
+
         return redirect()->route('admin.subjects.index')->with('alert', trans('setting.add_subject_success'));
     }
 
@@ -205,6 +206,7 @@ class SubjectController extends Controller
                 'name',
                 'status',
                 'desciption',
+                'duration',
             ]);
             $subject = $this->subjectRepository->update($id, $attributes);
             $subject->courses()->detach();

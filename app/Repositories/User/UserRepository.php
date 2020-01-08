@@ -16,4 +16,9 @@ class UserRepository extends EloquentRepository implements UserRepositoryInterfa
     {
         return User::where('role_id', 1)->get();
     }
+
+    public function findWithCourse($id)
+    {
+        return User::with('courses')->find($id);
+    }
 }

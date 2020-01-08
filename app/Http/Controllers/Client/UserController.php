@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ClientRequest;
 use Illuminate\Support\Facades\Validator;
 use DB;
+use Auth;
 
 class UserController extends Controller
 {
@@ -154,5 +155,25 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function markAsRead(Request $request)
+    {
+        foreach (Auth::user()->notifications as $notification) {
+            if ($notification->id == $request->id) {
+                $notification->markAsRead();
+            }
+        }
+
+        return response()->json('OK', config('client.user.network'));
+    }
+
+    public function markAll(Request $request)
+    {
+        foreach (Auth::user()->unreadNotifications as $notification) {
+            $notification->markAsRead();
+        }
+
+        return response()->json('OK', config('client.user.network'));
     }
 }

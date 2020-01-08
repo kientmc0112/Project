@@ -37,12 +37,12 @@
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.status') }}</label>
                                                             <select class="form-control" name="status" id="">
-                                                                <option value="{{ config('configsubject.status_subject_open') }}" 
+                                                                <option value="{{ config('configsubject.status_subject_open') }}"
                                                                     @if ($subject->status == false)
                                                                         selected
                                                                     @endif >{{ trans('setting.open') }}
                                                                 </option>
-                                                                <option value="{{ config('configsubject.status_subject_waiting') }}" 
+                                                                <option value="{{ config('configsubject.status_subject_waiting') }}"
                                                                     @if ($subject->status == true)
                                                                         selected
                                                                     @endif>{{ trans('setting.waiting') }}
@@ -50,7 +50,7 @@
                                                             </select>
                                                         </div>
                                                         <div class="form-group" >
-                                                            <label for="">{{ trans('setting.subject') }}</label> | 
+                                                            <label for="">{{ trans('setting.subject') }}</label> |
                                                             <td>
                                                                 <button type="button" id="btn_add" name="btn_add" class="btn btn-primary"><i class="fas fa-plus"></i></button>
                                                             </td>
@@ -62,7 +62,7 @@
                                                                                 <td>
                                                                                     <select name="course_id[]" id="course_id" class="form-control">
                                                                                         @foreach ($courses as $course)
-                                                                                            <option 
+                                                                                            <option
                                                                                                 @if ($item->id == $course->id)
                                                                                                     selected
                                                                                                 @endif
@@ -80,6 +80,10 @@
                                                                     </div>
                                                                 @endforeach
                                                             </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="">{{ trans('setting.duration') }}</label>
+                                                            <input type="text" class="form-control" name="duration" value="{{ $subject->duration }}">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>

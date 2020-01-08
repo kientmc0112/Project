@@ -19,6 +19,7 @@ return [
     'add_category' => 'Add Category',
     'edit_category' => 'Edit Category',
     'list_category' => 'List Category',
+    'duration' => 'Duration',
     //Courses
     'add_course' => 'Add Course',
     'edit_course' => 'Edit Course',

@@ -27,6 +27,7 @@ class SubjectRequest extends FormRequest
             'name' => 'required|min:3|max:50',
             'status' => 'required|min:0|max:1|numeric',
             'description' => 'required',
+            'duration' => 'required|numeric',
         ];
     }
 

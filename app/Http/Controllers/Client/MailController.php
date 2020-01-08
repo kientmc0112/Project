@@ -7,9 +7,24 @@ use Illuminate\Http\Request;
 use Mail;
 use App\Jobs\JobMail;
 use Carbon\Carbon;
+use App\Repositories\Course\CourseRepositoryInterface;
+use App\Repositories\Task\TaskRepositoryInterface;
+use App\Models\Course;
+use App\Models\User;
+use App\Models\Category;
+use Auth;
 
 class MailController extends Controller
 {
+    protected $courseRepository;
+    protected $taskRepository;
+
+    public function __construct(CourseRepositoryInterface $courseRepository, TaskRepositoryInterface $taskRepository)
+    {
+        $this->courseRepository = $courseRepository;
+        $this->taskRepository = $taskRepository;
+    }
+
     public function basic()
     {
         $data = array('name' => "Trần Kiên");
@@ -56,15 +71,45 @@ class MailController extends Controller
 
     public function queue()
     {
+        $data = $this->courseRepository->getAll();
         // $times = now()->addMinutes(1);
         // $course_id = 1;
         // $course = Course::find($course_id);
         // Mail::to('kien.112.1998@gmail.com')
         //     ->later($times, new CourseMail($course));
         // $jobmail = new JobMail($course);
-        $emailJob = (new JobMail())->delay(Carbon::now()->addMinutes(5));
+        $emailJob = (new JobMail($data))->delay(Carbon::now()->addMinutes(1));
         dispatch($emailJob);
         // JobMail::dispatch()
         //     ->delay(now()->addMinutes(1));
+    }
+
+    public function test()
+    {
+        // $cate = Category::find(2)->with('categories');
+        // $user = User::find(2);
+        // $user1 = User::find(2)->with('courses.pivot.status');
+        // $user1 = User::with('courses.pivot.status')->first();
+        // dd($user1);
+
+        // $course_id = 1;
+        // $user_id = Auth::user()->id;
+        // $user = User::with('courses.pivot.status')->find($user_id);
+        // foreach ($user->courses as $course) {
+        //     if($course->id == $course_id) {
+        //         $permiss = $course->pivot->status;
+        //     }
+        // }
+        // dd($permiss);
+        $date1 = date('Y-m-d');
+        $date1 = strtotime($date1);
+        echo $date1;
+        $date = "2020-01-05 17:32:35";
+        $date = strtotime($date) + 48*60*60;
+        $date = date('Y-m-d', $date);
+        if($date == $date1) {
+            echo 1;
+        }
+        // dd($date);
     }
 }

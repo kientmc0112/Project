@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Client;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use DB;
 use Auth;
 
 class ReportController extends Controller

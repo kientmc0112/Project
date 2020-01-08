@@ -46,6 +46,10 @@
                                                             <div class="add_main"></div>
                                                         </div>
                                                         <div class="form-group">
+                                                            <label for="">{{ trans('setting.duration') }}</label>
+                                                            <input type="text" class="form-control" name="duration" id="">
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label for="">{{ trans('setting.description') }}</label>
                                                             <textarea class="form-control" name="description" id="" cols="{{ config('configsubject.cols_textarea') }}" rows="{{ config('configsubject.rows_textarea') }}">{{ old('description') }}</textarea>
                                                         </div>

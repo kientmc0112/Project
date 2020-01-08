@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Course\CourseRepositoryInterface;
-use App\Models\Course;
-use Carbon\Carbon;
 
 class ChartController extends Controller
 {
@@ -99,13 +97,11 @@ class ChartController extends Controller
             $data = array();
             for ($i = 1; $i <= 12; $i++) {
                 if ($i < 10) $i = '0' . $i;
-                $courses = Course::withTrashed()->where('created_at', 'LIKE', $year . '-' . $i . '-' . '%')->count();
+                $courses = $this->courseRepository->groupCourseByMonth($year, $i);
                 $data[] = $courses;
             }
         } else {
-            $courses = Course::withTrashed()->get()->groupBy(function($val) {
-                return Carbon::parse($val->created_at)->format('Y');
-            });
+            $courses = $this->courseRepository->groupCourseByYear();
             $data = array();
             foreach ($courses as $key => $course) {
                 $data[$key] = $course->count();
@@ -117,9 +113,7 @@ class ChartController extends Controller
 
     public function year()
     {
-        $courses = Course::withTrashed()->get()->groupBy(function($val) {
-            return Carbon::parse($val->created_at)->format('Y');
-        });
+        $courses = $this->courseRepository->groupCourseByYear();
         $data = array();
         foreach ($courses as $key => $course) {
             $data[$key] = $course->count();
