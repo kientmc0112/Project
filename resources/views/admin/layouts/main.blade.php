@@ -59,7 +59,7 @@
             var myLineChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                    labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November"],
                     datasets: [{
                         label: "Sessions",
                         lineTension: 0.3,
@@ -80,7 +80,8 @@
                         yAxes: [{
                             ticks: {
                                 min: 0,
-                                maxTicksLimit: 5
+                                maxTicksLimit: 1,
+                                                                minTicksLimit: 1
                             },
                             gridLines: {
                                 color: "rgba(0, 0, 0, .125)",

@@ -1,11 +1,3 @@
-{{-- <div id="preloader">
-    <div id="spinner">
-        <div class="preloader-dot-loading">
-            <div class="cssload-loading"><i></i><i></i><i></i><i></i></div>
-        </div>
-    </div>
-    <div id="disable-preloader" class="btn btn-default btn-sm">{{ trans('layouts.disable') }}</div>
-</div> --}}
 <header id="header" class="header">
     <input type="hidden" id="user_id" value="{{ json_encode(Auth::user()->id) }}">
     <div class="header-top bg-theme-color-2 sm-text-center p-0">

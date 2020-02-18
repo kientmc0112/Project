@@ -61,13 +61,13 @@ abstract class EloquentRepository implements RepositoryInterface
         $result = $this->_model->find($id);
         if ($result) {
             $result->update($attributes);
-            
+
             return $result;
         }
 
         return false;
     }
-    
+
     public function delete($id)
     {
         $result = $this->_model->find($id);
